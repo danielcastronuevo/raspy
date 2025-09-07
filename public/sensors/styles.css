@@ -1,0 +1,106 @@
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #0d0d0f;
+      color: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100dvh;
+      margin: 0;
+    }
+
+    .container {
+      background: #111;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      width: fit-content;
+      border: 1px solid #333; /* borde externo */
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: #ccc;
+      letter-spacing: 1px;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .cell {
+      padding: 16px;
+      border-radius: 10px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      user-select: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 100ms ease, border 100ms ease;
+    }
+
+    .cell i {
+      margin: 0 3px;
+      font-size: 1.6rem;
+      rotate: -45deg;
+    }
+
+    /* Títulos */
+    .titulo {
+      background: transparent;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #aaa;
+      cursor: default;
+    }
+
+    .titulo:nth-child(1) {
+      color: #a67bff; /* violeta */
+    }
+    .titulo:nth-child(2) {
+      color: #ff8b47; /* naranja */
+    }
+
+    /* Botones P1 violetas */
+    #b1-p1, #b2-p1, #b3-p1 {
+      background: linear-gradient(145deg, #7a3cff, #531cbf);
+      color: #fff;
+      border-top: 0 solid transparent;   /* siempre transparente */
+      border-bottom: 4px solid #3a1393; /* relieve normal */
+    }
+    /* Botones P2 naranjas */
+    #b1-p2, #b2-p2, #b3-p2 {
+      background: linear-gradient(145deg, #ff7b2f, #cc4d00);
+      color: #fff;
+      border-top: 0 solid transparent;   /* siempre transparente */
+      border-bottom: 4px solid #993500; /* relieve normal */
+    }
+
+    /* Efecto de presión */
+    .cell.pressed {
+      transform: translateY(2px);
+      border-bottom-width: 0 !important; /* desaparece el relieve inferior */
+    }
+
+    @media (max-width: 500px) {
+      .cell {
+        padding: 12px;
+        font-size: 1.2rem;
+      }
+      .cell i {
+        font-size: 1.3rem;
+      }
+    }
+
+
+.cell {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}

@@ -1,0 +1,32 @@
+{
+  "jugadores": [
+    "Daniel",
+    "Dario",
+    "Bernardo",
+    "Julian"
+  ],
+  "parejas": {
+    "pareja1": [
+      "Daniel",
+      "Dario"
+    ],
+    "pareja2": [
+      "Bernardo",
+      "Julian"
+    ]
+  },
+  "parejaSacadora": "pareja2",
+  "sacadores": [
+    "Daniel",
+    "Bernardo"
+  ],
+  "tiempoCalentamiento": "Sin calentamiento",
+  "cambioDeLado": "Al finalizar cada SET",
+  "tipoGames": "Punto de oro",
+  "ordenDeSaque": [
+    "Bernardo",
+    "Daniel",
+    "Julian",
+    "Dario"
+  ]
+}

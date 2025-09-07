@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Sensores</title>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Simulador de Sensores</h1>
+
+    <div class="grid">
+      <div class="cell titulo">P1</div>
+      <div class="cell titulo">P2</div>
+
+      <button id="b1-p1" class="cell"><i class="fa-solid fa-hand-pointer"></i></button>
+      <button id="b1-p2" class="cell"><i class="fa-solid fa-hand-pointer"></i></button>
+
+      <button id="b2-p1" class="cell"><i class="fa-solid fa-hand-pointer"></i><i class="fa-solid fa-hand-pointer"></i></button>
+      <button id="b2-p2" class="cell"><i class="fa-solid fa-hand-pointer"></i><i class="fa-solid fa-hand-pointer"></i></button>
+
+      <button id="b3-p1" class="cell"><i class="fa-solid fa-hand-pointer"></i><i class="fa-solid fa-hand-pointer"></i><i class="fa-solid fa-hand-pointer"></i></button>
+      <button id="b3-p2" class="cell"><i class="fa-solid fa-hand-pointer"></i><i class="fa-solid fa-hand-pointer"></i><i class="fa-solid fa-hand-pointer"></i></button>
+    </div>
+  </div>
+
+  <script>
+    // Manejo de presión en mouse y touch
+    document.querySelectorAll(".cell:not(.titulo)").forEach(btn => {
+      const press = () => btn.classList.add("pressed");
+      const release = () => btn.classList.remove("pressed");
+
+      btn.addEventListener("mousedown", press);
+      btn.addEventListener("mouseup", release);
+      btn.addEventListener("mouseleave", release);
+
+      btn.addEventListener("touchstart", press, { passive: true });
+      btn.addEventListener("touchend", release);
+      btn.addEventListener("touchcancel", release);
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

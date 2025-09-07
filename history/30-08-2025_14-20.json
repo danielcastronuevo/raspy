@@ -1,0 +1,4826 @@
+{
+  "metadata": {
+    "matchId": "db4f62e8-74be-4d48-86f5-bebcb60d6df5",
+    "fecha": "30-08-2025",
+    "hora": "14-20",
+    "ganador": "Pareja 1",
+    "duracionSegundos": 9,
+    "duracionTexto": "00:00:09",
+    "huboCalentamiento": true,
+    "configuracion": {
+      "jugadores": [
+        "Berto",
+        "Juli",
+        "Dario",
+        "Daniel"
+      ],
+      "jugadoresConOnline": [
+        {
+          "nombre": "Berto",
+          "online": false
+        },
+        {
+          "nombre": "Juli",
+          "online": false
+        },
+        {
+          "nombre": "Dario",
+          "online": false
+        },
+        {
+          "nombre": "Daniel",
+          "online": false
+        }
+      ],
+      "parejas": {
+        "pareja1": [
+          "Berto",
+          "Juli"
+        ],
+        "pareja2": [
+          "Dario",
+          "Daniel"
+        ]
+      },
+      "parejaSacadora": "pareja2",
+      "sacadores": [
+        "Berto",
+        "Dario"
+      ],
+      "tiempoCalentamiento": "5 minutos",
+      "cambioDeLado": "Al finalizar cada SET",
+      "tipoGames": "Punto de oro",
+      "ordenDeSaque": [
+        "Dario",
+        "Berto",
+        "Daniel",
+        "Juli"
+      ],
+      "pulseras": {
+        "pareja1": {
+          "nombre": "A01",
+          "mac": "C3:00:00:51:33:5C"
+        },
+        "pareja2": {
+          "nombre": "A02",
+          "mac": "C3:00:00:51:33:63"
+        }
+      }
+    }
+  },
+  "historial": [
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              1,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              1,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              1,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              1,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              2,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              2,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              2,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              2,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              3,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              3,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              3,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              3,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              4,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              4,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              4,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              4,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              5,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              5,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              5,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              5,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 0,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "derecha",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              1,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              1,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              1,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              1,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              2,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              2,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              2,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              2,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              3,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              3,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              3,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              3,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Berto",
+        "indice": 1,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              4,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              4,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              4,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              4,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Daniel",
+        "indice": 2,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              5,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              5,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          1,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              5,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          2,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              5,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          3,
+          0
+        ],
+        "setActual": 1,
+        "partidoTerminado": false
+      },
+      "sacadorActual": {
+        "nombre": "Juli",
+        "indice": 3,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    },
+    {
+      "configuracion": {
+        "jugadores": [
+          "Berto",
+          "Juli",
+          "Dario",
+          "Daniel"
+        ],
+        "jugadoresConOnline": [
+          {
+            "nombre": "Berto",
+            "online": false
+          },
+          {
+            "nombre": "Juli",
+            "online": false
+          },
+          {
+            "nombre": "Dario",
+            "online": false
+          },
+          {
+            "nombre": "Daniel",
+            "online": false
+          }
+        ],
+        "parejas": {
+          "pareja1": [
+            "Berto",
+            "Juli"
+          ],
+          "pareja2": [
+            "Dario",
+            "Daniel"
+          ]
+        },
+        "parejaSacadora": "pareja2",
+        "sacadores": [
+          "Berto",
+          "Dario"
+        ],
+        "tiempoCalentamiento": "5 minutos",
+        "cambioDeLado": "Al finalizar cada SET",
+        "tipoGames": "Punto de oro",
+        "ordenDeSaque": [
+          "Dario",
+          "Berto",
+          "Daniel",
+          "Juli"
+        ],
+        "pulseras": {
+          "pareja1": {
+            "nombre": "A01",
+            "mac": "C3:00:00:51:33:5C"
+          },
+          "pareja2": {
+            "nombre": "A02",
+            "mac": "C3:00:00:51:33:63"
+          }
+        }
+      },
+      "marcador": {
+        "sets": [
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              6,
+              0
+            ]
+          },
+          {
+            "games": [
+              0,
+              0
+            ]
+          }
+        ],
+        "puntos": [
+          0,
+          0
+        ],
+        "setActual": 2,
+        "partidoTerminado": true
+      },
+      "sacadorActual": {
+        "nombre": "Dario",
+        "indice": 0,
+        "puntosEnTiebreak": 0
+      },
+      "ladoActual": "izquierda",
+      "puntosTotalesEnTiebreak": 0
+    }
+  ]
+}

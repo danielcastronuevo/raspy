@@ -1,0 +1,1636 @@
+/* ============================================================
+ * VARIABLES GLOBALES
+ * ============================================================ */
+
+:root{
+  /* === COLORES BASE === */
+  --bg-color: #227;                           /* Color de fondo principal */
+  --text-color: #fff;                         /* Color de texto principal */
+  --accent-color-1: #03abff;                  /* Color de fondo "games" */
+  --accent-color-2: #b7fe01;                  /* Color para cronometros,iconos y detalles */
+  --accent-color-3: #FFD700;                  /* Color para punto de oro */
+  --red-warn: #f55;                           /* Rojo de advertencia (Usado en "tiempo restante") */
+
+  /* Violeta eléctrico */
+  --bg-color: #1b0a3d;
+  --text-color: #fff;
+  --accent-color-1: #9b30ff;
+  /*--accent-color-2: #7a1fff;*/
+  --accent-color-3: #F5C518;
+  --red-warn: #ff4d6d;
+
+  /* === OVERLAYS Y TRANSPARENCIAS === */
+  --semitransparent-bg: #00000044;            /* Negro semitransparente para bg de cronos */
+  --color-overlay-dark: rgba(0,0,0,0.3);      /* Fondo de Overlay */
+  --color-bar-bg: #000;                       /* Fondo sólido para barras de anuncio. Ej:"¡cambio de lado!" */
+
+  /* === GRADIENTES === */
+  --gradient-separator: linear-gradient(
+    to right,
+    transparent,
+    var(--text-color),
+    transparent
+  );                                            /* Separador generico */
+
+  --gradient-hist-separator: linear-gradient(
+    to right,
+    rgba(255,255,255,0) 0%, 
+    var(--text-color) 10%, 
+    var(--text-color) 90%,
+    rgba(255,255,255,0) 100%
+  );                                            /* Separadores contador historial */
+
+  --separator-gradient: linear-gradient(
+    to right,
+    rgba(255,255,255,0) 0%,
+    var(--text-color) 10%,
+    var(--text-color) 100%
+  );                                            /* Separadores contador principal */
+
+  /* === TIPOGRAFÍA === */
+  --main-font: "Oswald", Arial, sans-serif;     /* Fuente principal con fallback */
+}
+
+/* ============================================================
+ * RESET DE ESTILOS
+ * ============================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+ * BODY / MAIN
+ * ============================================================ */
+main {
+  position: relative;
+  height: 100vh; 
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+body {
+  background: var(--bg-color);
+  font-family: var(--main-font);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0.2vh, transparent 0.1vh);
+  background-size: 4vh 4vh;
+  pointer-events: none;
+}
+
+/* ============================================================
+ * MARCADOR - CONTENEDOR PRINCIPAL
+ * ============================================================ */
+.marcador-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 55vh;  
+  height: auto;
+  margin: auto;
+  padding: 1%;
+  scale: 2.6; /*ANTES ERA 2.2*/
+  max-height: fit-content;
+  box-sizing: border-box;
+}
+
+/* HEADER */
+.marcador-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 0.5vh;
+}
+.court-name {
+  text-align: left;
+  flex-basis: 50%;
+  font-size: 2.2vh;
+  font-weight: 300;
+}
+.set-title,
+.game-title {
+  text-align: center;
+  flex-basis: 10%;
+  flex-shrink: 0;
+  font-size: 2vh;
+  font-weight: 300;
+  text-wrap: nowrap;
+}
+.game-title { font-weight: 500;}
+
+/* FILAS DE PUNTAJE */
+.marcador-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.player-name {
+  text-align: left;
+  flex-basis: 50%;
+  font-size: 3vh;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0.5vh 0;
+}
+.player-name p {
+  display: flex;
+  align-items: start;
+  justify-content: start;
+}
+
+.score,
+.game-score {
+  text-align: center;
+  flex-basis: 10%;
+  flex-shrink: 0;
+  font-size: 4vh;
+  font-weight: 600;
+  font-family: "Oswald", serif;
+}
+.score,
+.set-title { margin: 0 1%; }
+
+.game-score {
+  flex-basis: 20%;
+  font-size: 6vh;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-color-1);
+  transition: 500ms background ease;
+}
+#points-title { flex-basis: 20%; }
+
+.set-ganado {
+  opacity: 1;
+}
+
+.set-perdido {
+  opacity: 0.5;
+transition: opacity 0.5s ease !important;
+}
+
+/* Solo fondo naranja para Tiebreak */
+.game-score.tiebreak {
+  background-color: #FF6B11;
+}
+
+/* ============================================================
+   CRONO PARTIDO FINALIZADO - OVERLAY CON ANIMACIONES
+   ============================================================ */
+
+#partido-final-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  /*display: none; */
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-color);
+  z-index: 999999;
+  opacity: 0;
+}
+
+@keyframes fadeInBg {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Bloque central */
+.final-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  gap: .5vh;
+  padding: 2vh 4vw;
+  border-radius: 1vh;
+  scale: 2.5;
+
+  opacity: 0;
+  transform: translateY(3vh) scale(0.9);
+  animation: fadeUpZoom 0.8s ease forwards;
+}
+
+.final-title {
+  font-family: 'Oswald', serif;
+  font-size: 2vh;
+  margin: 0;
+  color: var(--text-color);
+  text-align: center;
+  user-select: none;
+}
+
+.final-crono {
+  font-size: 6vh;
+  margin: 0 3vh !important;
+  color: var(--text-color); 
+}
+
+.final-line {
+  width: 1.5vh; 
+  height: 9vh;
+  background: var(--accent-color-2);
+}
+
+.final-mini-container {
+  display: flex;
+  align-items: center;
+  background: var(--semitransparent-bg);
+}
+
+/* Separador */
+.final-separator {
+  margin:2.5vh 0 0vh 0;
+  width: 100%;
+  height: 0.2vh;
+  background: var(--gradient-separator);
+}
+
+/* Texto de ayuda con iconos */
+.final-help-container {
+  margin-top: 2vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+  flex-wrap: wrap;
+
+  opacity: 0;
+  transform: translateY(2vh);
+  animation: fadeUp 0.8s ease forwards;
+
+}
+
+.final-help {
+  font-family: 'Oswald', serif;
+  font-size: 2vh;
+  color: var(--text-color);
+  text-align: center;
+  user-select: none;
+  margin: 0;
+}
+
+.final-help-2 {
+  display: block;
+  width: 100%;
+  margin-top: -1vh;
+}
+
+/* Iconos dentro del bloque de ayuda */
+.final-help-container .pulsera-grafico-container {
+  width: 3vh !important;
+  height: 3vh !important;
+  position: relative;
+  scale: 0.8;
+  margin-left: -0.7vh;
+}
+
+.final-help-container .hands-container {
+  position: relative;
+  display: flex;
+  margin-left: -4.3vh;
+  margin-right: 0.5vh;
+  transform: translateY(-1vh);
+  scale: 0.7;
+}
+
+.final-help-container .fa-hand-pointer {
+  font-size: 2.5vh;
+  transform: translate(1.5vh, 1.2vh) rotate(-45deg);
+}
+
+/* Overlay fondo desapareciendo */
+@keyframes fadeOutBg {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.parentesis-de-ayuda{
+  margin-left: 3vh;
+  color: var(--text-color);
+font-size: 3vh;
+transform: translateY(1vh);
+}
+
+/* ============================================================
+   CRONO CALENTAMIENTO - OVERLAY CON ANIMACIONES
+   ============================================================ */
+
+#calentamiento-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: none; /* invisible por defecto */
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-color);
+  z-index: 999;
+  opacity: 0; /* importante para la animación */
+}
+
+@keyframes fadeInBg {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Bloque central (título, crono, separador) */
+.calento-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  gap: .5vh;
+  padding: 2vh 4vw;
+  border-radius: 1vh;
+  scale: 2.5;
+
+  opacity: 0;
+  transform: translateY(3vh) scale(0.9);
+  animation: fadeUpZoom 0.8s ease forwards;
+
+}
+
+@keyframes fadeUpZoom {
+  from {
+    opacity: 0;
+    transform: translateY(3vh) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.calento-title {
+  font-family: 'Oswald', serif;
+  font-size: 2vh;
+  margin: 0;
+  color: var(--text-color);
+  text-align: center;
+  user-select: none;
+}
+
+.calento-crono {
+  font-size: 6vh;
+  margin: 0 3vh !important;
+  color: var(--text-color); 
+}
+
+.calento-line {
+  width: 1.5vh; 
+  height: 9vh;
+  background: var(--accent-color-2);
+}
+
+.calento-mini-container {
+  display: flex;
+  align-items: center;
+  background: var(--semitransparent-bg);
+}
+
+/* Separador */
+.calento-separator {
+  margin:2.5vh 0 0vh 0;
+  width: 100%;
+  height: 0.2vh;
+  background: var(--gradient-separator)
+}
+
+/* Texto de ayuda con iconos */
+.calento-help-container {
+  margin-top: 2vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+  flex-wrap: wrap;
+
+  opacity: 0;
+  transform: translateY(2vh);
+  animation: fadeUp 0.8s ease forwards;
+
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(2vh);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.calento-help {
+  font-family: var(--main-font);
+  font-size: 2vh;
+  color: var(--text-color);
+  text-align: center;
+  user-select: none;
+  margin: 0;
+}
+
+.calento-help-2 {
+  display: block;
+  width: 100%;
+  margin-top: -1vh;
+}
+
+/* Iconos dentro del bloque de ayuda */
+.calento-help-container .pulsera-grafico-container {
+  width: 3vh !important;
+  height: 3vh !important;
+  position: relative;
+  scale: 0.8;
+  margin-left: -0.7vh;
+}
+
+.calento-help-container .hands-container {
+  position: relative;
+  display: flex;
+  margin-left: -3.5vh;
+  margin-right: 0.5vh;
+  scale: 0.7;
+}
+
+.calento-help-container .fa-hand-pointer {
+  font-size: 2.5vh;
+  transform: translate(1.5vh, 1.2vh) rotate(-45deg);
+}
+
+
+
+/* Overlay fondo desapareciendo */
+@keyframes fadeOutBg {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ============================================================
+ * PELOTITA DEL SACADOR - COPIA PELOTITA CON FUEGO, EL DE ARRIBA ANDA PERFECTO CON BALL.PNG
+ * ============================================================ */
+
+/* PELOTITA */
+.sacador-ball-container {
+  position: relative;
+}
+.sacador-ball-container img {
+  width: 5vh;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.ball1, .ball2, .ball3, .ball4 {
+  transform: translate(-5.5vh, -1.1vh) !important;
+}
+
+/* Estado base: oculto y desplazado */
+.sacador-ball-container {
+  opacity: 0;
+  transform: translateY(-2vh);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+/* Estado visible */
+.sacador-ball-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ============================================================
+ * SEPARADORES
+ * ============================================================ */
+.separator {
+  height: 0.2vh;
+  width: 100%;
+  background: var(--separator-gradient);
+}
+.vertical-separator-container { position: relative; }
+.vertical-separator {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0.2vh;
+  height: 8vh;
+  background: var(--text-color);
+  transform: translate(-50%, -50%);
+}
+.vertical-separator:first-child { transform: translate(-50%, -50%) translateX(3vh); }
+.vertical-separator:last-child {  transform: translate(-50%, -50%) translateX(9.3vh); }
+
+/* ============================================================
+ * RELOJ - RELOJ SUPERIOR E IMAGEN
+ * ============================================================ */
+.reloj {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column;
+  z-index: 10;
+}
+.reloj p {
+  font-family: var(--main-font);
+  font-size: 5vh;
+  color: var(--text-color);
+  margin: 0;
+  text-align: center;
+  user-select: none;
+  padding: 1vh 3vh;
+  border-radius: 0 0 3vh 3vh;
+  background: var(--semitransparent-bg);
+}
+.logo-club {
+  width: 14vh;
+  aspect-ratio: 1/1;
+  margin: auto;
+  object-fit: contain;
+}
+
+/* ============================================================
+ * CRONOS - RELOJES INFERIORES
+ * ============================================================ */
+.cronos-container {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  bottom: 4vh;
+  display: flex; flex-direction: row;
+  padding: 1vh 3vw;
+  z-index: 10;
+}
+.cronos-container p {
+  font-family: var(--main-font);
+  margin: 0;
+  text-align: center;
+  user-select: none;
+}
+.column-cronos {
+  display: flex;
+  flex-direction: column;
+  align-items: start; 
+  gap: .5vh;
+}
+.cronos-title { font-size: 3vh; }
+.crono-1, .crono-2 {
+  font-size: 6vh;
+  margin: 0 3vh !important;
+}
+.crono-2 { color: var(--red-warn); }
+
+.line-decoration-cronos {
+  width: 1.5vh; height: 100%;
+  background: var(--accent-color-2);
+}
+.cronos-mini-container {
+  display: flex;
+  background: var(--semitransparent-bg);
+  width: 29vh;
+}
+
+/* ============================================================
+ * ANUNCIOS
+ * ============================================================ */
+.ads-container {
+  position: fixed;
+  display: flex; align-items: center; justify-content: center;
+  width: 72vh; height: 20vh;
+  font-size: 1.5vh; 
+  opacity: 1; z-index: 1000;
+}
+.ads-container p {
+  font-size: 5vh;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+}
+/* POSICIONES */
+.ads-container1 { top: 0; left: 50%; transform: translateX(-100%) translateX(-15vh); }
+.ads-container2 { top: 0; left: 50%; transform: translateX(0%) translateX(15vh); }
+.ads-container3 { bottom: 0; left: 50%; width: 55.5vh; transform: translateX(-100%) translateX(-31.5vh); }
+.ads-container4 { bottom: 0; left: 50%; width: 55.5vh; transform: translateX(0%) translateX(31.5vh); }
+
+.ads-container1, .ads-container2{
+background: linear-gradient(#ffffff11, #ffffff00);
+height: 10vh;
+}
+
+.ads-container3, .ads-container4{
+background: linear-gradient(#ffffff00, #ffffff11);
+}
+
+/*
+ANUNCIO 3 REFERENCIA A LOS CONTROLES:
+*/
+
+.seccion-de-referencias{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1vh;
+}
+
+.referencia{
+  width: 100%;
+  display: flex;
+  margin-left: 5vh;
+}
+
+.referencia-texto-container{
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.seccion-de-referencias p{
+  font-size: 3vh;
+  text-wrap: nowrap;
+  text-align: start;
+  margin-left: 1vh;
+  font-weight:normal !important;
+}
+
+.pulsera-grafico-container{
+  width: 4vh !important;
+  height: 4vh !important;
+}
+
+.referencia-texto-container-3{
+  transform: translateX(6vh);
+}
+
+.referencia-texto-container-2{
+  transform: translateX(4vh);
+}
+
+.referencia-texto-container-1{
+  transform: translateX(2vh);
+}
+
+.circulo-exterior{
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  background: var(--text-color);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.circulo-detalle{
+  width: 75%;
+  height: 75%; 
+  border-radius: 100%;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circulo-interior{
+  width: 90%;
+  height: 90%;
+  border-radius: 100%;
+  background: var(--text-color);
+    display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.linea-detalle{
+  width: 25%;
+  height: 7%;
+  background: var(--bg-color);
+  border-radius: 100% 0 0 100%;
+}
+
+
+.fa-hand-pointer{
+  color: var(--accent-color-2);
+  font-size: 3vh;
+  transform: translate(2.5vh, 2vh) rotate(-45deg);
+  text-shadow: -0.2vh -0.2vh 0 var(--bg-color);
+}
+
+.fa-hand-pointer:nth-child(2){
+  margin-right: -0.2vh;
+  margin-left: -0.2vh;
+}
+
+.hands-container{
+  position: absolute;
+  display: flex;
+  align-items: end;
+}
+
+/*=============ADS 4 LOGOS============*/
+
+.ads-container4{
+ justify-content: space-between !important;
+ align-items: center;
+}
+
+.ads-container4 img{
+  width: 20vh;
+}
+
+
+
+
+.ads-container4::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0.3vh;          /* grosor relativo */
+  height: 100%;         /* cubre toda la altura visible */
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    white 50%,
+    transparent 100%
+  );
+  transform: skewY(20deg);
+  transform-origin: top;
+}
+
+/* ============================================================
+ * OVERLAY DE ANUNCIOS DEL JUEGO
+ * ============================================================ */
+
+/* Contenedor principal */
+.overlay-advice {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 9999;
+  font-family: var(--main-font);
+  background: transparent; /* empieza transparente */
+}
+
+@keyframes overlayBg {
+  from {
+    background: transparent;
+  }
+  to {
+    background: var(--color-overlay-dark);
+  }
+}
+
+
+/* Barras */
+.bar {
+  width: 110%;
+  height: 40vh;
+  background: var(--color-bar-bg);
+  rotate: -5deg;
+}
+
+/* Posición inicial ya definida con translate */
+.bar-upper {
+  transform: translate(-10vh, -10vh);
+
+}
+
+.bar-lower {
+  transform: translate(-10vh, 10vh);
+
+}
+
+/* Animaciones */
+@keyframes slideRightToLeft {
+  from { transform: translateX(120vw) translateY(-10vh) }
+  to { transform: translateX(-10vh) translateY(-10vh) }
+}
+
+@keyframes slideLeftToRight {
+  from { transform: translateX(-120vw) translateY(10vh) }
+  to { transform: translateX(-10vh) translateY(10vh) }
+}
+
+/* Animaciones */
+@keyframes slideRightToLeftText {
+  from { opacity:0;transform: translateX(-10vw) }
+  to { opacity: 1; transform: translateX(0vh) }
+}
+
+@keyframes slideLeftToRightText {
+  from { opacity:0;transform: translateX(5vw)}
+  to { opacity: 1; transform: translateX(0vh)}
+}
+
+
+/* Fondo salida */
+@keyframes overlayBgOut {
+  from {
+    background: var(--color-overlay-dark);
+  }
+  to {
+    background: transparent;
+  }
+}
+
+/* Barras salida */
+@keyframes slideLeftToRightOut {
+  from { transform: translateX(-10vh) translateY(-10vh) }
+  to   { transform: translateX(120vw) translateY(-10vh) }
+}
+
+@keyframes slideRightToLeftOut {
+  from { transform: translateX(-10vh) translateY(10vh) }
+  to   { transform: translateX(-120vw) translateY(10vh) }
+}
+
+/* Texto salida */
+@keyframes slideLeftToRightTextOut {
+  from { opacity: 1; transform: translateX(0vh) }
+  to   { opacity: 0; transform: translateX(10vw) }
+}
+
+@keyframes slideRightToLeftTextOut {
+  from { opacity: 1; transform: translateX(0vh) }
+  to   { opacity: 0; transform: translateX(-5vw) }
+}
+
+/* Contenedor de texto */
+.advice-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  rotate: -5deg;
+}
+
+/* Texto único */
+.advice-text.single-line {
+  font-size: 20vh;
+  font-weight: bold;
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.2vh;
+  text-align: center;
+  line-height: 1;
+  transform: translateX(100vw); /* empieza fuera de pantalla a la derecha */
+
+}
+
+/* Texto de dos líneas */
+.advice-text.line1 {
+  font-size: 20vh;
+  font-weight: bold;
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.2vh;
+  text-align: center;
+  line-height: 1;
+  transform: translateX(100vw);
+
+}
+
+.advice-text.line2 {
+  font-size: 20vh;
+  font-weight: bold;
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.2vh;
+  text-align: center;
+  line-height: 1;
+  transform: translateX(-100vw);
+
+}
+
+/*
+TIEBREAK EFECTOS PARTICULAS
+*/
+
+/* Overlay pantalla completa arriba de todo */
+#lava-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0;                 /* aparece con fade */
+  transition: opacity 400ms ease;
+}
+
+#lava-overlay.active {
+  opacity: 1;
+}
+
+#lava-overlay.fade-out {
+  opacity: 0;
+}
+
+
+/* Fondo Overlay Genérico */
+#bg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;                   /* empieza invisible */
+  transition: opacity 0.5s ease; /* fade-in/fade-out */
+  pointer-events: none;          /* no molesta clics */
+}
+
+/* Cuando está activo */
+#bg-overlay.active {
+  opacity: 1;
+}
+
+
+/*
+PUNTO DE ORO!!!!!!!!!!
+*/
+
+/* Puntos de los jugadores en dorado */
+.game-score.punto-oro {
+  background-color: var(--accent-color-3); /* dorado fuerte */
+}
+
+/*
+ * ESPACIO PARA MENEJAR Y MOSTRAR CONTENEDORES PRINCIPALES DEL MARCADOR
+ *
+*/
+
+
+
+.marcador-container,
+.cronos-container {
+  opacity: 0;
+  display: none  ;
+  transition: opacity 1s ease, transform 1s ease ;
+}
+
+/*.marcador-container,
+.cronos-container,
+.reloj,
+.ads-container {
+  opacity: 0;
+  display: none  ;
+  transition: opacity 1s ease, transform 1s ease ;
+}*/
+
+
+.marcador-container{
+  transform: translateX(-5vh);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*======================
+ * MENU SACADOR
+ *=======================*/
+
+#menu-sacador-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: none; /* invisible por defecto */
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-color);
+  z-index: 999;
+  opacity: 0;
+}
+
+/* Columna central (título, paso, opciones) */
+.menu-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  gap: 1.5vh;
+  padding: 2vh 4vw;
+  border-radius: 1vh;
+  scale: 2.5;
+
+  opacity: 0;
+  transform: translateY(3vh) scale(0.9);
+  animation: fadeUpZoom 0.8s ease forwards;
+}
+
+
+#menu-sacador-overlay,
+#menu-sacador-overlay p {
+  text-transform: uppercase;
+}
+
+@keyframes fadeUpZoom {
+  from {
+    opacity: 0;
+    transform: translateY(3vh) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+#menu-sacador-overlay .calento-title{
+  font-size: 4vh !important;
+}
+
+/* Título del overlay */
+.menu-title {
+  font-family: 'Oswald', serif;
+  font-size: 2.5vh;
+  color: var(--text-color);
+  text-align: center;
+  margin: 0;
+}
+
+/* Paso actual */
+.menu-step {
+  font-family: var(--main-font);
+  font-size: 2vh;
+  color: var(--text-color);
+  margin: 1vh 0;
+  text-align: center;
+}
+
+/* Contenedor de opciones */
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  align-items: center;
+}
+
+/* Cada opción individual */
+.menu-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5vh;
+  font-family: var(--main-font);
+  font-size: 2vh;
+  color: var(--text-color);
+  text-align: center;
+}
+
+/* Animación de cada opción */
+.menu-option {
+  opacity: 0;
+  transform: translateY(2vh);
+  animation: fadeUp 0.8s ease forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(2vh);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reutilizamos los gráficos de pulsera */
+.menu-option .pulsera-grafico-container {
+  width: 3vh !important;
+  height: 3vh !important;
+  position: relative;
+  scale: 0.8;
+}
+
+/* Contenedor de manitos */
+.menu-option .hands-container {
+  display: flex;
+  justify-content: center;
+  gap: 0.3vh;
+  scale: 0.7;
+}
+
+.menu-option .fa-hand-pointer {
+  font-size: 2.5vh;
+  transform: rotate(-45deg);
+}
+
+#menu-sacador-opciones{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    to right,
+    transparent,
+    #9b30ff33,
+    transparent
+  );   
+  width: 100%;
+  padding: 1.5vh;
+  margin-top: 0 !important;
+}
+
+#menu-sacador-opciones .calento-help-container{
+  background: var(--semitransparent-bg);
+  margin-top: 0;
+  padding-right: 1vh;
+}
+
+.menu-option-text {
+  background: var(--accent-color-2);
+  padding: 0.5vh 1vw;
+  font-weight: bold;
+  color: var(--bg-color);
+  display: inline-block;
+  min-width: 6ch;
+  text-align: center;
+}
+
+.menu-option-ref {
+  font-family: var(--main-font);
+  font-size: 1.8vh;
+  color: var(--text-color);
+  margin-left: 0.5vw;
+  display: inline-block;
+}
+
+
+
+
+
+#menu-sacador-paso {
+  margin-top: 0.5vh;
+  text-transform: uppercase;       /* si querés mantener mayúsculas */
+  font-weight: bold;                /* opcional, para destacar el paso */
+  border-radius: 3vh;
+  padding: 0.2vh 1vh;           /* espacio entre texto y línea */
+  border: 0.1vh solid #9b30ff55; /* línea más visible y estilizada */
+  width:fit-content;
+  background: #9b30ff33;
+}
+
+
+
+
+
+
+
+/*TABLA RESUMEN DE SACADORES MENU*/
+
+/* Contenedor de tabla y opciones */
+.contenedor-tabla-opciones {
+  display: flex;
+  width: 100%;
+  gap: 2vh;
+  margin-top: 2vh;
+  padding-right: 2vh;
+}
+
+/* Tabla de resumen */
+.tabla-resumen {
+  width: fit-content; 
+  text-align: center;
+  color: #fff; /* Texto blanco */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 25vh;
+  scale: 0.95;
+}
+
+/* Tabla en sí */
+.tabla-resumen table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Encabezado y celdas */
+.tabla-resumen th,
+.tabla-resumen td {
+  border-bottom: 0.1vh solid #9b30ff88; /* línea blanca */
+  font-size: 1.7vh;
+  padding: 0.3vh 1vh;
+  text-align: start;
+  text-wrap: nowrap;
+}
+
+.tabla-resumen th:nth-child(1), .tabla-resumen td:nth-child(1) {
+  width: 8vh;
+}
+
+.tabla-resumen th{
+  background-color: var(--accent-color-2);
+  color: var(--bg-color) !important;
+}
+
+.tabla-resumen td{
+border-right: 0.1vh solid #9b30ff88;
+
+}
+
+.tabla-resumen td:nth-child(1){
+  /*background: #9b30ff55;*/
+  font-weight: bold;
+  color: var(--accent-color-2);
+border-right: 0.1vh solid #9b30ff88;
+border-left: 0.1vh solid #9b30ff88;
+}
+
+/* Encabezados */
+.tabla-resumen th {
+  color: #fff;
+
+}
+
+/* Título de resumen */
+.resumen-title {
+  font-family: 'Oswald', serif;
+  font-size: 2.5vh;
+  font-weight: bold;
+  margin: 0 0 1vh 0;
+  color: #fff;
+}
+
+/* Pareja sacadora */
+.resumen-pareja-sacadora {
+  font-size: 1.8vh;
+  font-weight: bold;
+  margin-top: 1vh;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-wrap: nowrap;
+}
+
+.resumen-pareja-sacadora b{
+  background: #9b30ff33;
+  border: 0.1vh solid #9b30ff55;
+  display: flex;
+  margin-left: 1vh;
+  border-radius: 3vh;
+  padding: 0vh 1vh;
+}
+
+/* Columna del orden (super compacta) */
+.tabla-resumen th.orden-col,
+.tabla-resumen td.orden-col {
+  width: 2ch;          /* súper chiquita */
+  text-align: center;
+  padding: 0.2vh 0.4vh;
+}
+
+/* Columna de jugador ocupa el resto */
+.tabla-resumen td.jugador-col {
+  text-align: left;
+  padding-left: 0.8vh;
+  font-weight: bold;
+}
+
+/* Título encima de la tabla */
+.tabla-resumen .resumen-title {
+  font-size: 1.9vh;
+  margin-bottom: 0.5vh;
+  text-align: center;
+}
+
+/* Degradado fila por fila (lo complementamos con inline JS para intensidad dinámica) */
+.tabla-resumen tbody tr {
+  transition: background 0.3s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ /* ================== OVERLAY de MENU =================== */
+  #menu-overlay {
+    display: none; /* Se activa dinámicamente */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.75);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+  }
+
+  /* ================== CONTENEDOR ================== */
+  #menu-contenedor {
+    background: #222;
+    padding: 30px 40px;
+    border-radius: 15px;
+    color: #fff;
+    text-align: center;
+    min-width: 300px;
+    max-width: 400px;
+  }
+
+  #menu-contenedor h2 {
+    margin-bottom: 20px;
+    font-size: 1.4em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ================== OPCIONES ================== */
+  .menu-opcion {
+    font-size: 1.2em;
+    padding: 10px 0;
+    margin: 5px 0;
+    cursor: default;
+    position: relative;
+  }
+
+  /* Señalizador de opción seleccionada */
+  .menu-opcion.seleccionado::before {
+    content: "\f0a4"; /* FontAwesome hand-pointer */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    display: inline-block;
+    transform: rotate(90deg);
+    margin-right: 10px;
+    color: #ffcc00;
+  }
+
+  .menu-instrucciones {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #aaa;
+  }
+
+/* ============================================================
+   OVERLAY DEL QR
+   ============================================================ */
+
+.qr-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 60vh;
+  transform: translate(-50%, -50%) scale(1.3); 
+  display: none;    
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 4vh;
+  padding: 2vh;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  box-sizing: border-box;
+}
+
+/* Contenedores QR y Tabla */
+#qr-container, #ultimo-partido-container {
+  display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+/* QR */
+
+#qr-container {
+  width: 27vh;
+  height: 27vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius: .5vh;
+  overflow: hidden;
+}
+
+
+/* Tabla último partido */
+#ultimo-partido-container {
+  width: 50vh;
+  margin-left: 4vh;
+}
+
+#ultimo-partido-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 2.2vh;
+  text-align: center;
+}
+
+#ultimo-partido-container th, 
+#ultimo-partido-container td {
+  border: 0.2vh solid var(--text-color);
+  padding: 1vh;
+}
+
+/* Resaltar QR y tabla en pantalla */
+#qr-container, #ultimo-partido-container {
+  color: var(--text-color);
+}
+
+/* ============================================================
+ * MARCADOR HISTORIAL - CONTENEDOR PRINCIPAL
+ * ============================================================ */
+.marcador-hist-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40vh;  
+  height: auto;
+  margin: auto;
+  padding: 1%;
+  scale: 1;
+  max-height: fit-content;
+  box-sizing: border-box;
+}
+
+/* HEADER */
+.marcador-hist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 0.5vh;
+}
+.hist-court-name {
+  text-align: left;
+  flex-basis: 50%;
+  font-size: 2.2vh;
+  font-weight: 300;
+}
+.hist-set-title,
+.hist-game-title {
+  text-align: center;
+  flex-basis: 10%;
+  flex-shrink: 0;
+  font-size: 2vh;
+  font-weight: 300;
+  text-wrap: nowrap;
+}
+.hist-game-title { font-weight: 500;}
+
+/* FILAS DE PUNTAJE */
+.marcador-hist-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.hist-player-name {
+  text-align: left;
+  flex-basis: 50%;
+  font-size: 3vh;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0.5vh 0;
+}
+.hist-player-name p {
+  display: flex;
+  align-items: start;
+  justify-content: start;
+}
+
+.hist-score,
+.hist-game-score {
+  text-align: center;
+  flex-basis: 10%;
+  flex-shrink: 0;
+  font-size: 4vh;
+  font-weight: 600;
+  font-family: "Oswald", serif;
+}
+.hist-score,
+.hist-set-title { margin: 0 1%; }
+
+.hist-game-score {
+  flex-basis: 20%;
+  font-size: 6vh;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-color-1);
+}
+#hist-points-title { flex-basis: 20%; }
+
+.hist-set-ganado {
+  opacity: 1;
+}
+.hist-set-perdido {
+  opacity: 0.5;
+  transition: opacity 0.5s ease !important;
+}
+
+/* ============================================================
+ * SEPARADORES HISTORIAL
+ * ============================================================ */
+.hist-separator {
+  height: 0.2vh;
+  width: 100%;
+  background: var(--gradient-hist-separator);
+}
+
+.hist-vertical-separator-container { position: relative; }
+.hist-vertical-separator {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0.2vh;
+  height: 8vh;
+  background: var(--text-color);
+  transform: translate(-50%, -50%);
+}
+.hist-vertical-separator:first-child { transform: translate(-50%, -50%) translateX(7.5vh); }
+.hist-vertical-separator:last-child  { transform: translate(-50%, -50%) translateX(14vh); }
+
+
+.hist-score-high {
+  color: var(--text-color); /* blanco */
+  opacity: 1;
+  font-weight: bold;
+}
+
+.hist-score-low {
+  color: var(--text-color); 
+  opacity: 0.3; /* más apagado */
+}
+
+.ultimo-partido-title{
+  font-size: 3.8vh;
+  text-align: start;
+  margin-bottom: 3vh;
+  text-align: center;
+}
+
+
+.qr-title {
+  font-size: 4vh;
+  color: var(--text-color);
+  margin: 1vh 0;
+  text-wrap: nowrap;
+}
+
+
+
+/*ANIMACION DE RESPIRAR PARA BACKGROUNDS*/
+@keyframes overlayBreath {
+  0%   { background-position: 50% 0%; }
+  50%  { background-position: 50% 100%; }
+  100% { background-position: 50% 0%; }
+}
+
+/*PARTICULAS POR CADA PUNTO*/
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10;
+}
+
