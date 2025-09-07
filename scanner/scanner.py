@@ -46,9 +46,9 @@ async def whitelist_watchdog():
 
 # ------------ LOGIC ----------------------------------------
 REBOUND_BY_TYPE = {
-    "simple": 2.0,
-    "double": 2.0,
-    "triple": 2.5,   # 👈 rebote para triple-toque
+    "simple": 3.0,
+    "double": 3.0,
+    "triple": 3.0,   # 👈 rebote para triple-toque
 }
 
 ACTIONS = {
