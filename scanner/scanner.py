@@ -7,7 +7,7 @@ import json
 
 # ------------ CONFIG ---------------------------------------
 MAC_PREFIX = "C3:00:00".upper()
-NODE_URL   = "http://localhost:3000/api/sensors"  # cambialo si es necesario
+NODE_URL   = "http://localhost:5000/api/sensors"  # cambialo si es necesario
 CSV_PATH   = Path("log.csv")
 WHITELIST_FILE = "whiteList.json"
 WATCHDOG_INTERVAL = 1.0  # segundos
