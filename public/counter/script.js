@@ -533,6 +533,7 @@ function getHost() {
 // GENERAR QR Y TABLA
 // =======================
 
+ 
 async function generarQRyUltimoPartido() {
   const qrOverlay = document.querySelector(".qr-overlay");
   qrOverlay.innerHTML = ""; // limpiamos
@@ -558,34 +559,46 @@ async function generarQRyUltimoPartido() {
   qrContainer.id = "qr-container";
   qrWrapper.appendChild(qrContainer);
 
-
-
   // Contenedor del último partido
   const ultimoContainer = document.createElement("div");
   ultimoContainer.id = "ultimo-partido-container";
   qrOverlay.appendChild(ultimoContainer);
 
-  // === QR ===
-  const host = getHost();
-  const puerto = "5000";
-  const path = "/config/";
-  const urlPartido = `http://${host}:${puerto}${path}`;
+  // === QR dinámico con raspy_id ===
+  try {
+    // 🔹 1. Pedimos el raspy_id a la propia API local
+    const resp = await fetch("/api/raspy-id");
+    const data = await resp.json();
+    const raspy_id = data.raspy_id;
+
+    // 🔹 2. VPS (dominio o IP pública)
+    const vpsUrl = "http://91.108.124.53:5000"; // o https://tu-dominio.com
+
+    // 🔹 3. Armamos la URL con query param
+    //const path = "/config/";
+    //const urlPartido = `${vpsUrl}${path}?raspy_id=${raspy_id}`;
+
+    const urlPartido = `${vpsUrl}?raspy_id=${raspy_id}`;
 
 
+    // Definimos tamaño dinámico
+    const width = qrContainer.offsetWidth || 200;
+    const height = qrContainer.offsetHeight || 200;
 
-// Definimos tamaño dinámico
-const width = qrContainer.offsetWidth;
-const height = qrContainer.offsetHeight;
+    new QRCode(qrContainer, {
+      text: urlPartido,
+      width: width,
+      height: height,
+      colorDark: "#9b30ff",
+      colorLight: "#1b0a3d",
+      correctLevel: QRCode.CorrectLevel.H
+    });
 
-new QRCode(qrContainer, {
-  text: urlPartido,
-  width: width,
-  height: height,
-  colorDark: "#9b30ff",
-  colorLight: "#1b0a3d",
-  correctLevel: QRCode.CorrectLevel.H
-});
+    console.log("✅ QR generado con URL:", urlPartido);
 
+  } catch (err) {
+    console.error("❌ Error obteniendo Raspy ID:", err);
+  }
 
   // === Último partido (igual que antes) ===
   try {
@@ -654,28 +667,28 @@ new QRCode(qrContainer, {
 
     ultimoContainer.innerHTML = html;
 
-// Aplicamos estilos dinámicos a cada set
-sets.forEach((s, i) => {
-  const p1Cell = ultimoContainer.querySelectorAll(".marcador-hist-row")[0]
-                  .querySelectorAll(".hist-score-set")[i].querySelector("p");
-  const p2Cell = ultimoContainer.querySelectorAll(".marcador-hist-row")[1]
-                  .querySelectorAll(".hist-score-set")[i].querySelector("p");
+    // Aplicamos estilos dinámicos a cada set
+    sets.forEach((s, i) => {
+      const p1Cell = ultimoContainer.querySelectorAll(".marcador-hist-row")[0]
+                      .querySelectorAll(".hist-score-set")[i].querySelector("p");
+      const p2Cell = ultimoContainer.querySelectorAll(".marcador-hist-row")[1]
+                      .querySelectorAll(".hist-score-set")[i].querySelector("p");
 
-  const val1 = Number(p1Cell.textContent);
-  const val2 = Number(p2Cell.textContent);
+      const val1 = Number(p1Cell.textContent);
+      const val2 = Number(p2Cell.textContent);
 
-  if (val1 > val2) {
-    p1Cell.style.opacity = "1";
-    p2Cell.style.opacity = "0.5";
-  } else if (val2 > val1) {
-    p1Cell.style.opacity = "0.5";
-    p2Cell.style.opacity = "1";
-  } else {
-    // Empate
-    p1Cell.style.opacity = "1";
-    p2Cell.style.opacity = "1";
-  }
-});
+      if (val1 > val2) {
+        p1Cell.style.opacity = "1";
+        p2Cell.style.opacity = "0.5";
+      } else if (val2 > val1) {
+        p1Cell.style.opacity = "0.5";
+        p2Cell.style.opacity = "1";
+      } else {
+        // Empate
+        p1Cell.style.opacity = "1";
+        p2Cell.style.opacity = "1";
+      }
+    });
 
   } catch (e) {
     console.warn("No hay historial para mostrar:", e);
