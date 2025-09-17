@@ -69,7 +69,9 @@ done
 
 # Abrir Chrome en pantalla completa apuntando al marcador
 echo -e "${greenColour}[+]${endColour} Abriendo Chrome en pantalla completa..."
-google-chrome --start-fullscreen "http://localhost:3000" &
+chromium-browser --start-fullscreen "http://localhost:3000" &
+# o si tu Raspberry Pi OS usa chromium
+# chromium --start-fullscreen "http://localhost:3000" &
 
 echo -e "${greenColour}[+]${endColour} Aplicación levantada y servicios configurados para iniciar automáticamente."
 
