@@ -8,48 +8,68 @@ yellowColour="\e[0;33m\033[1m"
 redColour="\e[0;31m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 
+SYSTEMD_DIR="systemd"
+APP_DIR="$(pwd)"
 VENV_DIR="../pyenv"
+CURRENT_USER=$(whoami)
 
 # CTRL+C
 function ctrl_c () {
-  echo -e "\n\n${yellowColour}[!]${endColour} Saliendo...\n"
-  tput cnorm
-  exit 1
+    echo -e "\n\n${yellowColour}[!]${endColour} Saliendo...\n"
+    tput cnorm
+    exit 1
 }
 trap ctrl_c INT
 
-echo -e "${turquoiseColour}[+]${endColour} Iniciando aplicación..."
+echo -e "${turquoiseColour}[+]${endColour} Preparando servicios systemd para el usuario ${greenColour}$CURRENT_USER${endColour}..."
 
-# 1. Levantar backend
-if [ -f "server.js" ]; then
-    echo -e "${greenColour}[+]${endColour} Levantando backend con Node.js..."
-    node server.js &
-    NODE_PID=$!
-    sleep 1
-else
-    echo -e "${redColour}[!]${endColour} No se encontró server.js en la carpeta actual."
-fi
-
-# 2. Entrar al virtualenv y ejecutar scanner.py
-if [ -d "$VENV_DIR" ]; then
-    echo -e "${greenColour}[+]${endColour} Activando entorno virtual..."
-    source "$VENV_DIR/bin/activate"
-
-    if [ -f "scanner/scanner.py" ]; then
-        echo -e "${greenColour}[+]${endColour} Ejecutando scanner.py..."
-        python scanner/scanner.py
+# Copiar servicios al systemd del usuario
+for service in raspy-server raspy-scanner; do
+    SERVICE_FILE="$SYSTEMD_DIR/$service.service"
+    if [ -f "$SERVICE_FILE" ]; then
+        # Reemplazar User dinámicamente
+        sed "s/^User=.*/User=$CURRENT_USER/" "$SERVICE_FILE" > "/tmp/$service.service.tmp"
+        sudo mv "/tmp/$service.service.tmp" "/etc/systemd/system/$service.service"
+        sudo chmod 644 "/etc/systemd/system/$service.service"
+        echo -e "${greenColour}[+]${endColour} Servicio $service preparado."
     else
-        echo -e "${redColour}[!]${endColour} No se encontró scanner.py en scanner/"
+        echo -e "${redColour}[!]${endColour} No se encontró $SERVICE_FILE"
     fi
+done
 
-    deactivate
-else
-    echo -e "${redColour}[!]${endColour} No se encontró entorno virtual '$VENV_DIR'."
-fi
+# Recargar systemd
+sudo systemctl daemon-reload
 
-# Opcional: matar backend si querés que termine junto con scanner.py
-if [[ ! -z "$NODE_PID" ]]; then
-    kill $NODE_PID 2>/dev/null
-fi
+# Función para verificar si un servicio está activo
+function check_service() {
+    systemctl is-active --quiet "$1"
+}
 
-echo -e "${greenColour}[+]${endColour} Aplicación finalizada."
+# Levantar servicios
+for service in raspy-server raspy-scanner; do
+    if check_service "$service"; then
+        read -p "$(echo -e "${yellowColour}[!]${endColour} $service ya está corriendo. Reiniciarlo? (S/N): ")" RESP
+        RESP=${RESP^^}
+        if [[ "$RESP" == "S" ]]; then
+            echo -e "${greenColour}[+]${endColour} Reiniciando $service..."
+            sudo systemctl restart "$service"
+        else
+            echo -e "${greenColour}[+]${endColour} Dejando $service en ejecución."
+        fi
+    else
+        echo -e "${greenColour}[+]${endColour} Iniciando $service..."
+        sudo systemctl start "$service"
+    fi
+done
+
+# Habilitar para que arranque al iniciar
+for service in raspy-server raspy-scanner; do
+    sudo systemctl enable "$service"
+done
+
+# Abrir Chrome en pantalla completa apuntando al marcador
+echo -e "${greenColour}[+]${endColour} Abriendo Chrome en pantalla completa..."
+google-chrome --start-fullscreen "http://localhost:3000" &
+
+echo -e "${greenColour}[+]${endColour} Aplicación levantada y servicios configurados para iniciar automáticamente."
+
