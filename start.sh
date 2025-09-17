@@ -83,7 +83,7 @@ done
 
 # Abrir Chromium en pantalla completa apuntando al marcador
 echo -e "${greenColour}[+]${endColour} Abriendo Chromium en pantalla completa..."
-chromium-browser --start-fullscreen --disable-gpu --no-sandbox "http://localhost:3000" &>/dev/null &
+chromium-browser --start-fullscreen --disable-gpu --no-sandbox "http://localhost:5000/counter/" &>/dev/null &
 
 echo -e "${greenColour}[+]${endColour} Aplicación levantada y servicios configurados para iniciar automáticamente."
 
