@@ -86,39 +86,45 @@ function guardarEstado() {
   fs.writeFileSync(HISTORIAL_PATH, JSON.stringify(historial, null, 2));
 }
 
-// =======================
-// 🛠️ Inicialización del partido
-// =======================
+// ===============================
+// 🛠️ CONFIGURAR PARTIDO
+// ===============================
 
 function configurarPartido(config) {
-  // 🚫 Bloquear si ya hay partido activo o terminado dentro del período de gracia
   if (estado.estadoPartido !== 'esperando') {
     console.log(`⚠️ No se puede configurar un nuevo partido, estado actual: ${estado.estadoPartido}`);
-    return false; // opcional: devolver algo para que el server avise al frontend
+    return false;
   }
 
-  // 🆕 Generar nuevo ID de partido
   const { randomUUID } = require('crypto');
   estado.matchId = randomUUID();
-
   estado.configuracion = config;
 
-  // Limpiar temporizadores anteriores si existen
-  if (estado.temporizadorCalentamiento) {
-    clearInterval(estado.temporizadorCalentamiento);
-    estado.temporizadorCalentamiento = null;
-  }
-  if (estado.temporizadorPartido) {
-    clearInterval(estado.temporizadorPartido);
-    estado.temporizadorPartido = null;
-  }
-  if (estado.temporizadorFin) {
-    clearTimeout(estado.temporizadorFin);
-    estado.temporizadorFin = null;
-  }
+  // Limpiar temporizadores anteriores
+  [estado.temporizadorCalentamiento, estado.temporizadorPartido, estado.temporizadorFin]
+    .forEach(timer => {
+      if (timer) clearInterval(timer);
+    });
+  estado.temporizadorCalentamiento = null;
+  estado.temporizadorPartido = null;
+  estado.temporizadorFin = null;
 
   estado.tiempoInicio = null;
   estado.tiempoPartidoTranscurrido = 0;
+
+  // ✅ Programar finalización absoluta por hora "fin"
+  const ahora = new Date();
+  const [finHoras, finMinutos] = config.fin.split(':').map(Number);
+  const finDate = new Date(ahora);
+  finDate.setHours(finHoras, finMinutos, 0, 0);
+
+  if (finDate <= ahora) finDate.setDate(finDate.getDate() + 1); // si ya pasó, que sea mañana
+  const msRestantes = finDate.getTime() - ahora.getTime();
+
+  estado.temporizadorFin = setTimeout(() => {
+    console.log(`⏰ Hora de fin alcanzada (${config.fin}), finalizando partido.`);
+    finalizarPorTiempo();
+  }, msRestantes);
 
   // Extraer minutos de calentamiento
   const tiempoConfig = config.tiempoCalentamiento || '0 minutos';
@@ -132,17 +138,17 @@ function configurarPartido(config) {
     estado.temporizadorCalentamiento = setInterval(() => {
       estado.tiempoCalentamientoRestante--;
       if (estado.tiempoCalentamientoRestante <= 0) {
-        //iniciarPartido();
-        iniciarEleccionSacador()
+        clearInterval(estado.temporizadorCalentamiento);
+        estado.temporizadorCalentamiento = null;
+        iniciarEleccionSacador();
       }
-      //notificarCambio();
     }, 1000);
 
   } else {
-    //iniciarPartido();
-    iniciarEleccionSacador()
+    iniciarEleccionSacador();
   }
 
+  // Reset marcador e historial
   estado.marcador = {
     sets: [
       { games: [0, 0] },
@@ -153,10 +159,8 @@ function configurarPartido(config) {
     setActual: 0,
     partidoTerminado: false,
   };
-
   estado.historial = [];
 
-  // 🔄 Borrar historial anterior en archivo
   try {
     if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
     if (!fs.existsSync(HISTORIAL_DIR)) fs.mkdirSync(HISTORIAL_DIR, { recursive: true });
@@ -172,52 +176,37 @@ function configurarPartido(config) {
 
   console.log('🛠️ Partido configurado:', config);
   notificarCambio();
-  return true; // éxito
+  return true;
 }
+
 
 function iniciarPartido() {
   if (estado.estadoPartido === 'jugando') return;
 
-  // Limpia timers anteriores si existen
   if (estado.temporizadorCalentamiento) {
     clearInterval(estado.temporizadorCalentamiento);
     estado.temporizadorCalentamiento = null;
   }
-  if (estado.temporizadorPartido) {
-    clearInterval(estado.temporizadorPartido);
-  }
 
   estado.estadoPartido = 'jugando';
-
-  // Si ya hay tiempo acumulado, lo usás, sino arrancás desde ahora
   if (!estado.tiempoInicio) {
     estado.tiempoInicio = Date.now();
-  } else {
-    // Ajustá el tiempoInicio para compensar tiempo acumulado
-    
-if (typeof estado.tiempoPartidoTranscurrido !== "number") {
-  estado.tiempoPartidoTranscurrido = 0;
-}
-estado.tiempoInicio = Date.now() - estado.tiempoPartidoTranscurrido * 1000;
-
   }
 
-estado.temporizadorPartido = setInterval(() => {
-  // 🚫 Cortar si ya no estamos en modo jugando
-  if (estado.estadoPartido !== 'jugando') {
-    clearInterval(estado.temporizadorPartido);
-    estado.temporizadorPartido = null;
-    return;
-  }
-
-  estado.tiempoPartidoTranscurrido = Math.floor((Date.now() - estado.tiempoInicio) / 1000);
-  console.log('⏱️ Tiempo partido transcurrido (s):', estado.tiempoPartidoTranscurrido);
-  //notificarCambio();
-}, 1000);
+  // ⏱️ Solo mide el tiempo transcurrido, el fin ya lo maneja configurarPartido
+  estado.temporizadorPartido = setInterval(() => {
+    if (estado.estadoPartido !== 'jugando') {
+      clearInterval(estado.temporizadorPartido);
+      estado.temporizadorPartido = null;
+      return;
+    }
+    estado.tiempoPartidoTranscurrido = Math.floor((Date.now() - estado.tiempoInicio) / 1000);
+  }, 1000);
 
   console.log('🎾 Partido comenzado automáticamente');
   notificarCambio();
 }
+
 
 
 
@@ -353,23 +342,78 @@ function ganarSet(parejaIndex, setIdx) {
   return gamesPareja >= 6 && gamesPareja - gamesRival >= 2;
 }
 
-// ===============================
-// GANAR PARTIDO FINALIZAR
-// ===============================
 
-function ganarPartido(parejaIndex) {
+
+// =======================
+// 🚨 Finalizar por tiempo
+// =======================
+function finalizarPorTiempo() {
+  if (estado.marcador.partidoTerminado) return;
+  ganarPartido(null, "tiempo"); 
+}
+
+// ===============================
+// 🏁 GANAR PARTIDO FINALIZAR 🏁 
+// ===============================
+function ganarPartido(parejaIndex, motivo = "normal") {
   estado.marcador.partidoTerminado = true;
   estado.estadoPartido = 'terminado';
+  estado.motivoFin = motivo;
 
   if (estado.temporizadorPartido) {
     clearInterval(estado.temporizadorPartido);
     estado.temporizadorPartido = null;
   }
 
+
+if (motivo === "tiempo") {
+  console.log(`⏹️ Partido terminado por motivo: tiempo`);
+
+  // Guardar historial ya mismo
+  guardarHistorialFinal();
+
+  // Limpiar archivo temporal
+  if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
+
+  // Reset inmediato del estado
+  estado.estadoPartido = 'esperando';
+  estado.matchId = null;
+  estado.marcador = {
+    sets: [
+      { games: [0, 0] },
+      { games: [0, 0] },
+      { games: [0, 0] }
+    ],
+    puntos: [0, 0],
+    setActual: 0,
+    partidoTerminado: false
+  };
+  estado.historial = [];
+  estado.tiempoPartidoTranscurrido = 0;
+  estado.tiempoGraciaRestante = null;
+
+  // 🚨 Limpiar también menú sacador
+  estado.sacadorActual = null;
+  if (estado.estadoPartido === 'eligiendoSacador') {
+    estado.estadoPartido = 'esperando';
+  }
+    // 🔹 Reseteamos menú sacador
+    menuSacador.activo = false;
+    menuSacador.paso = null;
+    menuSacador.opciones = [];
+    menuSacador.index = 0;
+    menuSacador.metodo = null;
+    menuSacador.ordenDeSaque = [];
+
+  notificarCambio();
+  return; // 👈 cortamos acá
+}
+
+
+  // --- Lógica normal (cuando hay un ganador) ---
   console.log(`🎉 Pareja ${parejaIndex + 1} gana el partido! 🎉`);
 
-  // Duración de gracia
-  const duracion = 30;
+  const duracion = 30; // tiempo de gracia
   estado.tiempoGraciaRestante = duracion;
 
   if (estado.temporizadorFin) clearInterval(estado.temporizadorFin);
@@ -383,13 +427,9 @@ function ganarPartido(parejaIndex) {
 
       console.log("⌛ Fin del tiempo de gracia, volviendo a standby.");
 
-      // 🔹 Guardar historial antes de reiniciar estado
       guardarHistorialFinal();
-
-      // 🔹 Limpiar archivo temporal
       if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
 
-      // 🔹 Reiniciar estado completamente
       estado.estadoPartido = 'esperando';
       estado.matchId = null;
       estado.marcador = {
@@ -415,6 +455,7 @@ function ganarPartido(parejaIndex) {
     }
   }, 1000);
 }
+
 
 // ===============================
 // --- GUARDAR HISTORIAL FINAL  ---
@@ -671,7 +712,7 @@ function ganarGame(parejaIndex) {
 
     if (modoCambioLado === 'Sin cambios') {
       // No hacemos nada, ni en tiebreak ni en games normales
-    } else if (modoCambioLado === 'Tradicional (Impares)' && totalGames % 2 === 1) {
+    } else if (modoCambioLado === 'Tradicional (impares)' && totalGames % 2 === 1) {
       cambiarLado();
     } else if (modoCambioLado === 'Al finalizar cada SET' && ganarSet(parejaIndex, setActual)) {
       cambiarLado();
@@ -1252,6 +1293,7 @@ function seleccionarMenu() {
     cerrarMenu();
   }
 }
+
 
 // ================================
 // ====== FINALIZAR PARTIDO =======

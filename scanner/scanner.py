@@ -7,10 +7,12 @@ import json
 
 # ------------ CONFIG ---------------------------------------
 MAC_PREFIX = "C3:00:00".upper()
-NODE_URL   = "http://localhost:5000/api/sensors"  # cambialo si es necesario
-CSV_PATH   = Path("log.csv")
-WHITELIST_FILE = "whiteList.json"
+NODE_URL   = "http://localhost:5000/api/sensors" 
 WATCHDOG_INTERVAL = 1.0  # segundos
+
+SCRIPT_DIR = Path(__file__).parent  # carpeta donde esta scanner.py
+WHITELIST_FILE = SCRIPT_DIR / "whiteList.json"
+CSV_PATH = SCRIPT_DIR / "log.csv"
 
 # ------------ WHITELIST ------------------------------------
 def load_mac_to_pareja(filepath=WHITELIST_FILE):
@@ -180,4 +182,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-

@@ -17,14 +17,44 @@ let estadoActual = null;
 let estabaEnTiebreak = false;
 let estadoPrevioPartido = null; // 👈 guardamos el último estado
 
+
+
 // =================================================
 // ================ EVENTO ESTADO =================
 // =================================================
 
-// EVENTO ESTADO: COntiene la totalidad de la información recibida
-
 socket.on("estado", (estado) => {
   estadoActual = estado;
+
+  const cronoRestante = document.querySelector(".crono-2");
+
+  // =================== LIMPIAR CRONO TIEMPO RESTANTE SI NO SE ESTÁ JUGANDO ===================
+  if (estado.estadoPartido !== 'jugando' && timerTiempoRestante) {
+    // Si teníamos un cronómetro activo y ahora ya no estamos jugando, el partido terminó
+    clearInterval(timerTiempoRestante);
+    timerTiempoRestante = null;
+
+    // Mostramos mensaje de partido finalizado solo si venía jugando
+    if (cronoRestante && cronoRestante.textContent !== "00:00:00") {
+      showAdviceOverlay("PARTIDO", "FINALIZADO");
+     // Quitar overlay animado
+     hideBgOverlay("lowtime-bg");
+    }
+
+    // Limpiamos overlay y color
+    if (overlayRadial) {
+      overlayRadial.style.opacity = "0";
+      overlayRadial.style.display = "none";
+     // Quitar overlay animado
+     hideBgOverlay("lowtime-bg");
+    }
+    if (cronoRestante) {
+      cronoRestante.style.color = "";
+      cronoRestante.textContent = "00:00:00";
+    }
+
+    avisoDosMinutosMostrado = false;
+  }
 
   // =================== ESTADO ESPERANDO ===================
   if (estado.estadoPartido === "esperando") {
@@ -33,7 +63,6 @@ socket.on("estado", (estado) => {
     ocultarOverlayFinalPartido();
     ocultarOverlayMenu();
     ocultarContadores();
-
     mostrarOverlayQR();
 
   // =================== ESTADO CALENTAMIENTO ===================
@@ -43,20 +72,25 @@ socket.on("estado", (estado) => {
     ocultarOverlayFinalPartido();
     ocultarOverlayMenu();
     ocultarContadores();
-
-    // Tomamos directamente el tiempo de calentamiento enviado por el backend
     const tiempoSegundos = parseInt(estado.configuracion.tiempoCalentamiento, 10) * 60;
-
     mostrarOverlayCalentamiento(tiempoSegundos);
 
   // =================== ESTADO JUGANDO ===================
   } else if (estado.estadoPartido === "jugando") {
+    const [horaFin, minFin] = estado.configuracion.fin.split(':').map(Number);
+    const ahora = new Date();
+    const finDate = new Date(ahora);
+    finDate.setHours(horaFin, minFin, 0, 0);
+    let segundosHastaFin = Math.floor((finDate - ahora) / 1000);
+    if (segundosHastaFin < 0) segundosHastaFin = 0;
+
+    iniciarCronoRestante(segundosHastaFin);
+
     console.warn("⚪ Estado JUGANDO → mostrar contadores");
     ocultarOverlayFinalPartido();
     ocultarOverlayCalentamiento();
     ocultarOverlayQR();
     ocultarOverlayMenu();
-
     mostrarContadores();
 
   // =================== ESTADO TERMINADO ===================
@@ -68,11 +102,6 @@ socket.on("estado", (estado) => {
     ocultarContadores();
     mostrarOverlayFinalPartido(estado.tiempoGraciaRestante);    
   }
-
-
-
-
-
 
   // =================== MENÚ ACTIVO ===================
   if (estado.menu?.activo) {
@@ -850,6 +879,98 @@ function ocultarContadores() {
   }, duracionMs);
 }
 
+
+
+
+
+
+
+// =================================================
+// =============== TIEMPO RESTANTE =================
+// =================================================
+
+let timerTiempoRestante = null;
+let overlayRadial = document.getElementById("overlay-radial");
+let overlayVisible = false;
+let avisoDosMinutosMostrado = false; // flag para que el mensaje de 2 min solo aparezca una vez
+
+function iniciarCronoRestante(segundosHastaFin) {
+  let tiempoRestante = Number(segundosHastaFin);
+  if (isNaN(tiempoRestante) || tiempoRestante < 0) tiempoRestante = 0;
+
+  if (timerTiempoRestante) clearInterval(timerTiempoRestante);
+
+  const cronoRestante = document.querySelector(".crono-2");
+
+  function mostrarOverlay() {
+    if (!overlayVisible) {
+      overlayVisible = true;
+      overlayRadial.style.display = "block";
+      overlayRadial.offsetHeight; // forzamos reflow
+      overlayRadial.style.opacity = "1";
+    }
+  }
+
+  function ocultarOverlay() {
+    if (overlayVisible) {
+      overlayVisible = false;
+      overlayRadial.style.opacity = "0";
+      overlayRadial.addEventListener("transitionend", function handler() {
+        overlayRadial.style.display = "none";
+        overlayRadial.removeEventListener("transitionend", handler);
+      });
+    }
+  }
+
+  function actualizarCronoRestante() {
+    const horas = Math.floor(tiempoRestante / 3600);
+    const minutos = Math.floor((tiempoRestante % 3600) / 60);
+    const segundos = tiempoRestante % 60;
+
+    cronoRestante.textContent =
+      String(horas).padStart(2, "0") + ":" +
+      String(minutos).padStart(2, "0") + ":" +
+      String(segundos).padStart(2, "0");
+
+    // =========== Mensaje de 2 minutos ===========
+    if (tiempoRestante <= 120 && !avisoDosMinutosMostrado) {
+      showAdviceOverlay("ÚLTIMOS 2", "MINUTOS");
+      // Overlay rojo para tiempo restante
+      showBgOverlay(
+        "linear-gradient(to bottom, #FF6B1100, #FF6B1155",
+        "lowtime-bg",
+        true
+      );
+      avisoDosMinutosMostrado = true;
+      cronoRestante.style.color = "var(--red-warn)";
+      mostrarOverlay();
+    } else if (tiempoRestante > 120) {
+      cronoRestante.style.color = "";
+      ocultarOverlay();
+    }
+
+    // =========== Mensaje de partido finalizado ===========
+    if (tiempoRestante <= 0) {
+      cronoRestante.textContent = "00:00:00";
+      cronoRestante.style.color = "";
+      ocultarOverlay();
+      showAdviceOverlay("PARTIDO", "FINALIZADO");
+    }
+  }
+
+  actualizarCronoRestante();
+
+  timerTiempoRestante = setInterval(() => {
+    tiempoRestante--;
+    if (tiempoRestante < 0) {
+      clearInterval(timerTiempoRestante);
+      timerTiempoRestante = null;
+      return;
+    }
+    actualizarCronoRestante();
+  }, 1000);
+}
+
 // =================================================
 // =============== TIEMPO DE PARTIDO ===============
 // =================================================
@@ -866,11 +987,13 @@ function iniciarRelojLocal(segundosIniciales) {
 
   timerLocal = setInterval(() => {
     const tiempoTranscurrido = tiempoBase + Math.floor((Date.now() - fechaServidor) / 1000);
-    actualizarCrono(tiempoTranscurrido);
+    actualizarCronoPartido(tiempoTranscurrido);
   }, 1000);
 }
 
-function actualizarCrono(segundos) {
+function actualizarCronoPartido(segundos = 0) { // default 0 para evitar NaN
+  if (typeof segundos !== 'number' || isNaN(segundos)) segundos = 0;
+
   const horas = Math.floor(segundos / 3600);
   const minutos = Math.floor((segundos % 3600) / 60);
   const segundosRestantes = segundos % 60;
@@ -880,9 +1003,10 @@ function actualizarCrono(segundos) {
     String(minutos).padStart(2, '0') + ':' +
     String(segundosRestantes).padStart(2, '0');
 
-  const crono = document.querySelector('.crono-1');
-  if (crono) crono.textContent = formato;
+  const crono1 = document.querySelector('.crono-1');
+  if (crono1) crono1.textContent = formato;
 }
+
 
 // =================================================
 // ===================== RELOJ =====================

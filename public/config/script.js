@@ -484,3 +484,40 @@ sendToServer = (datosPartido) => {
 
 
 
+// ==================================================
+// 🧪 ENVIAR PRUEBA AL SERVIDOR
+// ==================================================
+function enviarPruebaAlServer(finCustom = "23:59") {
+  const datosPrueba = {
+    jugadores: ["Juan", "Pedro", "Luis", "Carlos"],
+    parejas: {
+      pareja1: ["Juan", "Pedro"],
+      pareja2: ["Luis", "Carlos"]
+    },
+    parejaSacadora: "pareja1",
+    sacadores: ["Juan", "Luis"],
+
+    tiempoCalentamiento: "5 minutos",
+    cambioDeLado: "Tradicional (impares)",
+    tipoGames: "Punto de oro",
+
+    ordenDeSaque: ["Juan", "Pedro", "Luis", "Carlos"],
+
+    duracion: "60 minutos",
+    comienzo: "20:00",
+    fin: finCustom,  // 🔹 Editable a gusto
+
+    pulseras: {
+      pareja1: { nombre: "Pulsera Azul", mac: "AA:BB:CC:DD:EE:01" },
+      pareja2: { nombre: "Pulsera Roja", mac: "AA:BB:CC:DD:EE:02" }
+    }
+  };
+
+  console.log("🧪 Enviando datos de PRUEBA al servidor:", datosPrueba);
+
+  sendToServer(datosPrueba);
+}
+
+
+enviarPruebaAlServer("17:10");
+
