@@ -13,6 +13,10 @@ APP_DIR="$(pwd)"
 VENV_DIR="../pyenv"
 CURRENT_USER=$(whoami)
 
+# Detectar rutas absolutas
+NODE_PATH=$(which node)
+PYTHON_PATH=$(which python)
+
 # CTRL+C
 function ctrl_c () {
     echo -e "\n\n${yellowColour}[!]${endColour} Saliendo...\n"
@@ -22,14 +26,24 @@ function ctrl_c () {
 trap ctrl_c INT
 
 echo -e "${turquoiseColour}[+]${endColour} Preparando servicios systemd para el usuario ${greenColour}$CURRENT_USER${endColour}..."
+echo -e "${turquoiseColour}[+]${endColour} Node: ${greenColour}$NODE_PATH${endColour}"
+echo -e "${turquoiseColour}[+]${endColour} Python: ${greenColour}$PYTHON_PATH${endColour}"
 
-# Copiar servicios al systemd del usuario
+# Copiar servicios al systemd del usuario con rutas dinámicas
 for service in raspy-server raspy-scanner; do
     SERVICE_FILE="$SYSTEMD_DIR/$service.service"
     if [ -f "$SERVICE_FILE" ]; then
-        # Reemplazar User dinámicamente
-        sed "s/^User=.*/User=$CURRENT_USER/" "$SERVICE_FILE" > "/tmp/$service.service.tmp"
-        sudo mv "/tmp/$service.service.tmp" "/etc/systemd/system/$service.service"
+        TMP_FILE="/tmp/$service.service.tmp"
+        if [[ "$service" == "raspy-server" ]]; then
+            sed -e "s|^User=.*|User=$CURRENT_USER|" \
+                -e "s|^ExecStart=.*|ExecStart=$NODE_PATH server.js|" \
+                "$SERVICE_FILE" > "$TMP_FILE"
+        else
+            sed -e "s|^User=.*|User=$CURRENT_USER|" \
+                -e "s|^ExecStart=.*|ExecStart=$PYTHON_PATH $APP_DIR/scanner/scanner.py|" \
+                "$SERVICE_FILE" > "$TMP_FILE"
+        fi
+        sudo mv "$TMP_FILE" "/etc/systemd/system/$service.service"
         sudo chmod 644 "/etc/systemd/system/$service.service"
         echo -e "${greenColour}[+]${endColour} Servicio $service preparado."
     else
@@ -67,11 +81,9 @@ for service in raspy-server raspy-scanner; do
     sudo systemctl enable "$service"
 done
 
-# Abrir Chrome en pantalla completa apuntando al marcador
-echo -e "${greenColour}[+]${endColour} Abriendo Chrome en pantalla completa..."
-chromium-browser --start-fullscreen "http://localhost:3000" &
-# o si tu Raspberry Pi OS usa chromium
-# chromium --start-fullscreen "http://localhost:3000" &
+# Abrir Chromium en pantalla completa apuntando al marcador
+echo -e "${greenColour}[+]${endColour} Abriendo Chromium en pantalla completa..."
+chromium-browser --start-fullscreen --disable-gpu --no-sandbox "http://localhost:3000" &>/dev/null &
 
 echo -e "${greenColour}[+]${endColour} Aplicación levantada y servicios configurados para iniciar automáticamente."
 
