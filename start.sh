@@ -9,13 +9,13 @@ redColour="\e[0;31m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 
 SYSTEMD_DIR="systemd"
-APP_DIR="$(pwd)"
 VENV_DIR="../pyenv"
 CURRENT_USER=$(whoami)
 
 # Detectar rutas absolutas
 NODE_PATH=$(which node)
 PYTHON_PATH=$(which python)
+APP_DIR="$(pwd)/raspy-app"
 
 # CTRL+C
 function ctrl_c () {
@@ -36,10 +36,12 @@ for service in raspy-server raspy-scanner; do
         TMP_FILE="/tmp/$service.service.tmp"
         if [[ "$service" == "raspy-server" ]]; then
             sed -e "s|^User=.*|User=$CURRENT_USER|" \
+                -e "s|^WorkingDirectory=.*|WorkingDirectory=$APP_DIR|" \
                 -e "s|^ExecStart=.*|ExecStart=$NODE_PATH server.js|" \
                 "$SERVICE_FILE" > "$TMP_FILE"
         else
             sed -e "s|^User=.*|User=$CURRENT_USER|" \
+                -e "s|^WorkingDirectory=.*|WorkingDirectory=$APP_DIR|" \
                 -e "s|^ExecStart=.*|ExecStart=$PYTHON_PATH $APP_DIR/scanner/scanner.py|" \
                 "$SERVICE_FILE" > "$TMP_FILE"
         fi
@@ -59,7 +61,7 @@ function check_service() {
     systemctl is-active --quiet "$1"
 }
 
-# Levantar servicios
+# Levantar servicios y habilitarlos al inicio
 for service in raspy-server raspy-scanner; do
     if check_service "$service"; then
         read -p "$(echo -e "${yellowColour}[!]${endColour} $service ya está corriendo. Reiniciarlo? (S/N): ")" RESP
@@ -74,10 +76,6 @@ for service in raspy-server raspy-scanner; do
         echo -e "${greenColour}[+]${endColour} Iniciando $service..."
         sudo systemctl start "$service"
     fi
-done
-
-# Habilitar para que arranque al iniciar
-for service in raspy-server raspy-scanner; do
     sudo systemctl enable "$service"
 done
 
