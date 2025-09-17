@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 # Colores
@@ -9,13 +8,17 @@ redColour="\e[0;31m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 
 SYSTEMD_DIR="systemd"
-VENV_DIR="../pyenv"
+TMP_SYSTEMD_DIR="./tmp_systemd"
+APP_DIR="$(pwd)/raspy-app"   # raíz de la aplicación
+VENV_DIR="$APP_DIR/../pyenv"
 CURRENT_USER=$(whoami)
 
-# Detectar rutas absolutas
+# Rutas dinámicas
+NODE_NVM_SH="$HOME/.nvm/nvm.sh"
 NODE_PATH=$(which node)
 PYTHON_PATH=$(which python)
-APP_DIR="$(pwd)/raspy-app"
+
+mkdir -p "$TMP_SYSTEMD_DIR"
 
 # CTRL+C
 function ctrl_c () {
@@ -26,62 +29,57 @@ function ctrl_c () {
 trap ctrl_c INT
 
 echo -e "${turquoiseColour}[+]${endColour} Preparando servicios systemd para el usuario ${greenColour}$CURRENT_USER${endColour}..."
-echo -e "${turquoiseColour}[+]${endColour} Node: ${greenColour}$NODE_PATH${endColour}"
+echo -e "${turquoiseColour}[+]${endColour} Node/NVM: ${greenColour}$NODE_NVM_SH${endColour}"
 echo -e "${turquoiseColour}[+]${endColour} Python: ${greenColour}$PYTHON_PATH${endColour}"
 
-# Copiar servicios al systemd del usuario con rutas dinámicas
+# Generar archivos systemd en tmp_systemd
 for service in raspy-server raspy-scanner; do
     SERVICE_FILE="$SYSTEMD_DIR/$service.service"
+    TMP_FILE="$TMP_SYSTEMD_DIR/$service.service"
+
     if [ -f "$SERVICE_FILE" ]; then
-        TMP_FILE="/tmp/$service.service.tmp"
+        cp "$SERVICE_FILE" "$TMP_FILE"
+        sed -i "s|^User=.*|User=$CURRENT_USER|" "$TMP_FILE"
+        # Ajustar WorkingDirectory un nivel arriba de APP_DIR
+	sed -i "s|^WorkingDirectory=.*|WorkingDirectory=$(dirname "$APP_DIR")|" "$TMP_FILE"
+
+
         if [[ "$service" == "raspy-server" ]]; then
-            sed -e "s|^User=.*|User=$CURRENT_USER|" \
-                -e "s|^WorkingDirectory=.*|WorkingDirectory=$APP_DIR|" \
-                -e "s|^ExecStart=.*|ExecStart=$NODE_PATH server.js|" \
-                "$SERVICE_FILE" > "$TMP_FILE"
+            sed -i "/^ExecStart=/c\ExecStart=/bin/bash -c 'source $NODE_NVM_SH && $NODE_PATH $(dirname "$APP_DIR")/server.js'" "$TMP_FILE"
         else
-            sed -e "s|^User=.*|User=$CURRENT_USER|" \
-                -e "s|^WorkingDirectory=.*|WorkingDirectory=$APP_DIR|" \
-                -e "s|^ExecStart=.*|ExecStart=$PYTHON_PATH $APP_DIR/scanner/scanner.py|" \
-                "$SERVICE_FILE" > "$TMP_FILE"
+            sed -i "/^ExecStart=/c\ExecStart=$PYTHON_PATH $(dirname "$APP_DIR")/scanner/scanner.py" "$TMP_FILE"
         fi
-        sudo mv "$TMP_FILE" "/etc/systemd/system/$service.service"
-        sudo chmod 644 "/etc/systemd/system/$service.service"
-        echo -e "${greenColour}[+]${endColour} Servicio $service preparado."
+
+        echo -e "${greenColour}[+]${endColour} Servicio $service preparado en $TMP_FILE"
     else
         echo -e "${redColour}[!]${endColour} No se encontró $SERVICE_FILE"
     fi
 done
 
-# Recargar systemd
-sudo systemctl daemon-reload
+# Revisar antes de copiar
+echo -e "${yellowColour}[!]${endColour} Los archivos están listos en $TMP_SYSTEMD_DIR. Revisa antes de copiarlos."
+read -p "¿Querés copiarlos a /etc/systemd/system ahora? (S/N): " RESP
+RESP=${RESP^^}
 
-# Función para verificar si un servicio está activo
-function check_service() {
-    systemctl is-active --quiet "$1"
-}
+if [[ "$RESP" == "S" ]]; then
+    for service in raspy-server raspy-scanner; do
+        sudo mv "$TMP_SYSTEMD_DIR/$service.service" "/etc/systemd/system/$service.service"
+        sudo chmod 644 "/etc/systemd/system/$service.service"
+        echo -e "${greenColour}[+]${endColour} Servicio $service instalado en systemd."
+    done
+    sudo systemctl daemon-reload
+    echo -e "${greenColour}[+]${endColour} Systemd recargado."
+fi
 
-# Levantar servicios y habilitarlos al inicio
+# Levantar servicios y habilitarlos
 for service in raspy-server raspy-scanner; do
-    if check_service "$service"; then
-        read -p "$(echo -e "${yellowColour}[!]${endColour} $service ya está corriendo. Reiniciarlo? (S/N): ")" RESP
-        RESP=${RESP^^}
-        if [[ "$RESP" == "S" ]]; then
-            echo -e "${greenColour}[+]${endColour} Reiniciando $service..."
-            sudo systemctl restart "$service"
-        else
-            echo -e "${greenColour}[+]${endColour} Dejando $service en ejecución."
-        fi
-    else
-        echo -e "${greenColour}[+]${endColour} Iniciando $service..."
-        sudo systemctl start "$service"
-    fi
     sudo systemctl enable "$service"
+    sudo systemctl start "$service"
+    echo -e "${greenColour}[+]${endColour} Servicio $service iniciado y habilitado."
 done
 
-# Abrir Chromium en pantalla completa apuntando al marcador
+# Abrir Chromium en pantalla completa
 echo -e "${greenColour}[+]${endColour} Abriendo Chromium en pantalla completa..."
 chromium-browser --start-fullscreen --disable-gpu --no-sandbox "http://localhost:5000/counter/" &>/dev/null &
 
 echo -e "${greenColour}[+]${endColour} Aplicación levantada y servicios configurados para iniciar automáticamente."
-
