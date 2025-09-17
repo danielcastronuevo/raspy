@@ -1,0 +1,14 @@
+
+[Unit]
+Description=Raspy Scanner Python
+After=raspy-server.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/pi/raspy-app
+ExecStart=/home/pi/pyenv/bin/python raspy-app/scanner/scanner.py
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=Raspy Node Server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/pi/raspy-app
+ExecStart=/usr/bin/node server.js
+Restart=always
+User=pi
+Environment=PATH=/home/pi/raspy-app/node_modules/.bin:/usr/bin:/bin
+
+[Install]
+WantedBy=multi-user.target
