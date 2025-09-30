@@ -1,4 +1,13 @@
-# ==== 1. Scanner Python ====
+# === 0. Primero probar con el start.sh, es automatico ===
+mv start.sh ../.start.sh
+cd ..
+./start.sh
+
+# === 1. Clonar el repo y entrar a la carpeta ===
+git clone https://github.com/danielcastronuevo/raspy.git app
+cd app
+
+# ==== 2. Scanner Python ====
 sudo tee /etc/systemd/system/raspy-scanner.service > /dev/null <<'EOF'
 [Unit]
 Description=Raspy Scanner Python
@@ -15,7 +24,7 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
-# ==== 2. Servidor Node.js ====
+# ==== 3. Servidor Node.js ====
 sudo tee /etc/systemd/system/raspy-server.service > /dev/null <<'EOF'
 [Unit]
 Description=Raspy Node Server
@@ -32,7 +41,7 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
-# ==== 3. Dar permisos de ejecución ===
+# ==== 4. Dar permisos de ejecución ===
 chmod +x PYSTART.sh
 chmod +x NODESTART.sh
 
@@ -43,12 +52,12 @@ chmod +x NODESTART.sh
 ./PYSTART.sh
 ./NODESTART.sh
 
-# ==== 4. Activar servicios ====
+# ==== 5. Activar servicios ====
 sudo systemctl daemon-reload
 sudo systemctl enable raspy-scanner
 sudo systemctl enable raspy-server
 
-# ==== 5. Autostart Chromium Kiosk ====
+# ==== 6. Autostart Chromium Kiosk ====
 mkdir -p ~/.config/autostart
 tee ~/.config/autostart/chromium-kiosk.desktop > /dev/null <<'EOF'
 [Desktop Entry]
@@ -60,7 +69,7 @@ Terminal=false
 X-GNOME-Autostart-enabled=true
 EOF
 
-# ==== 6. Reboot para probar ====
+# ==== 7. Reboot para probar ====
 sudo reboot
 
 # ==== Opcionales: Apagar servicios ====
