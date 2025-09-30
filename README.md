@@ -36,6 +36,13 @@ EOF
 chmod +x PYSTART.sh
 chmod +x NODESTART.sh
 
+# ==== (Si es primera vez que se hace, ===
+# ==== preferible levantar a mano los ====
+# ==== scripts, sobre todo el entorno) ===
+# Dejar que arranquen y CTRL + C
+./PYSTART.sh
+./NODESTART.sh
+
 # ==== 4. Activar servicios ====
 sudo systemctl daemon-reload
 sudo systemctl enable raspy-scanner
@@ -62,3 +69,5 @@ sudo systemctl stop raspy-scanner
 sudo systemctl stop raspy-server
 
 # ==== Opcionales: Logs ====
+journalctl -u raspy-server
+journalctl -u raspy-scanner

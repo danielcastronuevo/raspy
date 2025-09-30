@@ -607,7 +607,7 @@ async function generarQRyUltimoPartido() {
     //const path = "/config/";
     //const urlPartido = `${vpsUrl}${path}?raspy_id=${raspy_id}`;
 
-    const urlPartido = `${vpsUrl}?raspy_id=${raspy_id}`;
+    const urlPartido = `${vpsUrl}?id=${raspy_id}`;
 
 
     // Definimos tamaño dinámico
