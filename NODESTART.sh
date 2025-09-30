@@ -1,29 +1,31 @@
 #!/bin/bash
-# PYSTART.sh - levanta scanner.py dentro del entorno virtual, creándolo si no existe
+# NODESTART.sh - levanta server.js con Node.js
 
-# Ruta relativa al script
+# Colores
+GREEN="\e[32m"
+YELLOW="\e[33m"
+RED="\e[31m"
+RESET="\e[0m"
+
+# Ruta al proyecto
 BASE_DIR="$(dirname "$0")"
+cd "$BASE_DIR" || { echo -e "${RED}[!] Error:${RESET} No se pudo entrar a $BASE_DIR"; exit 1; }
 
-# Entrar a la carpeta del scanner
-cd "$BASE_DIR/scanner" || exit 1
-
-# Entorno virtual (en la raíz del proyecto)
-VENV_DIR="../venv"
-
-# Crear entorno si no existe
-if [ ! -d "$VENV_DIR" ]; then
-    echo "⚡ Creando entorno virtual..."
-    /usr/bin/python3 -m venv "$VENV_DIR"
-    echo "⚡ Entorno virtual creado."
-    
-    # Activar y instalar dependencias
-    source "$VENV_DIR/bin/activate"
-    pip install --upgrade pip setuptools
-    pip install bleak aiohttp
-else
-    # Activar entorno virtual existente
-    source "$VENV_DIR/bin/activate"
+# Instalar dependencias si no existen node_modules
+if [ ! -d "node_modules" ]; then
+    echo -e "${YELLOW}[+] Instalando dependencias de Node...${RESET}"
+    npm install || { echo -e "${RED}[!] Error:${RESET} Falló npm install"; exit 1; }
+    echo -e "${GREEN}[✓] Dependencias instaladas${RESET}"
 fi
 
-# Ejecutar el script Python en modo unbuffered
-"$VENV_DIR/bin/python3" -u scanner.py
+# Ejecutar server.js
+echo -e "${YELLOW}[+] Ejecutando server.js...${RESET}"
+/home/MARCADOR/.nvm/versions/node/v24.4.0/bin/node server.js
+
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}[✓] server.js corriendo${RESET}"
+else
+    echo -e "${RED}[✗] server.js terminó con error${RESET}"
+    exit 1
+fi
+

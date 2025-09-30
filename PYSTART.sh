@@ -12,8 +12,10 @@ cd "$BASE_DIR/scanner" || { echo -e "${RED}[!] Error:${RESET} No se pudo entrar 
 
 VENV_DIR="../venv"
 
-if [ ! -d "$VENV_DIR" ]; then
+# Si no existe o está roto, recrear
+if [ ! -x "$VENV_DIR/bin/python3" ]; then
     echo -e "${YELLOW}[+] Creando entorno virtual...${RESET}"
+    rm -rf "$VENV_DIR"
     /usr/bin/python3 -m venv "$VENV_DIR" || { echo -e "${RED}[!] Error:${RESET} Falló la creación del entorno"; exit 1; }
     echo -e "${GREEN}[✓] Entorno virtual creado${RESET}"
 
@@ -26,6 +28,7 @@ else
     source "$VENV_DIR/bin/activate"
 fi
 
+# Ejecutar scanner
 echo -e "${YELLOW}[+] Ejecutando scanner.py...${RESET}"
 "$VENV_DIR/bin/python3" -u scanner.py
 
