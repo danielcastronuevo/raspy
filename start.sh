@@ -48,7 +48,7 @@ done
 # --------------------------
 if [ -d "$BASE_DIR" ]; then
     echo -e "${YELLOW}[!] Se detectó una carpeta existente para el proyecto: $BASE_DIR${RESET}"
-    read -p "¿Querés borrarla y empezar desde cero? [Y/N]: " RESP
+    read -p "¿Querés borrarla y empezar desde cero? (o CTRL + C para cortar ejecución) [Y/N]: " RESP
     case "$RESP" in
         [Yy]* )
             echo -e "${GREEN}[+] Borrando carpeta existente...${RESET}"
