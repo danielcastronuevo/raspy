@@ -28,7 +28,7 @@ echo -e "${TURQUOISE}AUTOMATIZACIÓN DE ARRANQUE${RESET}\n"
 # --------------------------
 # Carpeta del proyecto
 # --------------------------
-BASE_DIR="$HOME/app"
+BASE_DIR="$HOME/raspy"
 RECREATE=false  # Si vamos a clonar o recrear entornos
 
 # --------------------------
