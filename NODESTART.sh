@@ -1,14 +1,29 @@
-
 #!/bin/bash
-# NODESTART.sh - levanta server.js con Node
+# PYSTART.sh - levanta scanner.py dentro del entorno virtual, creándolo si no existe
 
-# Ruta absoluta a tu proyecto
-PROJECT_DIR="/home/pi/padel_app"
+# Ruta relativa al script
+BASE_DIR="$(dirname "$0")"
 
-# Entrar al proyecto
-cd "$PROJECT_DIR" || exit 1
+# Entrar a la carpeta del scanner
+cd "$BASE_DIR/scanner" || exit 1
 
-# Ejecutar Node.js
-/usr/bin/node server.js
+# Entorno virtual (en la raíz del proyecto)
+VENV_DIR="../venv"
 
-# Nota: si querés reinicio automático en crash, conviene usar systemd
+# Crear entorno si no existe
+if [ ! -d "$VENV_DIR" ]; then
+    echo "⚡ Creando entorno virtual..."
+    /usr/bin/python3 -m venv "$VENV_DIR"
+    echo "⚡ Entorno virtual creado."
+    
+    # Activar y instalar dependencias
+    source "$VENV_DIR/bin/activate"
+    pip install --upgrade pip setuptools
+    pip install bleak aiohttp
+else
+    # Activar entorno virtual existente
+    source "$VENV_DIR/bin/activate"
+fi
+
+# Ejecutar el script Python en modo unbuffered
+"$VENV_DIR/bin/python3" -u scanner.py
