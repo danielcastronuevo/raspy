@@ -344,6 +344,14 @@ function ganarSet(parejaIndex, setIdx) {
 
 
 
+// ================================
+// ====== FINALIZAR PARTIDO =======
+// ================================
+function finalizarPartido() {
+  console.log("🏁 Partido finalizado manualmente desde menú.");
+  ganarPartido(null, "menu"); 
+}
+
 // =======================
 // 🚨 Finalizar por tiempo
 // =======================
@@ -356,6 +364,8 @@ function finalizarPorTiempo() {
 // 🏁 GANAR PARTIDO FINALIZAR 🏁 
 // ===============================
 function ganarPartido(parejaIndex, motivo = "normal") {
+  if (estado.marcador.partidoTerminado) return; // Evitar doble finalización
+
   estado.marcador.partidoTerminado = true;
   estado.estadoPartido = 'terminado';
   estado.motivoFin = motivo;
@@ -365,39 +375,37 @@ function ganarPartido(parejaIndex, motivo = "normal") {
     estado.temporizadorPartido = null;
   }
 
+  //guardarHistorialFinal(motivo); // <-- motivo ahora se pasa
 
-if (motivo === "tiempo") {
-  console.log(`⏹️ Partido terminado por motivo: tiempo`);
+  // --- Caso especial: finalización por tiempo o menú ---
+  if (motivo === "tiempo" || motivo === "menu") {
+    console.log(`⏹️ Partido terminado por motivo: ${motivo}`);
 
-  // Guardar historial ya mismo
-  guardarHistorialFinal();
+    // Guardar historial ya mismo
+    guardarHistorialFinal(motivo);
 
-  // Limpiar archivo temporal
-  if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
+    // Limpiar archivo temporal
+    if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
 
-  // Reset inmediato del estado
-  estado.estadoPartido = 'esperando';
-  estado.matchId = null;
-  estado.marcador = {
-    sets: [
-      { games: [0, 0] },
-      { games: [0, 0] },
-      { games: [0, 0] }
-    ],
-    puntos: [0, 0],
-    setActual: 0,
-    partidoTerminado: false
-  };
-  estado.historial = [];
-  estado.tiempoPartidoTranscurrido = 0;
-  estado.tiempoGraciaRestante = null;
-
-  // 🚨 Limpiar también menú sacador
-  estado.sacadorActual = null;
-  if (estado.estadoPartido === 'eligiendoSacador') {
+    // Reset inmediato del estado
     estado.estadoPartido = 'esperando';
-  }
-    // 🔹 Reseteamos menú sacador
+    estado.matchId = null;
+    estado.marcador = {
+      sets: [
+        { games: [0, 0] },
+        { games: [0, 0] },
+        { games: [0, 0] }
+      ],
+      puntos: [0, 0],
+      setActual: 0,
+      partidoTerminado: false
+    };
+    estado.historial = [];
+    estado.tiempoPartidoTranscurrido = 0;
+    estado.tiempoGraciaRestante = null;
+
+    // 🚨 Limpiar también menú sacador
+    estado.sacadorActual = null;
     menuSacador.activo = false;
     menuSacador.paso = null;
     menuSacador.opciones = [];
@@ -405,12 +413,11 @@ if (motivo === "tiempo") {
     menuSacador.metodo = null;
     menuSacador.ordenDeSaque = [];
 
-  notificarCambio();
-  return; // 👈 cortamos acá
-}
+    notificarCambio();
+    return; // 👈 cortamos acá
+  }
 
-
-  // --- Lógica normal (cuando hay un ganador) ---
+  // --- Lógica normal (cuando hay un ganador real) ---
   console.log(`🎉 Pareja ${parejaIndex + 1} gana el partido! 🎉`);
 
   const duracion = 30; // tiempo de gracia
@@ -427,7 +434,7 @@ if (motivo === "tiempo") {
 
       console.log("⌛ Fin del tiempo de gracia, volviendo a standby.");
 
-      guardarHistorialFinal();
+      guardarHistorialFinal("normal");
       if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
 
       estado.estadoPartido = 'esperando';
@@ -457,11 +464,12 @@ if (motivo === "tiempo") {
 }
 
 
+
+
 // ===============================
 // --- GUARDAR HISTORIAL FINAL  ---
 // ===============================
-
-function guardarHistorialFinal() {
+function guardarHistorialFinal(motivo = "normal") {
   try {
     if (!fs.existsSync(HISTORIAL_PATH)) return;
 
@@ -502,7 +510,8 @@ function guardarHistorialFinal() {
       duracionSegundos,
       duracionTexto,
       huboCalentamiento,
-      configuracion: estado.configuracion
+      configuracion: estado.configuracion,
+      motivoFin: motivo   // 👈 NUEVO: guardamos cómo terminó
     };
 
     // --- Ensamblamos data final ---
@@ -1293,49 +1302,6 @@ function seleccionarMenu() {
     cerrarMenu();
   }
 }
-
-
-// ================================
-// ====== FINALIZAR PARTIDO =======
-// ================================
-
-function finalizarPartido() {
-  console.log("🏁 Partido finalizado manualmente.");
-
-  // 🔹 Detener completamente los temporizadores
-  if (estado.temporizadorPartido) {
-    clearInterval(estado.temporizadorPartido);
-    estado.temporizadorPartido = null;
-  }
-  if (estado.temporizadorFin) {
-    clearInterval(estado.temporizadorFin);
-    estado.temporizadorFin = null;
-  }
-
-  // 🔹 Reiniciar estado completamente (igual que al inicio)
-  estado.estadoPartido = 'esperando';
-  estado.matchId = null; // marcar que no hay partido activo
-  estado.marcador = {
-    sets: [
-      { games: [0, 0] },
-      { games: [0, 0] },
-      { games: [0, 0] }
-    ],
-    puntos: [0, 0],
-    setActual: 0,
-    partidoTerminado: false,
-  };
-  estado.tiempoGraciaRestante = null;
-  //estado.tiempoInicio = null;
-  //estado.tiempoPartidoTranscurrido = 0;
-
-  // 🔹 Borrar historial
-  if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
-
-  // 🔔 Notificar al frontend
-  notificarCambio();
-}
-
 
 function resetEstado() {
   matchId = null;
