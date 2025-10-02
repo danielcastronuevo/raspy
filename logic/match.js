@@ -1337,6 +1337,50 @@ function finalizarPartido() {
 }
 
 
+function resetEstado() {
+  matchId = null;
+  configuracion = {};
+  marcador = {
+    sets: [
+      { games: [0, 0] },
+      { games: [0, 0] },
+      { games: [0, 0] }
+    ],
+    puntos: [0, 0],
+    setActual: 0,
+    partidoTerminado: false,
+  };
+  historial = [];
+  ladoActual = 'izquierda';
+  puntosTotalesEnTiebreak = 0;
+  estadoPartido = 'esperando';
+  tiempoInicio = null;
+  tiempoPartidoTranscurrido = 0;
+  tiempoGraciaRestante = null;
+  sacadorActual = null;
+
+
+
+
+if (estado.temporizadorCalentamiento) {
+  clearInterval(estado.temporizadorCalentamiento);
+  estado.temporizadorCalentamiento = null;
+}
+
+if (estado.temporizadorPartido) {
+  clearInterval(estado.temporizadorPartido);
+  estado.temporizadorPartido = null;
+}
+
+if (estado.temporizadorFin) {
+  clearInterval(estado.temporizadorFin);
+  estado.temporizadorFin = null;
+}
+
+notificarCambio();
+
+}
+
 // =======================
 // 📦 Export de funciones
 // =======================
@@ -1367,7 +1411,9 @@ module.exports = {
   seleccionarMenuSacador,
   volverMenuSacador,
   finalizarMenuSacador,
-  estaEnEligiendoSacador
+  estaEnEligiendoSacador,
+  //RESETEAR estados 
+  resetEstado
 };
 
 

@@ -28,6 +28,11 @@ const RASPY_ID = config.raspy_id;
 // ====================================
 const estado = require('./logic/match');
 
+// Forzar estado inicial limpio al arrancar
+if (estado.resetEstado) {
+  estado.resetEstado();  // Nueva función que centraliza el reset
+}
+
 estado.setOnChange(() => {
   const currentEstado = estado.getEstado();
 
@@ -100,6 +105,7 @@ io.on('connection', (socket) => {
   });
 });
 
+
 // ====================================
 // Conexión permanente a VPS
 // ====================================
@@ -111,6 +117,14 @@ const socketVPS = Client(VPS_URL, {
 socketVPS.on("connect", () => {
   console.log("✅ Conectado a VPS");
   socketVPS.emit("register_raspy", { raspy_id: RASPY_ID });
+
+  // 🔹 Apenas conecta, enviar estado limpio actual
+  const currentEstado = estado.getEstado();
+  socketVPS.emit("estado_cancha", {
+    raspy_id: RASPY_ID,
+    enEspera: estado.estaEnEspera(),
+    estado: currentEstado
+  });
 });
 
 socketVPS.on("disconnect", () => {
@@ -122,7 +136,6 @@ socketVPS.on(`config_${RASPY_ID}`, (datosPartido) => {
   console.log("✅ LLEGUE - Datos recibidos desde VPS:", datosPartido);
   configurarPartido(datosPartido, io);
 });
-
 // ====================================
 // Iniciar servidor local
 // ====================================
