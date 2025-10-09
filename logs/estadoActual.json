@@ -1,0 +1,85 @@
+{
+  "configuracion": {
+    "jugadores": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "parejas": {
+      "pareja1": [
+        "1",
+        "2"
+      ],
+      "pareja2": [
+        "3",
+        "4"
+      ]
+    },
+    "parejaSacadora": "pareja1",
+    "sacadores": [
+      "2",
+      "3"
+    ],
+    "tiempoCalentamiento": "Sin calentamiento",
+    "cambioDeLado": "Sin cambios",
+    "tipoGames": "Deuce / Advantage",
+    "ordenDeSaque": [
+      "2",
+      "3",
+      "1",
+      "4"
+    ],
+    "duracion": "120 minutos",
+    "comienzo": "11:00",
+    "fin": "13:00",
+    "pulseras": {
+      "pareja1": {
+        "nombre": "A04",
+        "mac": "C3:00:00:51:33:50"
+      },
+      "pareja2": {
+        "nombre": "A03",
+        "mac": "C3:00:00:51:33:4C"
+      }
+    }
+  },
+  "marcador": {
+    "sets": [
+      {
+        "games": [
+          0,
+          0
+        ]
+      },
+      {
+        "games": [
+          0,
+          0
+        ]
+      },
+      {
+        "games": [
+          0,
+          0
+        ]
+      }
+    ],
+    "puntos": [
+      3,
+      "ADV"
+    ],
+    "setActual": 0,
+    "partidoTerminado": false
+  },
+  "sacadorActual": {
+    "nombre": "2",
+    "indice": 0,
+    "puntosEnTiebreak": 0
+  },
+  "ladoActual": "izquierda",
+  "puntosTotalesEnTiebreak": 0,
+  "estadoPartido": "jugando",
+  "ultimoPunto": null,
+  "timestamp": "2025-10-09T14:01:33.879Z"
+}

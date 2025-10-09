@@ -1,0 +1,121 @@
+[
+  {
+    "timestamp": "2025-10-09T14:48:29.230Z",
+    "pareja": "pareja2",
+    "marcador": {
+      "pareja1": {
+        "setsGanados": 0,
+        "puntos": 0,
+        "gamesSetActual": 0
+      },
+      "pareja2": {
+        "setsGanados": 0,
+        "puntos": 15,
+        "gamesSetActual": 0
+      },
+      "setActual": 1
+    }
+  },
+  {
+    "timestamp": "2025-10-09T14:48:35.444Z",
+    "pareja": "pareja1",
+    "marcador": {
+      "pareja1": {
+        "setsGanados": 0,
+        "puntos": 15,
+        "gamesSetActual": 0
+      },
+      "pareja2": {
+        "setsGanados": 0,
+        "puntos": 15,
+        "gamesSetActual": 0
+      },
+      "setActual": 1
+    }
+  },
+  {
+    "timestamp": "2025-10-09T14:48:35.694Z",
+    "pareja": "pareja1",
+    "marcador": {
+      "pareja1": {
+        "setsGanados": 0,
+        "puntos": 30,
+        "gamesSetActual": 0
+      },
+      "pareja2": {
+        "setsGanados": 0,
+        "puntos": 15,
+        "gamesSetActual": 0
+      },
+      "setActual": 1
+    }
+  },
+  {
+    "timestamp": "2025-10-09T14:48:35.972Z",
+    "pareja": "pareja1",
+    "marcador": {
+      "pareja1": {
+        "setsGanados": 0,
+        "puntos": 40,
+        "gamesSetActual": 0
+      },
+      "pareja2": {
+        "setsGanados": 0,
+        "puntos": 15,
+        "gamesSetActual": 0
+      },
+      "setActual": 1
+    }
+  },
+  {
+    "timestamp": "2025-10-09T14:48:37.934Z",
+    "pareja": "pareja2",
+    "marcador": {
+      "pareja1": {
+        "setsGanados": 0,
+        "puntos": 40,
+        "gamesSetActual": 0
+      },
+      "pareja2": {
+        "setsGanados": 0,
+        "puntos": 30,
+        "gamesSetActual": 0
+      },
+      "setActual": 1
+    }
+  },
+  {
+    "timestamp": "2025-10-09T14:48:38.090Z",
+    "pareja": "pareja2",
+    "marcador": {
+      "pareja1": {
+        "setsGanados": 0,
+        "puntos": 40,
+        "gamesSetActual": 0
+      },
+      "pareja2": {
+        "setsGanados": 0,
+        "puntos": 40,
+        "gamesSetActual": 0
+      },
+      "setActual": 1
+    }
+  },
+  {
+    "timestamp": "2025-10-09T14:48:46.241Z",
+    "pareja": "pareja2",
+    "marcador": {
+      "pareja1": {
+        "setsGanados": 0,
+        "puntos": "-",
+        "gamesSetActual": 0
+      },
+      "pareja2": {
+        "setsGanados": 0,
+        "puntos": "AD",
+        "gamesSetActual": 0
+      },
+      "setActual": 1
+    }
+  }
+]

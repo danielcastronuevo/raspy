@@ -1,4 +1,5 @@
 
+const colors = require('./data/colors'); // Tus colores ANSI
 const express = require('express');
 const http = require('http');
 const path = require('path');
@@ -12,11 +13,27 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 // ====================================
-// Leer configuración desde config.json
+// Helpers para logs
+// ====================================
+function logError(msg) {
+  console.log(`${colors.rojo}[!]${colors.reset} ${msg}`);
+}
+function logInfo(msg) {
+  console.log(`${colors.cyan}[i]${colors.reset} ${msg}`);
+}
+function logWarn(msg) {
+  console.log(`${colors.amarillo}[!]${colors.reset} ${msg}`);
+}
+function logSuccess(msg) {
+  console.log(`${colors.verde}[+]${colors.reset} ${msg}`);
+}
+
+// ====================================
+// Leer configuración
 // ====================================
 const configPath = path.join(__dirname, 'config.json');
 if (!fs.existsSync(configPath)) {
-  console.error("❌ No se encontró config.json en la raíz del proyecto");
+  logError("No se encontró config.json en la raíz del proyecto");
   process.exit(1);
 }
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
@@ -28,21 +45,19 @@ const RASPY_ID = config.raspy_id;
 // ====================================
 const estado = require('./logic/match');
 
-// Forzar estado inicial limpio al arrancar
+// Reset inicial
 if (estado.resetEstado) {
-  estado.resetEstado();  // Nueva función que centraliza el reset
+  estado.resetEstado();
 }
 
 estado.setOnChange(() => {
   const currentEstado = estado.getEstado();
-
   io.emit('estado', currentEstado);
   io.emit('resumen', estado.getResumen());
   io.emit('menu', estado.menu);
   io.emit('menuSacador', estado.menuSacador);
   io.emit('esperando', { enEspera: estado.estaEnEspera() });
 
-  // 🔹 Enviar info de cancha al VPS en tiempo real
   if (socketVPS.connected) {
     socketVPS.emit("estado_cancha", {
       raspy_id: RASPY_ID,
@@ -59,7 +74,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ====================================
-// Rutas principales
+// Rutas
 // ====================================
 const configRoutes = require('./routes/config')(io);
 const sensorsRoutes = require('./routes/sensors');
@@ -72,8 +87,6 @@ app.use('/api/history', historyRoutes);
 // ====================================
 // Endpoints
 // ====================================
-
-// Estado del partido
 app.get('/api/partido-estado', (req, res) => {
   const currentEstado = estado.getEstado();
   res.json({ 
@@ -82,16 +95,15 @@ app.get('/api/partido-estado', (req, res) => {
   });
 });
 
-// Exponer Raspy ID al front
 app.get('/api/raspy-id', (req, res) => {
   res.json({ raspy_id: RASPY_ID });
 });
 
 // ====================================
-// Socket.io local
+// Socket.io
 // ====================================
 io.on('connection', (socket) => {
-  console.log('🟢 Cliente conectado:', socket.id);
+  logSuccess(`Cliente conectado: ${socket.id}`);
 
   const currentEstado = estado.getEstado();
   socket.emit('estado', currentEstado);
@@ -101,13 +113,12 @@ io.on('connection', (socket) => {
   socket.emit('esperando', { enEspera: estado.estaEnEspera() });
 
   socket.on('disconnect', () => {
-    console.log('🔴 Cliente desconectado:', socket.id);
+    logWarn(`Cliente desconectado: ${socket.id}`);
   });
 });
 
-
 // ====================================
-// Conexión permanente a VPS
+// Conexión a VPS
 // ====================================
 const socketVPS = Client(VPS_URL, {
   reconnectionAttempts: 999,
@@ -115,10 +126,9 @@ const socketVPS = Client(VPS_URL, {
 });
 
 socketVPS.on("connect", () => {
-  console.log("✅ Conectado a VPS");
+  logSuccess("Conectado a VPS");
   socketVPS.emit("register_raspy", { raspy_id: RASPY_ID });
 
-  // 🔹 Apenas conecta, enviar estado limpio actual
   const currentEstado = estado.getEstado();
   socketVPS.emit("estado_cancha", {
     raspy_id: RASPY_ID,
@@ -128,16 +138,16 @@ socketVPS.on("connect", () => {
 });
 
 socketVPS.on("disconnect", () => {
-  console.log("❌ Desconectado de VPS");
+  logError("Desconectado de VPS");
 });
 
-// Escuchar configuraciones desde la VPS
 socketVPS.on(`config_${RASPY_ID}`, (datosPartido) => {
-  console.log("✅ LLEGUE - Datos recibidos desde VPS:", datosPartido);
+  logInfo("Datos recibidos desde VPS");
   configurarPartido(datosPartido, io);
 });
+
 // ====================================
-// Iniciar servidor local
+// Iniciar servidor
 // ====================================
 const os = require('os');
 const PORT = process.env.PORT || 5000;
@@ -156,10 +166,24 @@ function getLocalIp() {
 
 const ip = getLocalIp();
 
+console.log(colors.cyan);
+console.log("_____________________                          ");
+console.log("____    |__  /__  __/___________ ____  ______ ");
+console.log("___  /| |_  /__  /  _  __ \\  __ `/  / / /  _ \\");
+console.log("__  ___ |  / _  /   / /_/ / /_/ // /_/ //  __/");
+console.log("_/_/  |_/_/  /_/    \\____/\\__, / \\__,_/ \\___/ ");
+console.log("                            /_/               ");
+console.log(`${colors.cyan}>_ CONTADOR DE PADEL${colors.reset}\n`);
+
 server.listen(PORT, () => {
-  console.log(`\n▶️  Servidor:        http://${ip}:${PORT}`);
-  console.log(`▶️  Configuración:   http://${ip}:${PORT}/config`);
-  console.log(`▶️  Sensores:        http://${ip}:${PORT}/sensors`);
-  console.log(`▶️  Contador:        http://${ip}:${PORT}/counter\n`);
+  console.log(''); 
+  logInfo('Links:');
+
+  logSuccess(`Configuración VPS:     ${colors.cyan}http://91.108.124.53:5000/?id=AABB11${colors.reset}`);
+  logSuccess(`Sensores:              ${colors.cyan}http://${ip}:${PORT}/sensors${colors.reset}`);
+  logSuccess(`Contador:              ${colors.cyan}http://${ip}:${PORT}/counter${colors.reset}`);
+
+  logWarn(`Servidor:              ${colors.amarillo}http://${ip}:${PORT}${colors.reset}`);
+  logWarn(`Configuración local:   ${colors.amarillo}http://${ip}:${PORT}/config${colors.reset}\n`);
 });
 

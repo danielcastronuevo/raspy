@@ -1,12 +1,17 @@
-// =======================
-// 🧠 Estado y configuración
-// =======================
+// ===============
+// === COLORES ===
+// ===============
 
-// UUID
+const colors = require('../data/colors');
+
+// ==========================
+// === Estado del partido ===
+// ==========================
+
 const { randomUUID } = require('crypto');
 
 let estado = {
-  matchId: null,  // 🆕 identificador único del partido
+  matchId: null,
   configuracion: {},
   marcador: {
     sets: [
@@ -16,32 +21,26 @@ let estado = {
     ],
     puntos: [0, 0],
     setActual: 0,
-    partidoTerminado: false,
+    partidoTerminado: false
   },
-
   ladoActual: 'izquierda',
   puntosTotalesEnTiebreak: 0,
   historial: [],
-
-  // 🆕 Nuevos campos para calentamiento y tiempo
-  estadoPartido: 'esperando', // puede ser: esperando, calentamiento, eligiendoSacador, jugando, terminado
-  tiempoInicio: null, // timestamp real de inicio de partido
-  tiempoCalentamientoRestante: null, // en segundos
+  estadoPartido: 'esperando',
+  tiempoInicio: null,
+  tiempoCalentamientoRestante: null,
   temporizadorCalentamiento: null,
-  tiempoPartidoSegundos: 0, // PARA MANEJAR EL TIEMPO DEL PARTIDO UNA VEZ FINALIZADO EL CALENTAMIENTO
-  temporizadorPartido: null, // PARA MANEJAR EL TIEMPO DEL PARTIDO UNA VEZ FINALIZADO EL CALENTAMIENTO
-
-  // 🆕 Nuevo campo numérico que viaja al frontend
+  tiempoPartidoSegundos: 0,
+  temporizadorPartido: null,
   tiempoGraciaRestante: null,
   temporizadorFin: null
 };
 
-
 let onChangeCallback = null;
 
-// =======================
-// 🔁 Subscripción a cambios de estado
-// =======================
+// ====================================
+// === NOTIFICAR CAMBIO AL SERVIDOR ===
+// ====================================
 
 function setOnChange(callback) {
   onChangeCallback = callback;
@@ -53,14 +52,13 @@ function notificarCambio() {
   }
 }
 
-// =======================
-// 💾 Historial para deshacer
-// =======================
+// ======================
+// === GUARDAR ESTADO ===
+// ======================
 
 const fs = require('fs');
 const path = require('path');
 
-// Ruta al archivo de historial dentro del directorio "logs"
 const HISTORIAL_DIR = path.join(__dirname, '..', 'logs');
 const HISTORIAL_PATH = path.join(HISTORIAL_DIR, 'historial.json');
 
@@ -69,8 +67,8 @@ function guardarEstado() {
     configuracion: { ...estado.configuracion },
     marcador: JSON.parse(JSON.stringify(estado.marcador)),
     sacadorActual: { ...estado.sacadorActual },
-    ladoActual: estado.ladoActual,          // <--- AGREGADO
-    puntosTotalesEnTiebreak: estado.puntosTotalesEnTiebreak // opcional, si quieres restaurar contador tiebreak
+    ladoActual: estado.ladoActual,
+    puntosTotalesEnTiebreak: estado.puntosTotalesEnTiebreak
   };
 
   if (!fs.existsSync(HISTORIAL_DIR)) {
@@ -86,13 +84,13 @@ function guardarEstado() {
   fs.writeFileSync(HISTORIAL_PATH, JSON.stringify(historial, null, 2));
 }
 
-// ===============================
-// 🛠️ CONFIGURAR PARTIDO
-// ===============================
+// ==========================
+// === CONFIGURAR PARTIDO ===
+// ==========================
 
 function configurarPartido(config) {
   if (estado.estadoPartido !== 'esperando') {
-    console.log(`⚠️ No se puede configurar un nuevo partido, estado actual: ${estado.estadoPartido}`);
+    console.warn(`[!] No se puede configurar un nuevo partido, estado actual: ${estado.estadoPartido}`);
     return false;
   }
 
@@ -112,21 +110,20 @@ function configurarPartido(config) {
   estado.tiempoInicio = null;
   estado.tiempoPartidoTranscurrido = 0;
 
-  // ✅ Programar finalización absoluta por hora "fin"
+  // Programar finalización absoluta por hora "fin"
   const ahora = new Date();
   const [finHoras, finMinutos] = config.fin.split(':').map(Number);
   const finDate = new Date(ahora);
   finDate.setHours(finHoras, finMinutos, 0, 0);
+  if (finDate <= ahora) finDate.setDate(finDate.getDate() + 1);
 
-  if (finDate <= ahora) finDate.setDate(finDate.getDate() + 1); // si ya pasó, que sea mañana
   const msRestantes = finDate.getTime() - ahora.getTime();
-
   estado.temporizadorFin = setTimeout(() => {
-    console.log(`⏰ Hora de fin alcanzada (${config.fin}), finalizando partido.`);
+    console.info(`[+] Hora de fin alcanzada (${config.fin}), finalizando partido.`);
     finalizarPorTiempo();
   }, msRestantes);
 
-  // Extraer minutos de calentamiento
+  // Configurar tiempo de calentamiento
   const tiempoConfig = config.tiempoCalentamiento || '0 minutos';
   const matchMinutos = tiempoConfig.match(/(\d+)/);
   const minutos = matchMinutos ? parseInt(matchMinutos[1]) : 0;
@@ -143,7 +140,6 @@ function configurarPartido(config) {
         iniciarEleccionSacador();
       }
     }, 1000);
-
   } else {
     iniciarEleccionSacador();
   }
@@ -157,7 +153,7 @@ function configurarPartido(config) {
     ],
     puntos: [0, 0],
     setActual: 0,
-    partidoTerminado: false,
+    partidoTerminado: false
   };
   estado.historial = [];
 
@@ -165,7 +161,7 @@ function configurarPartido(config) {
     if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
     if (!fs.existsSync(HISTORIAL_DIR)) fs.mkdirSync(HISTORIAL_DIR, { recursive: true });
   } catch (err) {
-    console.error('❌ Error al eliminar historial:', err);
+    console.error(`[!] Error al eliminar historial: ${err.message}`);
   }
 
   estado.sacadorActual = {
@@ -174,11 +170,14 @@ function configurarPartido(config) {
     puntosEnTiebreak: 0
   };
 
-  console.log('🛠️ Partido configurado:', config);
+  console.info(`[+] Partido configurado correctamente`);
   notificarCambio();
   return true;
 }
 
+// =======================
+// === Iniciar partido ===
+// =======================
 
 function iniciarPartido() {
   if (estado.estadoPartido === 'jugando') return;
@@ -193,7 +192,6 @@ function iniciarPartido() {
     estado.tiempoInicio = Date.now();
   }
 
-  // ⏱️ Solo mide el tiempo transcurrido, el fin ya lo maneja configurarPartido
   estado.temporizadorPartido = setInterval(() => {
     if (estado.estadoPartido !== 'jugando') {
       clearInterval(estado.temporizadorPartido);
@@ -203,18 +201,13 @@ function iniciarPartido() {
     estado.tiempoPartidoTranscurrido = Math.floor((Date.now() - estado.tiempoInicio) / 1000);
   }, 1000);
 
-  console.log('🎾 Partido comenzado automáticamente');
+  console.info(`[+] Partido iniciado automáticamente`);
   notificarCambio();
 }
 
-
-
-
-
-
-// =======================
-// 📝 Utilidades de texto y puntuación
-// =======================
+// ===================================================
+// === UTILIZAR PUNTUACIÓN TRADUCIDA DE LOS PUNTOS ===
+// ===================================================
 
 function puntoATexto(punto, enTieBreak = false, parejaIndex = null, puntos = null) {
   if (enTieBreak) return punto.toString();
@@ -238,9 +231,9 @@ function puntoATexto(punto, enTieBreak = false, parejaIndex = null, puntos = nul
   return map[punto] ?? punto;
 }
 
-// =======================
-// 🧮 Lógica de sets ganados
-// =======================
+// ===============================
+// === Lógica de sets ganados ====
+// ==============================
 
 function setGanadoPorPareja(set) {
   const g1 = set.games[0];
@@ -272,21 +265,68 @@ function setsGanados() {
   return resultados;
 }
 
-// =======================
-// 📋 Logs y resumen del estado
-// =======================
 
-function logEstado() {
+// ==============================
+// === [+] Logs y tablero del partido ===
+// ==============================
+
+function padBoth(texto, anchoTotal, relleno = ' ') {
+  const totalEspacios = anchoTotal - texto.length;
+  if (totalEspacios <= 0) return texto;
+  const espaciosIzq = Math.floor(totalEspacios / 2);
+  const espaciosDer = Math.ceil(totalEspacios / 2);
+  return relleno.repeat(espaciosIzq) + texto + relleno.repeat(espaciosDer);
+}
+
+async function logEstado() {
   const sets = setsGanados();
   const enTieBreak = esTieBreak();
   const puntos = estado.marcador.puntos.map(p => puntoATexto(p, enTieBreak));
-  console.log(
-    `Estado ➡️ Pareja 1 | SetsGanados: ${sets[0]} | Puntos: ${puntos[0]} | Games Set Actual: ${estado.marcador.sets[estado.marcador.setActual].games[0]}`
-  );
-  console.log(
-    `        Pareja 2 | SetsGanados: ${sets[1]} | Puntos: ${puntos[1]} | Games Set Actual: ${estado.marcador.sets[estado.marcador.setActual].games[1]}`
-  );
+  const totalSets = estado.marcador.sets.length;
+
+  const tableroPareja1 = estado.marcador.sets.map(s => s.games[0]);
+  const tableroPareja2 = estado.marcador.sets.map(s => s.games[1]);
+
+  const anchoCol = 7;
+  const labelWidth = 14;
+  const sep = '│';
+
+  const totalWidth = labelWidth + 1 + totalSets * (anchoCol + 1) + anchoCol + 1;
+  const sepFila = '═'.repeat(totalWidth);
+
+  const headerSets = sets.map((_, i) => padBoth(`SET${i + 1}`, anchoCol));
+  const headerGame = padBoth('GAME', anchoCol);
+  const header = headerSets.concat(headerGame).join(sep);
+
+  const topBorder = `╔${sepFila}╗`;
+  const title = `║${padBoth('TABLERO DE PUNTOS', totalWidth)}║`;
+  const midBorder = `╠${sepFila}╣`;
+  const headerRow = `║              | SET 1 | SET 2 | SET 3 | GAMES  ║`
+  const bottomBorder = `╚${sepFila}╝`;
+
+  // Filas de parejas usando los colores importados
+  const filaPareja1 = `║${padBoth('PAREJA1', labelWidth)}${sep}` +
+    tableroPareja1.map(val => `${colors.cyan}${padBoth(val.toString(), anchoCol)}${colors.reset}`).join(sep) +
+    `${sep}${colors.bold}${colors.magenta}${padBoth(puntos[0].toString(), anchoCol)}${colors.reset} ║`;
+
+  const filaPareja2 = `║${padBoth('PAREJA2', labelWidth)}${sep}` +
+    tableroPareja2.map(val => `${colors.cyan}${padBoth(val.toString(), anchoCol)}${colors.reset}`).join(sep) +
+    `${sep}${colors.bold}${colors.magenta}${padBoth(puntos[1].toString(), anchoCol)}${colors.reset} ║`;
+
+  console.log('\n' + topBorder);
+  console.log(title);
+  console.log(midBorder);
+  console.log(headerRow);
+  console.log(midBorder);
+  console.log(filaPareja1);
+  console.log(filaPareja2);
+  console.log(bottomBorder + '\n');
 }
+
+
+
+
+
 
 function getResumen() {
   const sets = setsGanados();
@@ -839,7 +879,6 @@ function deshacer() {
         }
 
         estado.tiempoPartidoTranscurrido = Math.floor((Date.now() - estado.tiempoInicio) / 1000);
-        console.log('⏱️ Tiempo partido transcurrido (s):', estado.tiempoPartidoTranscurrido);
       }, 1000);
 
       console.log('▶️ Temporizador de partido reanudado después de deshacer.');
