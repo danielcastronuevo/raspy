@@ -52,6 +52,7 @@ function notificarCambio() {
   }
 }
 
+
 // ======================
 // === GUARDAR ESTADO ===
 // ======================
@@ -63,12 +64,36 @@ const HISTORIAL_DIR = path.join(__dirname, '..', 'logs');
 const HISTORIAL_PATH = path.join(HISTORIAL_DIR, 'historial.json');
 
 function guardarEstado() {
+  const enTieBreak = esTieBreak();
+  const puntosTraducidos = estado.marcador.puntos.map((p, i) =>
+    puntoATexto(p, enTieBreak, i, estado.marcador.puntos)
+  );
+
   const estadoCopia = {
     configuracion: { ...estado.configuracion },
     marcador: JSON.parse(JSON.stringify(estado.marcador)),
     sacadorActual: { ...estado.sacadorActual },
     ladoActual: estado.ladoActual,
-    puntosTotalesEnTiebreak: estado.puntosTotalesEnTiebreak
+    puntosTotalesEnTiebreak: estado.puntosTotalesEnTiebreak,
+    ultimoPunto: estado.ultimoPunto || null,
+
+    tableroTexto: {
+      pareja1: {
+        gamesPorSet: estado.marcador.sets.map((s, idx) => ({
+          set: idx + 1,
+          games: s.games[0],  
+          gameActual: idx === estado.marcador.setActual ? puntosTraducidos[0] : null
+        }))
+      },
+      pareja2: {
+        gamesPorSet: estado.marcador.sets.map((s, idx) => ({
+          set: idx + 1,
+          games: s.games[1],  
+          gameActual: idx === estado.marcador.setActual ? puntosTraducidos[1] : null
+        }))
+      },
+      enTieBreak
+    }
   };
 
   if (!fs.existsSync(HISTORIAL_DIR)) {
@@ -83,6 +108,48 @@ function guardarEstado() {
   historial.push(estadoCopia);
   fs.writeFileSync(HISTORIAL_PATH, JSON.stringify(historial, null, 2));
 }
+
+// ==========================
+// === HISTORIAL ACTUAL ===
+// ==========================
+
+function getHistorialActual() {
+  const enTieBreak = esTieBreak();
+  const puntosTraducidos = estado.marcador.puntos.map((p, i) =>
+    puntoATexto(p, enTieBreak, i, estado.marcador.puntos)
+  );
+
+  const snapshot = {
+    configuracion: { ...estado.configuracion },
+    marcador: JSON.parse(JSON.stringify(estado.marcador)),
+    sacadorActual: { ...estado.sacadorActual },
+    ladoActual: estado.ladoActual,
+    puntosTotalesEnTiebreak: estado.puntosTotalesEnTiebreak || 0,
+    ultimoPunto: estado.ultimoPunto || null,
+    timestamp: Date.now(),
+
+    tableroTexto: {
+      pareja1: {
+        gamesPorSet: estado.marcador.sets.map((s, idx) => ({
+          set: idx + 1,
+          games: s.games[0],  
+          gameActual: idx === estado.marcador.setActual ? puntosTraducidos[0] : null
+        }))
+      },
+      pareja2: {
+        gamesPorSet: estado.marcador.sets.map((s, idx) => ({
+          set: idx + 1,
+          games: s.games[1],  
+          gameActual: idx === estado.marcador.setActual ? puntosTraducidos[1] : null
+        }))
+      },
+      enTieBreak
+    }
+  };
+
+  return snapshot;
+}
+
 
 // ==========================
 // === CONFIGURAR PARTIDO ===
@@ -634,7 +701,7 @@ function sumarPunto(parejaIndex) {
     return;
   }
 
-  guardarEstado();
+  guardarEstado(); //GRACIAS A ESTO ESTAMOS GUARDANDO UN ESTADO ANTERIOR, POR ESO NO PODEMOS PASAR ESTO PARA MAS ADELANTE, PORQUE ROMPE CON TODA LA LOGICA QUE ENVUELVE AL PROGRAMA
 
   const tipoGame = estado.configuracion.tipoGames;
   const rivalIndex = parejaIndex === 0 ? 1 : 0;
@@ -685,6 +752,11 @@ function sumarPunto(parejaIndex) {
       return;
     }
 
+
+    // ✅ Registrar el último punto del game/set
+    estado.ultimoPunto = {
+      pareja: parejaIndex === 0 ? 'pareja1' : 'pareja2',
+    };
     notificarCambio();
     logEstado();
     return;
@@ -697,6 +769,13 @@ function sumarPunto(parejaIndex) {
     } else {
       console.log(`🏆 Pareja ${parejaIndex + 1} gana el game por punto de oro`);
       ganarGame(parejaIndex);
+
+
+
+      // ✅ Registrar el último punto del game/set
+      estado.ultimoPunto = {
+        pareja: parejaIndex === 0 ? 'pareja1' : 'pareja2',
+      };
       return;
     }
   } else {
@@ -707,6 +786,10 @@ function sumarPunto(parejaIndex) {
       if (puntos[rivalIndex] < 3) {
         console.log(`🏆 Pareja ${parejaIndex + 1} gana el game (rival menos de 40)`);
         ganarGame(parejaIndex);
+      // ✅ Registrar el último punto del game/set
+      estado.ultimoPunto = {
+        pareja: parejaIndex === 0 ? 'pareja1' : 'pareja2',
+      };
         return;
       } else if (puntos[rivalIndex] === 3) {
         puntos[parejaIndex] = 'ADV';
@@ -715,11 +798,21 @@ function sumarPunto(parejaIndex) {
       }
     } else if (puntos[parejaIndex] === 'ADV') {
       console.log(`🏆 Pareja ${parejaIndex + 1} gana el game (desde ventaja)`);
+
       ganarGame(parejaIndex);
+
+      // ✅ Registrar el último punto del game/set
+      estado.ultimoPunto = {
+        pareja: parejaIndex === 0 ? 'pareja1' : 'pareja2',
+      };
       return;
     }
   }
 
+  // 🔹 Registrar quién hizo el último punto
+  estado.ultimoPunto = {
+    pareja: parejaIndex === 0 ? 'pareja1' : 'pareja2',
+  };
   logEstado();
   notificarCambio();
 }
@@ -837,6 +930,7 @@ function deshacer() {
     return;
   }
 
+
   const estadoAnterior = historial.pop();
   fs.writeFileSync(HISTORIAL_PATH, JSON.stringify(historial, null, 2));
 
@@ -884,6 +978,8 @@ function deshacer() {
       console.log('▶️ Temporizador de partido reanudado después de deshacer.');
     }
   }
+
+  estado.ultimoPunto = estadoAnterior.ultimoPunto ? { ...estadoAnterior.ultimoPunto } : null;
 
   notificarCambio();
 }
@@ -1398,6 +1494,7 @@ module.exports = {
   getEstado,
   setOnChange,
   getResumen,
+  getHistorialActual,
   estaEnCalentamiento,
   iniciarPartido,
   estaEnEspera,

@@ -99,6 +99,38 @@ app.get('/api/raspy-id', (req, res) => {
   res.json({ raspy_id: RASPY_ID });
 });
 
+
+// ====================================
+// 📄 ENDPOINT: historial anterior y estado actual
+// ====================================
+
+// 🔹 Devuelve el historial guardado (snapshot anteriores)
+app.get('/api/historial', (req, res) => {
+  try {
+    const HISTORIAL_PATH = path.join(__dirname, 'logs', 'historial.json');
+    if (!fs.existsSync(HISTORIAL_PATH)) {
+      return res.json({ historial: [], mensaje: "No hay historial disponible" });
+    }
+
+    const historial = JSON.parse(fs.readFileSync(HISTORIAL_PATH, 'utf-8'));
+    res.json({ historial });
+  } catch (err) {
+    console.error("❌ Error leyendo historial:", err);
+    res.status(500).json({ error: "Error leyendo historial" });
+  }
+});
+
+// 🔹 Devuelve el estado actual del partido (100% en vivo)
+app.get('/api/estado-actual', (req, res) => {
+  try {
+    const snapshotActual = estado.getHistorialActual();
+    res.json({ estadoActual: snapshotActual });
+  } catch (err) {
+    console.error("❌ Error generando estado actual:", err);
+    res.status(500).json({ error: "Error generando estado actual" });
+  }
+});
+
 // ====================================
 // Socket.io
 // ====================================

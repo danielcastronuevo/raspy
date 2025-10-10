@@ -147,6 +147,9 @@ socket.on("estado", (estado) => {
 
   // =================== ACTUALIZAR ESTADO PREVIO ===================
   estadoPrevioPartido = estado.estadoPartido;
+
+  // =================== ACTUALIZAR HISTORIAL DE JUGADAS ============
+  actualizarUltimasJugadas();
 });
 
 // =================================================
@@ -782,6 +785,7 @@ function ocultarOverlayCalentamiento() {
   }, 600); // mismo tiempo que la animación
 }
 
+
 // =================================================
 // =============== MOSTRAR CONTADOR ================
 // =================================================
@@ -794,46 +798,35 @@ function mostrarContadores(delay = 0) {
     timeoutContadores = null;
   }
 
+  const scoreHistory = document.querySelector(".score-history");
   const marcador = document.querySelector(".marcador-container");
   const cronos = document.querySelector(".cronos-container");
-  // const reloj = document.querySelector(".reloj");  // 🔹 lo dejamos quieto
-  // const ads1 = document.querySelector(".ads-container1");
-  // const ads2 = document.querySelector(".ads-container2");
-  // const ads3 = document.querySelector(".ads-container3");
-  // const ads4 = document.querySelector(".ads-container4");
-
-  // 🔹 agarramos la sección de referencias dentro de ads3
   const referencias = document.querySelector(".ads-container3 .seccion-de-referencias");
 
   timeoutContadores = setTimeout(() => {
     // Estado inicial
-    marcador.style.display = "flex";
-    marcador.style.opacity = "0";
-    marcador.style.transform = "translateX(-5vh) translateY(-2.5vh)";
-
-    cronos.style.display = "flex";
-    cronos.style.opacity = "0";
-
-    if (referencias) {
-      referencias.style.display = "flex";
-      referencias.style.opacity = "0";
-    }
+    [marcador, cronos, scoreHistory, referencias].forEach(el => {
+      if (!el) return;
+      el.style.display = "flex";
+      el.style.opacity = "0";
+      if (el === marcador) el.style.transform = "translateX(-5vh) translateY(-2.5vh)";
+    });
 
     // Forzar reflow
-    marcador.offsetHeight;
-    cronos.offsetHeight;
-    if (referencias) referencias.offsetHeight;
+    [marcador, cronos, scoreHistory, referencias].forEach(el => el && el.offsetHeight);
 
     // Transiciones
     const duracion = "1s ease";
-    marcador.style.transition = `opacity ${duracion}, transform ${duracion}`;
-    cronos.style.transition = `opacity ${duracion}`;
+    if (marcador) marcador.style.transition = `opacity ${duracion}, transform ${duracion}`;
+    if (cronos) cronos.style.transition = `opacity ${duracion}`;
+    if (scoreHistory) scoreHistory.style.transition = `opacity ${duracion}`;
     if (referencias) referencias.style.transition = `opacity ${duracion}`;
 
     // Animación final
-    marcador.style.opacity = "1";
-    marcador.style.transform = "translateY(-2.5vh)";
-    cronos.style.opacity = "1";
+    if (marcador) marcador.style.opacity = "1";
+    if (marcador) marcador.style.transform = "translateY(-2.5vh)";
+    if (cronos) cronos.style.opacity = "1";
+    if (scoreHistory) scoreHistory.style.opacity = "1";
     if (referencias) referencias.style.opacity = "1";
 
     timeoutContadores = null;
@@ -843,12 +836,7 @@ function mostrarContadores(delay = 0) {
 function ocultarContadores() {
   const marcador = document.querySelector(".marcador-container");
   const cronos = document.querySelector(".cronos-container");
-  // const reloj = document.querySelector(".reloj"); 
-  // const ads1 = document.querySelector(".ads-container1");
-  // const ads2 = document.querySelector(".ads-container2");
-  // const ads3 = document.querySelector(".ads-container3");
-  // const ads4 = document.querySelector(".ads-container4");
-
+  const scoreHistory = document.querySelector(".score-history");
   const referencias = document.querySelector(".ads-container3 .seccion-de-referencias");
 
   if (timeoutContadores) {
@@ -859,12 +847,21 @@ function ocultarContadores() {
   const duracionMs = 1000;
 
   // Animación de salida
-  marcador.style.transition = "opacity 1s ease, transform 1s ease";
-  marcador.style.opacity = "0";
-  marcador.style.transform = "translateX(-5vh) translateY(-2.5vh)";
+  if (marcador) {
+    marcador.style.transition = "opacity 1s ease, transform 1s ease";
+    marcador.style.opacity = "0";
+    marcador.style.transform = "translateX(-5vh) translateY(-2.5vh)";
+  }
 
-  cronos.style.transition = "opacity 1s ease";
-  cronos.style.opacity = "0";
+  if (cronos) {
+    cronos.style.transition = "opacity 1s ease";
+    cronos.style.opacity = "0";
+  }
+
+  if (scoreHistory) {
+    scoreHistory.style.transition = "opacity 1s ease";
+    scoreHistory.style.opacity = "0";
+  }
 
   if (referencias) {
     referencias.style.transition = "opacity 1s ease";
@@ -873,11 +870,13 @@ function ocultarContadores() {
 
   // Ocultar display al finalizar transición
   setTimeout(() => {
-    marcador.style.display = "none";
-    cronos.style.display = "none";
+    if (marcador) marcador.style.display = "none";
+    if (cronos) cronos.style.display = "none";
+    if (scoreHistory) scoreHistory.style.display = "none";
     if (referencias) referencias.style.display = "none";
   }, duracionMs);
 }
+
 
 
 
@@ -1463,3 +1462,112 @@ function stopPuntoDeOro() {
     hideBgOverlay("punto-oro");
   }
 }
+
+
+//=====================================
+//ULTIMO PUNTO HISTORIAL
+//=======================================
+
+const HISTORY_URL = 'http://192.168.1.39:5000/api/historial';
+const CURRENT_URL = 'http://192.168.1.39:5000/api/estado-actual';
+
+async function actualizarUltimasJugadas() {
+  try {
+    const [historialRes, estadoRes] = await Promise.all([
+      fetch(HISTORY_URL),
+      fetch(CURRENT_URL)
+    ]);
+
+    const historialDataRaw = await historialRes.json();
+    const estadoActual = (await estadoRes.json()).estadoActual;
+
+    const historialData = historialDataRaw.historial || historialDataRaw;
+
+    const ultimasJugadas = [];
+
+    // CASOS según tu lógica
+    if (historialData.length === 0) {
+      document.querySelector('.history-list').innerHTML = '';
+      return;
+    }
+
+    const historialFiltrado = historialData.filter(item => {
+      if (!item.ultimoPunto) return false;
+      const sets = item.marcador?.sets || [];
+      const puntos = item.marcador?.puntos || [];
+      const todoCero = sets.every(s => s.games.every(g => g === 0)) &&
+                        puntos.every(p => p === 0);
+      return !todoCero;
+    });
+
+    if (historialFiltrado.length === 0) {
+      // Solo mostramos estado actual si hay puntos
+      ultimasJugadas.push(estadoActual.ultimoPunto?.pareja || 'pareja1');
+    } else {
+      ultimasJugadas.push(estadoActual.ultimoPunto?.pareja || 'pareja1');
+      const últimosDos = historialFiltrado.slice(-2).reverse();
+      últimosDos.forEach(item => {
+        if (item.ultimoPunto?.pareja) ultimasJugadas.push(item.ultimoPunto.pareja);
+      });
+    }
+
+    const historyList = document.querySelector('.history-list');
+    historyList.innerHTML = '';
+
+    ultimasJugadas.forEach((jugada, idx) => {
+      const li = document.createElement('li');
+      li.className = 'pair';
+
+      // Convertimos "pareja1" → "PAREJA 1"
+      li.textContent = jugada.replace(/pareja(\d)/i, (_, num) => `PAREJA ${num}`);
+
+      // ✨ Aplicamos animación solo a la primera
+      if (idx === 0) li.classList.add('new-point');
+
+      historyList.appendChild(li);
+
+      if (idx < ultimasJugadas.length - 1) {
+        const sep = document.createElement('li');
+        sep.className = 'score-sep';
+        sep.innerHTML = '<i class="fa-solid fa-angles-right"></i>';
+        historyList.appendChild(sep);
+      }
+    });
+
+    // Opacidades según CSS
+    const pairs = historyList.querySelectorAll('.pair');
+    pairs.forEach((el, idx) => {
+      if (idx === 0) el.style.opacity = 1;
+      else if (idx === 1) el.style.opacity = 0.7;
+      else if (idx === 2) el.style.opacity = 0.4;
+    });
+
+  } catch (error) {
+    console.error('Error al actualizar últimas jugadas:', error);
+  }
+}
+
+/**
+ * Función auxiliar para mostrar "parejaX-valor" (comentada para uso futuro)
+ */
+/*
+function obtenerUltimoPuntoTexto(item, esEstadoActual) {
+  if (!item.ultimoPunto && !esEstadoActual) return null;
+
+  const pareja = item.ultimoPunto?.pareja || 'pareja1';
+  const tablero = item.tableroTexto[pareja];
+  let game = 0;
+
+  if (tablero) {
+    const activo = tablero.gamesPorSet.find(g => g.gameActual !== null);
+    game = activo ? activo.gameActual : 0;
+  }
+
+  if (!game && item.marcador?.puntos) {
+    game = pareja === 'pareja1' ? item.marcador.puntos[0] : item.marcador.puntos[1];
+  }
+
+  return `${pareja}-${game}`;
+}
+*/
+
