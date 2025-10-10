@@ -48,15 +48,15 @@ async def whitelist_watchdog():
 
 # ------------ LOGIC ----------------------------------------
 REBOUND_BY_TYPE = {
-    "simple": 3.0,
-    "double": 3.0,
-    "triple": 3.0,   # 👈 rebote para triple-toque
+    "simple": 4.0,
+    "double": 4.0,
+    "triple": 4.0,   
 }
 
 ACTIONS = {
     (11, 11): "simple",
     (22, 22): "double",
-    (33, 33): "triple",   # 👈 agregado
+    (33, 33): "triple",   
 }
 
 def node_action(pareja, tipo):
@@ -65,7 +65,7 @@ def node_action(pareja, tipo):
     elif tipo == "double":
         return "restar"
     elif tipo == "triple":
-        return "3-toques"   # 👈 lo que pediste
+        return "3-toques"  
     return None
 
 last_evt   = defaultdict(float)
