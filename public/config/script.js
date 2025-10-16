@@ -1,4 +1,3 @@
-
 const socket = io();
 
 socket.on('esperando', (data) => {
@@ -28,13 +27,6 @@ const selectsStep1 = [
   document.getElementById("bracelet-team1"),
   document.getElementById("bracelet-team2")
 ];
-
-//const step2NextBtn = document.getElementById("step2-next");
-//const step2Error = document.getElementById("step2-error");
-//const selectsStep2 = [
-//  document.getElementById("sacador1"),
-//  document.getElementById("sacador2")
-//];
 
 const step3NextBtn = document.getElementById("step3-next");
 const radiosCalentamiento = document.getElementsByName("calentamiento");
@@ -97,7 +89,6 @@ function llenarPulseras() {
   });
 }
 
-
 // ===================== CANCHA =====================
 function validateFinalizar() {
   const step4Valido = duracionSelect.value;
@@ -110,7 +101,7 @@ function setEstadoCancha(ocupada) {
   if(ocupada){
     estadoCancha.classList.remove("cancha-libre");
     estadoCancha.classList.add("cancha-ocupada");
-    estadoCancha.querySelector(".texto-estado").textContent = "CANCHA OCUPADA";
+    estadoCancha.querySelector(".texto-estado").textContent = "CANCHA NO DISPONIBLE";
     canchaMsg.style.display = "flex";
   } else {
     estadoCancha.classList.remove("cancha-ocupada");
@@ -121,10 +112,6 @@ function setEstadoCancha(ocupada) {
 
   validateFinalizar();
 }
-
-// Ejemplo inicial
-//setEstadoCancha(true);
-//setTimeout(() => setEstadoCancha(false), 20000);
 
 // ===================== STEP 1 =====================
 
@@ -193,34 +180,6 @@ function populateStep1() {
 inputsStep1.forEach(i => i.addEventListener("input", updateDatosStep1));
 selectsStep1.forEach(s => s.addEventListener("change", updateDatosStep1));
 
-// ===================== STEP 2 =====================
-//function validateStep2() {
-//  const valid = selectsStep2.every(s => s.value);
-//  step2Error.style.display = valid ? "none" : "block";
-//  step2NextBtn.disabled = !valid;
-//}
-
-//function updateDatosStep2() {
-//  datosPartido.sacadores.pareja1 = selectsStep2[0].value;
-//  datosPartido.sacadores.pareja2 = selectsStep2[1].value;
-//  validateStep2();
-//}
-
-//function populateStep2() {
-//  const sac1 = selectsStep2[0];
-//  const sac2 = selectsStep2[1];
-//  sac1.innerHTML = `<option value="" disabled hidden class="placeholder">Seleccionar Sacador</option>
-//                    <option ${datosPartido.sacadores.pareja1===datosPartido.jugadores.pareja1.j1?'selected':''}>${datosPartido.jugadores.pareja1.j1}</option>
-//                    <option ${datosPartido.sacadores.pareja1===datosPartido.jugadores.pareja1.j2?'selected':''}>${datosPartido.jugadores.pareja1.j2}</option>`;
-//  sac2.innerHTML = `<option value="" disabled hidden class="placeholder">Seleccionar Sacador</option>
-//                    <option ${datosPartido.sacadores.pareja2===datosPartido.jugadores.pareja2.j1?'selected':''}>${datosPartido.jugadores.pareja2.j1}</option>
-//                    <option ${datosPartido.sacadores.pareja2===datosPartido.jugadores.pareja2.j2?'selected':''}>${datosPartido.jugadores.pareja2.j2}</option>`;
-//  sac1.value = datosPartido.sacadores.pareja1 || '';
-//  sac2.value = datosPartido.sacadores.pareja2 || '';
-//  validateStep2();
-//}
-
-//selectsStep2.forEach(s => s.addEventListener("change", updateDatosStep2));
 
 // ===================== STEP 3 =====================
 function validateRadios(radios) {
@@ -293,6 +252,32 @@ function generateTimeOptions() {
   return { options, defaultTime };
 }
 
+function validarHorarioLogico() {
+  const ahora = new Date();
+  const [hInicio, mInicio] = inputInicio.value.split(':').map(Number);
+  const inicio = new Date();
+  inicio.setHours(hInicio, mInicio, 0, 0);
+
+  // Si no hay duración seleccionada todavía, no validamos
+  if (!duracionSelect.value) return true;
+
+  const fin = new Date(inicio.getTime() + parseInt(duracionSelect.value) * 60000);
+
+  // ⚠️ Si el horario de fin ya pasó, mostramos error y bloqueamos el botón finalizar
+  if (fin <= ahora) {
+    step4Error.style.display = "block";
+    step4Error.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> El horario de finalización no es válido. Por favor, modificá la hora de inicio o la duración del partido.`;
+    duracionSelect.classList.add("error");
+    finishBtn.disabled = true;
+    return false;
+  } else {
+    // restauramos mensaje original si todo está bien
+    step4Error.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Debes seleccionar la duración del partido';
+    validateStep4();
+    return true;
+  }
+}
+
 
 function updateInicioSelect() {
   const { options, defaultTime } = generateTimeOptions();
@@ -358,10 +343,14 @@ duracionSelect.addEventListener("change", () => {
   datosPartido.duracion = duracionSelect.value;
   validateStep4();
   updateFin();
+  validarHorarioLogico();
 });
 
 // Cuando el usuario cambia manualmente el inicio
-inputInicio.addEventListener('change', updateFin);
+inputInicio.addEventListener('change', () => {
+  updateFin();
+  validarHorarioLogico();
+});
 
 // Actualización automática cada 60 segundos
 setInterval(updateInicioSelect, 60000);
@@ -480,44 +469,4 @@ sendToServer = (datosPartido) => {
         console.warn("¿Estás seguro de que el servidor está corriendo?");
     });
 }
-
-
-
-
-// ==================================================
-// 🧪 ENVIAR PRUEBA AL SERVIDOR
-// ==================================================
-function enviarPruebaAlServer(finCustom = "23:59") {
-  const datosPrueba = {
-    jugadores: ["Juan", "Pedro", "Luis", "Carlos"],
-    parejas: {
-      pareja1: ["Juan", "Pedro"],
-      pareja2: ["Luis", "Carlos"]
-    },
-    parejaSacadora: "pareja1",
-    sacadores: ["Juan", "Luis"],
-
-    tiempoCalentamiento: "5 minutos",
-    cambioDeLado: "Tradicional (impares)",
-    tipoGames: "Punto de oro",
-
-    ordenDeSaque: ["Juan", "Pedro", "Luis", "Carlos"],
-
-    duracion: "60 minutos",
-    comienzo: "20:00",
-    fin: finCustom,  // 🔹 Editable a gusto
-
-    pulseras: {
-      pareja1: { nombre: "Pulsera Azul", mac: "AA:BB:CC:DD:EE:01" },
-      pareja2: { nombre: "Pulsera Roja", mac: "AA:BB:CC:DD:EE:02" }
-    }
-  };
-
-  console.log("🧪 Enviando datos de PRUEBA al servidor:", datosPrueba);
-
-  sendToServer(datosPrueba);
-}
-
-
-enviarPruebaAlServer("17:10");
 

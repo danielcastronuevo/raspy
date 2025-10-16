@@ -177,20 +177,46 @@ function configurarPartido(config) {
   estado.tiempoInicio = null;
   estado.tiempoPartidoTranscurrido = 0;
 
-  // Programar finalización absoluta por hora "fin"
+  // ================================
+  // 🕒 Programar finalización absoluta
+  // ================================
   const ahora = new Date();
-  const [finHoras, finMinutos] = config.fin.split(':').map(Number);
-  const finDate = new Date(ahora);
+
+  const [inicioHoras, inicioMinutos] = (config.inicio || '00:00').split(':').map(Number);
+  const [finHoras, finMinutos] = (config.fin || '00:00').split(':').map(Number);
+
+  const inicioDate = new Date(ahora);
+  inicioDate.setHours(inicioHoras, inicioMinutos, 0, 0);
+
+  const finDate = new Date(inicioDate);
   finDate.setHours(finHoras, finMinutos, 0, 0);
-  if (finDate <= ahora) finDate.setDate(finDate.getDate() + 1);
+
+  // Si el horario de fin está antes o igual al inicio, asumimos que cruza medianoche
+  if (finDate <= inicioDate) finDate.setDate(finDate.getDate() + 1);
+
+  // Validación: si ya estamos después del horario de fin → no tiene sentido arrancar
+  if (ahora > finDate) {
+    console.error(`[⛔] Horario inválido: el partido debía finalizar a las ${config.fin}, pero ya son las ${ahora.toTimeString().slice(0,5)}.`);
+    return false;
+  }
+
+  // Validación: si el inicio está en el futuro lejano (>12h), probablemente el día está mal cargado
+  if (inicioDate - ahora > 12 * 60 * 60 * 1000) {
+    console.warn(`[⚠️] El horario de inicio (${config.inicio}) parece corresponder a mañana. Se ajusta automáticamente.`);
+    inicioDate.setDate(inicioDate.getDate() - 1);
+  }
 
   const msRestantes = finDate.getTime() - ahora.getTime();
+  console.log(`⏳ Tiempo restante hasta fin del partido: ${Math.round(msRestantes / 60000)} minutos`);
+
   estado.temporizadorFin = setTimeout(() => {
     console.info(`[+] Hora de fin alcanzada (${config.fin}), finalizando partido.`);
     finalizarPorTiempo();
   }, msRestantes);
 
-  // Configurar tiempo de calentamiento
+  // ================================
+  // 🔥 Configurar tiempo de calentamiento
+  // ================================
   const tiempoConfig = config.tiempoCalentamiento || '0 minutos';
   const matchMinutos = tiempoConfig.match(/(\d+)/);
   const minutos = matchMinutos ? parseInt(matchMinutos[1]) : 0;
@@ -211,7 +237,9 @@ function configurarPartido(config) {
     iniciarEleccionSacador();
   }
 
-  // Reset marcador e historial
+  // ================================
+  // 🧮 Reset marcador e historial
+  // ================================
   estado.marcador = {
     sets: [
       { games: [0, 0] },
@@ -231,6 +259,9 @@ function configurarPartido(config) {
     console.error(`[!] Error al eliminar historial: ${err.message}`);
   }
 
+  // ================================
+  // 🎾 Sacador inicial
+  // ================================
   estado.sacadorActual = {
     nombre: config.ordenDeSaque[0],
     indice: 0,
@@ -241,6 +272,8 @@ function configurarPartido(config) {
   notificarCambio();
   return true;
 }
+
+
 
 // =======================
 // === Iniciar partido ===
