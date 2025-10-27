@@ -155,7 +155,11 @@ function getHistorialActual() {
 // === CONFIGURAR PARTIDO ===
 // ==========================
 
+
 function configurarPartido(config) {
+  console.log("=== [INICIO configurarPartido] ===");
+  console.log("Config recibida:", JSON.stringify(config, null, 2));
+
   if (estado.estadoPartido !== 'esperando') {
     console.warn(`[!] No se puede configurar un nuevo partido, estado actual: ${estado.estadoPartido}`);
     return false;
@@ -164,12 +168,13 @@ function configurarPartido(config) {
   const { randomUUID } = require('crypto');
   estado.matchId = randomUUID();
   estado.configuracion = config;
+  console.log(`[+] Nuevo matchId asignado: ${estado.matchId}`);
 
   // Limpiar temporizadores anteriores
-  [estado.temporizadorCalentamiento, estado.temporizadorPartido, estado.temporizadorFin]
-    .forEach(timer => {
-      if (timer) clearInterval(timer);
-    });
+  console.log("[i] Limpiando temporizadores anteriores...");
+  [estado.temporizadorCalentamiento, estado.temporizadorPartido, estado.temporizadorFin].forEach(timer => {
+    if (timer) clearInterval(timer);
+  });
   estado.temporizadorCalentamiento = null;
   estado.temporizadorPartido = null;
   estado.temporizadorFin = null;
@@ -178,68 +183,94 @@ function configurarPartido(config) {
   estado.tiempoPartidoTranscurrido = 0;
 
   // ================================
-  // 🕒 Programar finalización absoluta
+  // Determinar inicio y fin con fecha
   // ================================
   const ahora = new Date();
+  console.log(`[i] Hora actual del sistema: ${ahora.toISOString()}`);
 
-  const [inicioHoras, inicioMinutos] = (config.inicio || '00:00').split(':').map(Number);
-  const [finHoras, finMinutos] = (config.fin || '00:00').split(':').map(Number);
+  let inicioDate, finDate;
 
-  const inicioDate = new Date(ahora);
-  inicioDate.setHours(inicioHoras, inicioMinutos, 0, 0);
+  if (config.inicioFecha && config.finFecha) {
+    console.log("[i] Usando fechas completas desde config (inicioFecha / finFecha)");
+    inicioDate = new Date(config.inicioFecha);
+    finDate = new Date(config.finFecha);
+  } else {
+    console.log("[i] Usando formato HH:mm (sin fecha completa)");
+    const [inicioHoras, inicioMinutos] = (config.inicio || '00:00').split(':').map(Number);
+    const [finHoras, finMinutos] = (config.fin || '00:00').split(':').map(Number);
 
-  const finDate = new Date(inicioDate);
-  finDate.setHours(finHoras, finMinutos, 0, 0);
+    inicioDate = new Date(ahora);
+    inicioDate.setHours(inicioHoras, inicioMinutos, 0, 0);
 
-  // Si el horario de fin está antes o igual al inicio, asumimos que cruza medianoche
-  if (finDate <= inicioDate) finDate.setDate(finDate.getDate() + 1);
+    finDate = new Date(inicioDate);
+    finDate.setHours(finHoras, finMinutos, 0, 0);
 
-  // Validación: si ya estamos después del horario de fin → no tiene sentido arrancar
-  if (ahora > finDate) {
-    console.error(`[⛔] Horario inválido: el partido debía finalizar a las ${config.fin}, pero ya son las ${ahora.toTimeString().slice(0,5)}.`);
+    if (finHoras < inicioHoras || (finHoras === inicioHoras && finMinutos <= inicioMinutos)) {
+      console.log("[i] Detectado cruce de medianoche, ajustando finDate +1 día");
+      finDate.setDate(finDate.getDate() + 1);
+    }
+  }
+
+  console.log(`[i] inicioDate: ${inicioDate.toISOString()}`);
+  console.log(`[i] finDate: ${finDate.toISOString()}`);
+
+  // Validar coherencia de fechas
+  if (finDate <= inicioDate) {
+    console.error(`[X] Horarios inválidos: fin <= inicio`);
+    console.error(`    inicioDate=${inicioDate.toISOString()}, finDate=${finDate.toISOString()}`);
     return false;
   }
 
-  // Validación: si el inicio está en el futuro lejano (>12h), probablemente el día está mal cargado
-  if (inicioDate - ahora > 12 * 60 * 60 * 1000) {
-    console.warn(`[⚠️] El horario de inicio (${config.inicio}) parece corresponder a mañana. Se ajusta automáticamente.`);
-    inicioDate.setDate(inicioDate.getDate() - 1);
+  if (ahora > finDate) {
+    console.error(`[X] Horario inválido: finDate ya pasó`);
+    console.error(`    finDate=${finDate.toISOString()}, ahora=${ahora.toISOString()}`);
+    return false;
   }
 
   const msRestantes = finDate.getTime() - ahora.getTime();
-  console.log(`⏳ Tiempo restante hasta fin del partido: ${Math.round(msRestantes / 60000)} minutos`);
+  const minutosRestantes = Math.round(msRestantes / 60000);
+  console.log(`[i] Tiempo restante hasta fin del partido: ${minutosRestantes} minutos (${msRestantes} ms)`);
 
   estado.temporizadorFin = setTimeout(() => {
-    console.info(`[+] Hora de fin alcanzada (${config.fin}), finalizando partido.`);
+    console.info(`[+] Hora de fin alcanzada (${config.fin || config.finFecha}), finalizando partido.`);
     finalizarPorTiempo();
   }, msRestantes);
 
   // ================================
-  // 🔥 Configurar tiempo de calentamiento
+  // Configurar tiempo de calentamiento
   // ================================
+  console.log("[i] Configurando tiempo de calentamiento...");
   const tiempoConfig = config.tiempoCalentamiento || '0 minutos';
   const matchMinutos = tiempoConfig.match(/(\d+)/);
   const minutos = matchMinutos ? parseInt(matchMinutos[1]) : 0;
+  console.log(`[i] Minutos de calentamiento detectados: ${minutos}`);
 
   if (minutos > 0) {
     estado.estadoPartido = 'calentamiento';
     estado.tiempoCalentamientoRestante = minutos * 60;
+    console.log(`[+] Iniciando calentamiento de ${minutos} minutos (${estado.tiempoCalentamientoRestante} segundos)`);
 
     estado.temporizadorCalentamiento = setInterval(() => {
       estado.tiempoCalentamientoRestante--;
+      if (estado.tiempoCalentamientoRestante % 30 === 0) {
+        console.log(`[i] Calentamiento restante: ${estado.tiempoCalentamientoRestante}s`);
+      }
       if (estado.tiempoCalentamientoRestante <= 0) {
+        console.log("[+] Calentamiento terminado, iniciando elección de sacador...");
         clearInterval(estado.temporizadorCalentamiento);
         estado.temporizadorCalentamiento = null;
         iniciarEleccionSacador();
       }
     }, 1000);
   } else {
+    console.log("[i] Sin calentamiento, iniciando elección de sacador inmediatamente.");
     iniciarEleccionSacador();
   }
 
   // ================================
-  // 🧮 Reset marcador e historial
+  // Reset marcador e historial
   // ================================
+  console.log("[i] Reiniciando marcador e historial...");
   estado.marcador = {
     sets: [
       { games: [0, 0] },
@@ -253,14 +284,21 @@ function configurarPartido(config) {
   estado.historial = [];
 
   try {
-    if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
-    if (!fs.existsSync(HISTORIAL_DIR)) fs.mkdirSync(HISTORIAL_DIR, { recursive: true });
+    console.log("[i] Borrando archivos de historial anteriores...");
+    if (fs.existsSync(HISTORIAL_PATH)) {
+      fs.unlinkSync(HISTORIAL_PATH);
+      console.log(`[✓] Archivo ${HISTORIAL_PATH} eliminado.`);
+    }
+    if (!fs.existsSync(HISTORIAL_DIR)) {
+      fs.mkdirSync(HISTORIAL_DIR, { recursive: true });
+      console.log(`[✓] Carpeta ${HISTORIAL_DIR} creada.`);
+    }
   } catch (err) {
     console.error(`[!] Error al eliminar historial: ${err.message}`);
   }
 
   // ================================
-  // 🎾 Sacador inicial
+  // Sacador inicial
   // ================================
   estado.sacadorActual = {
     nombre: config.ordenDeSaque[0],
@@ -268,10 +306,14 @@ function configurarPartido(config) {
     puntosEnTiebreak: 0
   };
 
+  console.log(`[i] Sacador inicial: ${estado.sacadorActual.nombre || "(no definido)"}`);
+
   console.info(`[+] Partido configurado correctamente`);
+  console.log("=== [FIN configurarPartido] ===");
   notificarCambio();
   return true;
 }
+
 
 
 

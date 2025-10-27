@@ -210,8 +210,7 @@ console.log(`${colors.cyan}>_ CONTADOR DE PADEL${colors.reset}\n`);
 server.listen(PORT, () => {
   console.log(''); 
   logInfo('Links:');
-
-  logSuccess(`Configuración VPS:     ${colors.cyan}http://91.108.124.53:5000/?id=AABB11${colors.reset}`);
+  logSuccess(`Configuración VPS:     ${colors.cyan}https://config.altoquepadel.com/?id=${RASPY_ID}${colors.reset}`);
   logSuccess(`Sensores:              ${colors.cyan}http://${ip}:${PORT}/sensors${colors.reset}`);
   logSuccess(`Contador:              ${colors.cyan}http://${ip}:${PORT}/counter${colors.reset}`);
 

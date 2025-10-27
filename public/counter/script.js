@@ -36,7 +36,7 @@ socket.on("estado", (estado) => {
 
     // Mostramos mensaje de partido finalizado solo si venía jugando
     if (cronoRestante && cronoRestante.textContent !== "00:00:00") {
-      showAdviceOverlay("PARTIDO", "FINALIZADO");
+      showAdviceOverlay("PARTIDO", "FINALIZADOJEJE");
      // Quitar overlay animado
      hideBgOverlay("lowtime-bg");
     }
@@ -77,10 +77,8 @@ socket.on("estado", (estado) => {
 
   // =================== ESTADO JUGANDO ===================
   } else if (estado.estadoPartido === "jugando") {
-    const [horaFin, minFin] = estado.configuracion.fin.split(':').map(Number);
     const ahora = new Date();
-    const finDate = new Date(ahora);
-    finDate.setHours(horaFin, minFin, 0, 0);
+    const finDate = new Date(estado.configuracion.finFecha); // 👈 usar la fecha completa del servidor
     let segundosHastaFin = Math.floor((finDate - ahora) / 1000);
     if (segundosHastaFin < 0) segundosHastaFin = 0;
 
@@ -604,7 +602,7 @@ async function generarQRyUltimoPartido() {
     const raspy_id = data.raspy_id;
 
     // 🔹 2. VPS (dominio o IP pública)
-    const vpsUrl = "http://91.108.124.53:5000"; // o https://tu-dominio.com
+    const vpsUrl = "https://config.altoquepadel.com/"; // o https://tu-dominio.com
 
     // 🔹 3. Armamos la URL con query param
     //const path = "/config/";
@@ -953,7 +951,7 @@ function iniciarCronoRestante(segundosHastaFin) {
       cronoRestante.textContent = "00:00:00";
       cronoRestante.style.color = "";
       ocultarOverlay();
-      showAdviceOverlay("PARTIDO", "FINALIZADO");
+      showAdviceOverlay("PARTIDO", "FINALIZADOALO");
     }
   }
 

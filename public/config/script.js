@@ -37,6 +37,13 @@ const steps = document.querySelectorAll(".step");
 let current = 0;
 let canchaOcupada = false;
 
+let datosHorarios = {
+  inicioTexto: '',
+  finTexto: '',
+  inicioFecha: '',
+  finFecha: ''
+};
+
 let datosPartido = {
   jugadores: {
     pareja1: { j1: '', j2: '', pulsera: '' },
@@ -303,18 +310,34 @@ function updateInicioSelect() {
   updateFin();
 }
 
-
 function updateFin() {
   if (!duracionSelect.value) {
     inputFin.value = '';
     return;
   }
+
   const [h, m] = inputInicio.value.split(':').map(Number);
   const inicio = new Date();
   inicio.setHours(h, m, 0, 0);
+
   const fin = new Date(inicio.getTime() + parseInt(duracionSelect.value) * 60000);
-  inputFin.value = `${fin.getHours().toString().padStart(2,'0')}:${fin.getMinutes().toString().padStart(2,'0')}`;
+
+  // Si el fin pasa de medianoche, ajustamos el día siguiente
+  if (fin.getDate() !== inicio.getDate()) {
+    // no hace falta corregir nada, Date ya lo hace solo, pero lo marcamos para claridad
+  }
+
+  inputFin.value = `${fin.getHours().toString().padStart(2, '0')}:${fin.getMinutes().toString().padStart(2, '0')}`;
+
+  // Guardamos los datos detallados
+  datosHorarios = {
+    inicioTexto: inputInicio.value,
+    finTexto: inputFin.value,
+    inicioFecha: inicio.toISOString(),
+    finFecha: fin.toISOString()
+  };
 }
+
 
 // Llamamos a esta función cada vez que cargamos Step4 o cada X segundos si queremos que se actualice dinámicamente
 setInterval(updateInicioSelect, 60000); // cada minuto
@@ -424,9 +447,13 @@ finishBtn.addEventListener("click", () => {
     ordenDeSaque: ["", "", "", ""],
 
     // 🔹 Info de horarios
+
     duracion: `${datosPartido.duracion} minutos`,
-    comienzo: inputInicio.value,
-    fin: inputFin.value,
+    comienzo: datosHorarios.inicioTexto,
+    fin: datosHorarios.finTexto,
+    inicioFecha: datosHorarios.inicioFecha,
+    finFecha: datosHorarios.finFecha,
+
 
 
     pulseras: {
@@ -469,4 +496,44 @@ sendToServer = (datosPartido) => {
         console.warn("¿Estás seguro de que el servidor está corriendo?");
     });
 }
+
+
+
+// Simulación de datos de prueba para probar horarios normales (15:00 a 16:00)
+// const datosTest = {
+//   jugadores: ["Jugador 1", "Jugador 2", "Jugador 3", "Jugador 4"],
+//   parejas: {
+//     pareja1: ["Jugador 1", "Jugador 2"],
+//     pareja2: ["Jugador 3", "Jugador 4"]
+//   },
+//   parejaSacadora: "pareja1",
+//   sacadores: ["", ""],
+//   tiempoCalentamiento: "5 minutos",
+//   cambioDeLado: "Tradicional (impares)",
+//   tipoGames: "Punto de oro",
+//   ordenDeSaque: ["", "", "", ""],
+
+//   // Configuración de horario
+//   duracion: "60 minutos",
+//   comienzo: "15:00",
+//   fin: "16:00",
+//   inicioFecha: "2025-10-27T15:00:00-03:00",
+//   finFecha: "2025-10-27T16:00:00-03:00",
+
+//   // Pulseras
+//   pulseras: {
+//     pareja1: { nombre: "Pulsera Roja", mac: "AA:BB:CC:DD:EE:01" },
+//     pareja2: { nombre: "Pulsera Azul", mac: "AA:BB:CC:DD:EE:02" }
+//   }
+// };
+
+// // Envío al backend
+// fetch('/api/config', {
+//   method: 'POST',
+//   headers: { 'Content-Type': 'application/json' },
+//   body: JSON.stringify(datosTest)
+// })
+//   .then(r => r.json())
+//   .then(d => console.log("Respuesta del servidor:", d))
+//   .catch(e => console.error("Error enviando:", e));
 
