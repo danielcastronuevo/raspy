@@ -9,6 +9,13 @@ const path = require('path');
  * @param {Server} io - instancia de Socket.IO
  */
 function configurarPartido(datos, io) {
+
+
+datos.inicioFecha = datos.inicioFecha || null;
+datos.finFecha = datos.finFecha || null;
+datos.comienzo = datos.comienzo || '';
+datos.fin = datos.fin || '';
+
   if (!datos || Object.keys(datos).length === 0) return;
 
   // Configuramos el partido en memoria

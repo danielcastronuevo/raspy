@@ -1,18 +1,18 @@
 {
   "pareja1": {
-    "nombrePulsera": "Pulsera Roja",
-    "macPulsera": "AA:BB:CC:DD:EE:01",
+    "nombrePulsera": "A01",
+    "macPulsera": "C3:00:00:51:33:5C",
     "jugadores": [
-      "Jugador 1",
-      "Jugador 2"
+      "1",
+      "2"
     ]
   },
   "pareja2": {
-    "nombrePulsera": "Pulsera Azul",
-    "macPulsera": "AA:BB:CC:DD:EE:02",
+    "nombrePulsera": "A04",
+    "macPulsera": "C3:00:00:51:33:50",
     "jugadores": [
-      "Jugador 3",
-      "Jugador 4"
+      "3",
+      "4"
     ]
   }
 }

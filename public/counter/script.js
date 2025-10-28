@@ -36,7 +36,7 @@ socket.on("estado", (estado) => {
 
     // Mostramos mensaje de partido finalizado solo si venía jugando
     if (cronoRestante && cronoRestante.textContent !== "00:00:00") {
-      showAdviceOverlay("PARTIDO", "FINALIZADOJEJE");
+      showAdviceOverlay("PARTIDO", "FINALIZADO");
      // Quitar overlay animado
      hideBgOverlay("lowtime-bg");
     }
@@ -951,7 +951,7 @@ function iniciarCronoRestante(segundosHastaFin) {
       cronoRestante.textContent = "00:00:00";
       cronoRestante.style.color = "";
       ocultarOverlay();
-      showAdviceOverlay("PARTIDO", "FINALIZADOALO");
+      showAdviceOverlay("PARTIDO", "FINALIZADO");
     }
   }
 
