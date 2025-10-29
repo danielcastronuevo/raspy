@@ -947,12 +947,18 @@ function iniciarCronoRestante(segundosHastaFin) {
     }
 
     // =========== Mensaje de partido finalizado ===========
+
     if (tiempoRestante <= 0) {
       cronoRestante.textContent = "00:00:00";
       cronoRestante.style.color = "";
-      ocultarOverlay();
+
+      // Ocultar específicamente el overlay rojo de los últimos 2 minutos
+      hideBgOverlay("lowtime-bg");
+
+      // Mostrar mensaje de partido finalizado
       showAdviceOverlay("PARTIDO", "FINALIZADO");
     }
+
   }
 
   actualizarCronoRestante();
