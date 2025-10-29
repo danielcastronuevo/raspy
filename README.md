@@ -3,7 +3,8 @@
 Para traer y ejecutar `start.sh` sin clonar todo el repositorio, podés hacerlo descargándolo directamente desde GitHub y otorgándole permisos de ejecución. Los pasos son los siguientes:
 
 ```bash
-curl -O https://raw.githubusercontent.com/danielcastronuevo/raspy/refs/heads/master/start.sh
+git clone clone https://github.com/danielcastronuevo/raspy.git
+cd raspy
 chmod +x start.sh
 ./start.sh
 ```
