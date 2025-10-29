@@ -141,10 +141,12 @@ EOF
 if [ ! -d "$BASE_DIR/venv" ]; then
     echo -e "${YELLOW}[+] Creando entorno virtual Python${RESET}"
     cd "$BASE_DIR/scanner"
-    /usr/bin/python3 -m venv ../venv
-    source ../venv/bin/activate
+    VENV_DIR="../venv"
+    echo -e "${YELLOW}    ↳ Ubicación:${RESET} $(realpath $VENV_DIR)"
+    /usr/bin/python3 -m venv "$VENV_DIR"
+    source "$VENV_DIR/bin/activate"
     pip install --upgrade pip setuptools bleak aiohttp >/dev/null 2>&1
-    echo -e "${GREEN}[✓] Entorno Python listo${RESET}"
+    echo -e "${GREEN}[✓] Entorno Python listo en:${RESET} $(realpath $VENV_DIR)"
 fi
 
 if [ ! -d "$BASE_DIR/node_modules" ]; then
