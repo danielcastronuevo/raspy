@@ -35,6 +35,30 @@ echo -e "${YELLOW}[+] Directorio base detectado:${RESET} $BASE_DIR"
 echo -e "${YELLOW}[+] Usuario actual:${RESET} $USER_NAME\n"
 
 # --------------------------
+# Generar config.json si no existe
+# --------------------------
+CONFIG_FILE="${BASE_DIR}/config.json"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo -e "${YELLOW}[+] Generando config.json inicial${RESET}"
+
+    # Crear un ID aleatorio (8 caracteres, en mayúsculas)
+    UUID=$(cat /proc/sys/kernel/random/uuid | cut -c1-8 | tr '[:lower:]' '[:upper:]')
+
+    # Crear archivo JSON con la URL del VPS
+    cat <<EOF > "$CONFIG_FILE"
+{
+  "raspy_id": "$UUID",
+  "vps_url": "http://91.108.124.53:5000"
+}
+EOF
+
+    echo -e "${GREEN}[✓] Config.json creado con ID:${RESET} $UUID"
+else
+    echo -e "${YELLOW}[+] Config.json existente, se mantiene sin cambios${RESET}"
+fi
+
+# --------------------------
 # Limpiar servicios previos
 # --------------------------
 echo -e "${YELLOW}[+] Deteniendo servicios antiguos${RESET}"
@@ -105,7 +129,7 @@ tee ~/.config/autostart/chromium-kiosk.desktop > /dev/null <<EOF
 [Desktop Entry]
 Type=Application
 Name=Chromium Kiosk
-Exec=/usr/bin/chromium-browser --kiosk http://localhost:5000/counter/ --noerrdialogs --incognito --disable-restore-session-state
+Exec=/bin/bash -c "sleep 10 && /usr/bin/chromium-browser --kiosk http://localhost:5000/counter/ --noerrdialogs --incognito --disable-restore-session-state"
 StartupNotify=false
 Terminal=false
 X-GNOME-Autostart-enabled=true
