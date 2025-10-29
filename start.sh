@@ -35,17 +35,36 @@ echo -e "${YELLOW}[+] Directorio base detectado:${RESET} $BASE_DIR"
 echo -e "${YELLOW}[+] Usuario actual:${RESET} $USER_NAME\n"
 
 # --------------------------
-# Generar config.json si no existe
+# Generar config.json si no existe o preguntar
 # --------------------------
 CONFIG_FILE="${BASE_DIR}/config.json"
 
 if [ ! -f "$CONFIG_FILE" ]; then
-    echo -e "${YELLOW}[+] Generando config.json inicial${RESET}"
+    echo -e "${YELLOW}[+] No se encontró config.json, generando uno nuevo${RESET}"
+    REGEN=true
+else
+    echo -e "${YELLOW}[+] Config.json existente encontrado${RESET}"
+    echo -e "${YELLOW}[!] Desea regenerarlo? Se reemplazará con un nuevo ID aleatorio [s/N] (auto 10s):${RESET} \c"
+    
+    # Leer input con timeout 10s, default N
+    read -t 10 RESP || RESP="s"
+    
+    if [[ "$RESP" =~ ^[Ss]$ ]]; then
+        echo -e "${YELLOW}[+] Regenerando config.json...${RESET}"
+        rm -f "$CONFIG_FILE"
+        REGEN=true
+    else
+        echo -e "${YELLOW}[+] Se mantiene el config.json existente${RESET}"
+        REGEN=false
+    fi
+fi
 
+# Generar config.json si corresponde
+if [ "$REGEN" = true ]; then
     # Crear un ID aleatorio (8 caracteres, en mayúsculas)
     UUID=$(cat /proc/sys/kernel/random/uuid | cut -c1-8 | tr '[:lower:]' '[:upper:]')
 
-    # Crear archivo JSON con la URL del VPS
+    # Crear archivo JSON
     cat <<EOF > "$CONFIG_FILE"
 {
   "raspy_id": "$UUID",
@@ -54,9 +73,8 @@ if [ ! -f "$CONFIG_FILE" ]; then
 EOF
 
     echo -e "${GREEN}[✓] Config.json creado con ID:${RESET} $UUID"
-else
-    echo -e "${YELLOW}[+] Config.json existente, se mantiene sin cambios${RESET}"
 fi
+
 
 # --------------------------
 # Limpiar servicios previos
