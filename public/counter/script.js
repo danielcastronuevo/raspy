@@ -619,7 +619,7 @@ async function generarQRyUltimoPartido() {
       text: urlPartido,
       width: width,
       height: height,
-      colorDark: "#9b30ff",
+      colorDark: "#ffffff",
       colorLight: "#1b0a3d",
       correctLevel: QRCode.CorrectLevel.H
     });
@@ -1466,8 +1466,9 @@ function stopPuntoDeOro() {
 //ULTIMO PUNTO HISTORIAL
 //=======================================
 
-const HISTORY_URL = 'http://192.168.1.39:5000/api/historial';
-const CURRENT_URL = 'http://192.168.1.39:5000/api/estado-actual';
+const BASE_URL = `${window.location.origin.replace(/\/counter.*/, '')}`;
+const HISTORY_URL = `${BASE_URL}/api/historial`;
+const CURRENT_URL = `${BASE_URL}/api/estado-actual`;
 
 async function actualizarUltimasJugadas() {
   try {
