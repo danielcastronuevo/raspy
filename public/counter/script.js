@@ -908,16 +908,25 @@ function iniciarCronoRestante(segundosHastaFin) {
     }
   }
 
-  function ocultarOverlay() {
-    if (overlayVisible) {
-      overlayVisible = false;
-      overlayRadial.style.opacity = "0";
-      overlayRadial.addEventListener("transitionend", function handler() {
-        overlayRadial.style.display = "none";
-        overlayRadial.removeEventListener("transitionend", handler);
-      });
-    }
+
+function ocultarOverlay() {
+  if (overlayVisible) {
+    overlayVisible = false;
+    overlayRadial.style.opacity = "0";
+
+    let handler = function () {
+      overlayRadial.style.display = "none";
+      overlayRadial.removeEventListener("transitionend", handler);
+      clearTimeout(fallback);
+    };
+
+    // Fallback si la transición no dispara
+    let fallback = setTimeout(handler, 500); // duración similar a tu CSS
+
+    overlayRadial.addEventListener("transitionend", handler);
   }
+}
+
 
   function actualizarCronoRestante() {
     const horas = Math.floor(tiempoRestante / 3600);
