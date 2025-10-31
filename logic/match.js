@@ -214,6 +214,30 @@ function configurarPartido(config) {
   console.log(`[i] inicioDate: ${inicioDate.toISOString()}`);
   console.log(`[i] finDate: ${finDate.toISOString()}`);
 
+
+
+
+
+  // === INSERTAR DEBUG ACA ===
+  if (estado.debugTemporizador) clearInterval(estado.debugTemporizador);
+
+  estado.debugTemporizador = setInterval(() => {
+    const ahora = new Date();
+    const diff = finDate.getTime() - ahora.getTime();
+    const segRest = Math.floor(diff / 1000);
+    if (segRest <= 0) {
+      console.log(`[DEBUG] Tiempo alcanzado o pasado (diff=${diff}ms).`);
+      clearInterval(estado.debugTemporizador);
+    } else {
+      console.log(`[DEBUG] Quedan ${segRest}s (${diff}ms) hasta fin del partido.`);
+    }
+  }, 1000);
+  // === HASTA ACA ===
+
+
+
+
+
   // Validar coherencia de fechas
   if (finDate <= inicioDate) {
     console.error(`[X] Horarios inválidos: fin <= inicio`);
@@ -231,8 +255,11 @@ function configurarPartido(config) {
   const minutosRestantes = Math.round(msRestantes / 60000);
   console.log(`[i] Tiempo restante hasta fin del partido: ${minutosRestantes} minutos (${msRestantes} ms)`);
 
+  const programadoEn = Date.now();
+
   estado.temporizadorFin = setTimeout(() => {
-    console.info(`[+] Hora de fin alcanzada (${config.fin || config.finFecha}), finalizando partido.`);
+    const retraso = Date.now() - (programadoEn + msRestantes);
+    console.info(`[+] Hora de fin alcanzada (${config.fin || config.finFecha}), finalizando partido. Retraso real: ${retraso}ms`);
     finalizarPorTiempo();
   }, msRestantes);
 
