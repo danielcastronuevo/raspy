@@ -569,6 +569,7 @@ function finalizarPorTiempo() {
   ganarPartido(null, "tiempo"); 
 }
 
+
 // ===============================
 // 🏁 GANAR PARTIDO FINALIZAR 🏁 
 // ===============================
@@ -579,60 +580,39 @@ function ganarPartido(parejaIndex, motivo = "normal") {
   estado.estadoPartido = 'terminado';
   estado.motivoFin = motivo;
 
+  // --- LIMPIAR TODOS LOS TIMERS ---
+  if (estado.temporizadorCalentamiento) {
+    clearInterval(estado.temporizadorCalentamiento);
+    estado.temporizadorCalentamiento = null;
+  }
   if (estado.temporizadorPartido) {
     clearInterval(estado.temporizadorPartido);
     estado.temporizadorPartido = null;
   }
-
-  //guardarHistorialFinal(motivo); // <-- motivo ahora se pasa
-
-  // --- Caso especial: finalización por tiempo o menú ---
-  if (motivo === "tiempo" || motivo === "menu") {
-    console.log(`⏹️ Partido terminado por motivo: ${motivo}`);
-
-    // Guardar historial ya mismo
-    guardarHistorialFinal(motivo);
-
-    // Limpiar archivo temporal
-    if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
-
-    // Reset inmediato del estado
-    estado.estadoPartido = 'esperando';
-    estado.matchId = null;
-    estado.marcador = {
-      sets: [
-        { games: [0, 0] },
-        { games: [0, 0] },
-        { games: [0, 0] }
-      ],
-      puntos: [0, 0],
-      setActual: 0,
-      partidoTerminado: false
-    };
-    estado.historial = [];
-    estado.tiempoPartidoTranscurrido = 0;
-    estado.tiempoGraciaRestante = null;
-
-    // 🚨 Limpiar también menú sacador
-    estado.sacadorActual = null;
-    menuSacador.activo = false;
-    menuSacador.paso = null;
-    menuSacador.opciones = [];
-    menuSacador.index = 0;
-    menuSacador.metodo = null;
-    menuSacador.ordenDeSaque = [];
-
-    notificarCambio();
-    return; // 👈 cortamos acá
+  if (estado.temporizadorFin) {
+    clearInterval(estado.temporizadorFin);
+    estado.temporizadorFin = null;
+  }
+  if (estado.debugTemporizador) {
+    clearInterval(estado.debugTemporizador);
+    estado.debugTemporizador = null;
   }
 
-  // --- Lógica normal (cuando hay un ganador real) ---
+  // --- CASO ESPECIAL: TIEMPO O MENU ---
+  if (motivo === "tiempo" || motivo === "menu") {
+    console.log(`⏹️ Partido terminado por motivo: ${motivo}`);
+    guardarHistorialFinal(motivo);
+
+    if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
+
+    resetEstadoCompleto();
+    return;
+  }
+
+  // --- LÓGICA NORMAL (GANADOR REAL) ---
   console.log(`🎉 Pareja ${parejaIndex + 1} gana el partido! 🎉`);
 
-  const duracion = 30; // tiempo de gracia
-  estado.tiempoGraciaRestante = duracion;
-
-  if (estado.temporizadorFin) clearInterval(estado.temporizadorFin);
+  estado.tiempoGraciaRestante = 30; // 30 segs de gracia
 
   estado.temporizadorFin = setInterval(() => {
     estado.tiempoGraciaRestante--;
@@ -642,34 +622,42 @@ function ganarPartido(parejaIndex, motivo = "normal") {
       estado.temporizadorFin = null;
 
       console.log("⌛ Fin del tiempo de gracia, volviendo a standby.");
-
       guardarHistorialFinal("normal");
       if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
 
-      estado.estadoPartido = 'esperando';
-      estado.matchId = null;
-      estado.marcador = {
-        sets: [
-          { games: [0, 0] },
-          { games: [0, 0] },
-          { games: [0, 0] }
-        ],
-        puntos: [0, 0],
-        setActual: 0,
-        partidoTerminado: false
-      };
-      estado.historial = [];
-      estado.tiempoPartidoTranscurrido = 0;
-      estado.tiempoGraciaRestante = null;
-
-      if (estado.temporizadorPartido) {
-        clearInterval(estado.temporizadorPartido);
-        estado.temporizadorPartido = null;
-      }
-
-      notificarCambio();
+      resetEstadoCompleto();
     }
   }, 1000);
+}
+
+// --- FUNCIÓN DE RESET COMPLETO ---
+function resetEstadoCompleto() {
+  estado.estadoPartido = 'esperando';
+  estado.matchId = null;
+  estado.marcador = {
+    sets: [
+      { games: [0, 0] },
+      { games: [0, 0] },
+      { games: [0, 0] }
+    ],
+    puntos: [0, 0],
+    setActual: 0,
+    partidoTerminado: false
+  };
+  estado.historial = [];
+  estado.tiempoPartidoTranscurrido = 0;
+  estado.tiempoGraciaRestante = null;
+
+  // menú sacador
+  estado.sacadorActual = null;
+  menuSacador.activo = false;
+  menuSacador.paso = null;
+  menuSacador.opciones = [];
+  menuSacador.index = 0;
+  menuSacador.metodo = null;
+  menuSacador.ordenDeSaque = [];
+
+  notificarCambio();
 }
 
 
