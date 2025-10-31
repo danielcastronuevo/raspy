@@ -1028,16 +1028,21 @@ function actualizarHora() {
   const ahora = new Date();
   const horas = ahora.getHours().toString().padStart(2, '0');
   const minutos = ahora.getMinutes().toString().padStart(2, '0');
-  // Si querés segundos, descomentar:
-  // const segundos = ahora.getSeconds().toString().padStart(2, '0');
-
   document.getElementById("hora-local").textContent = `${horas}:${minutos}`;
 }
 
-// Actualiza al cargar
-actualizarHora();
-// Y luego cada minuto
-setInterval(actualizarHora, 1000 * 60);
+function iniciarReloj() {
+  actualizarHora();
+  const ahora = new Date();
+  const msHastaProximoMinuto = (60 - ahora.getSeconds()) * 1000;
+  setTimeout(() => {
+    actualizarHora();
+    setInterval(actualizarHora, 60 * 1000);
+  }, msHastaProximoMinuto);
+}
+
+iniciarReloj();
+
 
 // =================================================
 // ================= ACTUALIZAR MARCADOR ===========
