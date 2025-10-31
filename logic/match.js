@@ -1154,9 +1154,9 @@ function getEstado() {
     temporizadorCalentamiento,
     temporizadorPartido,
     temporizadorFin, // 🔹 excluir
+    debugTemporizador, // 💀 agregar esta
     ...estadoSinTimers
   } = estado;
-
   const copia = JSON.parse(JSON.stringify(estadoSinTimers));
 
   const enTiebreak = esTieBreak();
