@@ -155,6 +155,7 @@ function getHistorialActual() {
 // === CONFIGURAR PARTIDO ===
 // ==========================
 
+let watchdogFin = null; // ← variable privada de módulo
 
 function configurarPartido(config) {
   console.log("=== [INICIO configurarPartido] ===");
@@ -262,6 +263,32 @@ function configurarPartido(config) {
     console.info(`[+] Hora de fin alcanzada (${config.fin || config.finFecha}), finalizando partido. Retraso real: ${retraso}ms`);
     finalizarPorTiempo();
   }, msRestantes);
+
+  // ==============================================
+  // === SISTEMA DE CORTE REDUNDANTE (Watchdog) ===
+  // ==============================================
+  if (watchdogFin) clearInterval(watchdogFin);
+
+  watchdogFin = setInterval(() => {
+    const ahora = new Date();
+    const diff = finDate.getTime() - ahora.getTime();
+
+    if (diff <= 0) {
+      console.warn(`[⚠] Watchdog: hora de fin alcanzada (${finDate.toISOString()}). Forzando cierre de partido.`);
+      clearInterval(watchdogFin);
+      watchdogFin = null;
+
+      if (!estado.marcador.partidoTerminado) {
+        try {
+          finalizarPorTiempo();
+        } catch (err) {
+          console.error(`[X] Error en watchdog al finalizar partido: ${err.message}`);
+        }
+      } else {
+        console.log("[i] Watchdog detectó partido ya finalizado, sin acción.");
+      }
+    }
+  }, 1000);
 
   // ================================
   // Configurar tiempo de calentamiento

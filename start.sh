@@ -23,7 +23,7 @@ echo "___  /| |_  /__  /  _  __ \\  __ \`/  / / /  _ \\"
 echo "__  ___ |  / _  /   / /_/ / /_/ // /_/ //  __/"
 echo "_/_/  |_/_/  /_/    \\____/\\__, / \\__,_/ \\___/ "
 echo "                            /_/               "
-echo -e "${TURQUOISE}CONFIGURACIÓN LOCAL DE RASPY${RESET}\n"
+echo -e "${TURQUOISE}>_ ARRANQUE AUTOMÁTICO${RESET}\n"
 
 # --------------------------
 # Variables base

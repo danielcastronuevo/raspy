@@ -1,4 +1,4 @@
-## Instalación y configuración del Contador Raspy
+## Instalación y configuración del Contador 
 
 Este repositorio contiene la aplicación de **Contador**, que incluye el servidor Node.js, el escáner Bluetooth y el frontend web en modo kiosko, con despliegue automático en Raspberry Pi.
 
