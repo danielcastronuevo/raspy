@@ -1639,7 +1639,7 @@ border-left: 0.1vh solid #9b30ff88;
  * OVERLAY RADIAL PARA TIEMPO restante
  * ===================================*/
 
-
+/*
 .overlay-radial {
   position: fixed;
   top: 0;
@@ -1653,6 +1653,7 @@ border-left: 0.1vh solid #9b30ff88;
   display: none;
   transition: opacity 0.5s ease;
 }
+*/
 
 /*=====================================
  * ULTIMO PUNTO

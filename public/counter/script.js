@@ -882,13 +882,12 @@ function ocultarContadores() {
 
 
 
+
 // =================================================
 // =============== TIEMPO RESTANTE =================
 // =================================================
 
 let timerTiempoRestante = null;
-let overlayRadial = document.getElementById("overlay-radial");
-let overlayVisible = false;
 let avisoDosMinutosMostrado = false; // flag para que el mensaje de 2 min solo aparezca una vez
 
 function iniciarCronoRestante(segundosHastaFin) {
@@ -898,35 +897,6 @@ function iniciarCronoRestante(segundosHastaFin) {
   if (timerTiempoRestante) clearInterval(timerTiempoRestante);
 
   const cronoRestante = document.querySelector(".crono-2");
-
-  function mostrarOverlay() {
-    if (!overlayVisible) {
-      overlayVisible = true;
-      overlayRadial.style.display = "block";
-      overlayRadial.offsetHeight; // forzamos reflow
-      overlayRadial.style.opacity = "1";
-    }
-  }
-
-
-function ocultarOverlay() {
-  if (overlayVisible) {
-    overlayVisible = false;
-    overlayRadial.style.opacity = "0";
-
-    let handler = function () {
-      overlayRadial.style.display = "none";
-      overlayRadial.removeEventListener("transitionend", handler);
-      clearTimeout(fallback);
-    };
-
-    // Fallback si la transición no dispara
-    let fallback = setTimeout(handler, 500); // duración similar a tu CSS
-
-    overlayRadial.addEventListener("transitionend", handler);
-  }
-}
-
 
   function actualizarCronoRestante() {
     const horas = Math.floor(tiempoRestante / 3600);
@@ -941,7 +911,6 @@ function ocultarOverlay() {
     // =========== Mensaje de 2 minutos ===========
     if (tiempoRestante <= 120 && !avisoDosMinutosMostrado) {
       showAdviceOverlay("ÚLTIMOS 2", "MINUTOS");
-      // Overlay rojo para tiempo restante
       showBgOverlay(
         "linear-gradient(to bottom, #FF6B1100, #FF6B1155",
         "lowtime-bg",
@@ -949,25 +918,17 @@ function ocultarOverlay() {
       );
       avisoDosMinutosMostrado = true;
       cronoRestante.style.color = "var(--red-warn)";
-      mostrarOverlay();
     } else if (tiempoRestante > 120) {
       cronoRestante.style.color = "";
-      ocultarOverlay();
     }
 
     // =========== Mensaje de partido finalizado ===========
-
     if (tiempoRestante <= 0) {
       cronoRestante.textContent = "00:00:00";
       cronoRestante.style.color = "";
-
-      // Ocultar específicamente el overlay rojo de los últimos 2 minutos
       hideBgOverlay("lowtime-bg");
-
-      // Mostrar mensaje de partido finalizado
       showAdviceOverlay("PARTIDO", "FINALIZADO");
     }
-
   }
 
   actualizarCronoRestante();
@@ -982,6 +943,7 @@ function ocultarOverlay() {
     actualizarCronoRestante();
   }, 1000);
 }
+
 
 // =================================================
 // =============== TIEMPO DE PARTIDO ===============
