@@ -29,6 +29,18 @@
 <!-- Overlay rojo radial para TIEMPO RESTANTE -->
 <!-- <div id="overlay-radial" class="overlay-radial"></div> -->
 
+<!-- Contenedor 16:9 centrado -->
+<div class="centered-timer-label-container">
+  <!-- TEMPORIZADOR DE TOQUES -->
+  <div class="timer-label" id="timerLabel">
+    <svg class="timer-ring" viewBox="0 0 50 50">
+      <circle class="timer-bg" cx="25" cy="25" r="22"></circle>
+      <circle class="timer-progress" cx="25" cy="25" r="22"></circle>
+    </svg>
+    <div class="timer-text">PRÓXIMO TOQUE EN <span id="seconds">5</span>s...</div>
+  </div>
+</div>
+
 
 <!-- OVERLAY DE QR -->
 <div class="qr-overlay"></div>
@@ -279,8 +291,11 @@
     </section>
 
     <section class="ads-container ads-container2">
+
     </section>
     
+
+
   <section class="ads-container ads-container3">
     <div class="seccion-de-referencias">
       <div class="referencia referencia-1">

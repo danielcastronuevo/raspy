@@ -26,6 +26,9 @@ let estadoPrevioPartido = null; // 👈 guardamos el último estado
 socket.on("estado", (estado) => {
   estadoActual = estado;
 
+    // MOSTRAMOS TIEMPO PARA HACER EL PROXIMO PUNTO
+  startCountdown(5);
+
   const cronoRestante = document.querySelector(".crono-2");
 
   // =================== LIMPIAR CRONO TIEMPO RESTANTE SI NO SE ESTÁ JUGANDO ===================
@@ -161,6 +164,8 @@ socket.on("estado", (estado) => {
 socket.on("resumen", (resumen) => {
   console.log("➡️ Resumen recibido:", resumen);
 
+
+
   // ACTUALIZAMOS MARCADOR CON LOS GAMES TRANSFORMADOS
   actualizarGames(resumen);
 
@@ -220,10 +225,10 @@ function mostrarOverlayMenu(menu) {
 }
 
 
-  function ocultarOverlayMenu() {
-    const overlay = document.getElementById("menu-overlay");
-    if (overlay) overlay.style.display = "none";
-  }
+function ocultarOverlayMenu() {
+  const overlay = document.getElementById("menu-overlay");
+  if (overlay) overlay.style.display = "none";
+}
 
 
 
@@ -260,8 +265,8 @@ socket.on("menuSacador", (menuSacador) => {
 // ==============================
 
 const pasosTexto = {
-  sacadorPareja1: "elección del primer sacador de pareja 1",
-  sacadorPareja2: "elección del primer sacador de pareja 2",
+  sacadorPareja1: "elección del primer sacador de pareja 1",
+  sacadorPareja2: "elección del primer sacador de pareja 2",
   metodo: "ELECCIÓN DE PAREJA SACADORA",
   parejaSacadora: "ELECCIÓN DE PAREJA SACADORA",
   confirmacion: "CONFIRMAR CONFIGURACIÓN - RESUMEN"
@@ -1552,3 +1557,39 @@ function obtenerUltimoPuntoTexto(item, esEstadoActual) {
 }
 */
 
+
+// TEMPORIZADOR DE TOQUES
+function startCountdown(seconds) {
+  const container = document.querySelector('.centered-timer-label-container');
+  const label = container.querySelector('.timer-label');
+  const progress = container.querySelector('.timer-progress');
+  const secondsText = container.querySelector('#seconds');
+
+  const radius = 22; // radio fijo en px
+  const circumference = 2 * Math.PI * radius;
+
+  progress.style.strokeDasharray = circumference;
+  progress.style.strokeDashoffset = 0; // empieza lleno
+
+  label.classList.add('show');
+
+  const startTime = performance.now();
+
+  function update() {
+    const elapsed = (performance.now() - startTime) / 1000;
+    const timeLeft = Math.max(0, seconds - elapsed);
+
+    secondsText.textContent = Math.ceil(timeLeft);
+
+    const offset = (1 - timeLeft / seconds) * circumference;
+    progress.style.strokeDashoffset = offset;
+
+    if (timeLeft > 0) {
+      requestAnimationFrame(update);
+    } else {
+      label.classList.remove('show');
+    }
+  }
+
+  requestAnimationFrame(update);
+}

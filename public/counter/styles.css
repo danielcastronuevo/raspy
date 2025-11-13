@@ -1754,3 +1754,88 @@ border-left: 0.1vh solid #9b30ff88;
   white-space: nowrap;
   transition: opacity 0.3s ease;
 }
+
+
+/* ============================================================
+   TEMPORIZADOR DE TOQUES
+   ============================================================ */
+/* Contenedor 16:9 centrado */
+.centered-timer-label-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100vw;               /* ocupa todo el ancho posible */
+  height: 100vh;              /* ocupa todo el alto posible */
+  
+  max-width: calc(100vh * 16 / 9);  /* limita ancho para mantener 16:9 */
+  max-height: calc(100vw * 9 / 16); /* limita alto para mantener 16:9 */
+
+  aspect-ratio: 16 / 9;       /* asegura la relación 16:9 */
+
+  z-index: 9999;               /* encima de todo */
+  overflow: hidden;
+}
+
+
+/* Temporizador pegado a la esquina superior derecha del contenedor */
+/* Temporizador pegado a la esquina superior derecha del contenedor */
+.timer-label {
+  position: absolute;
+  top: 3vh;
+  right: -25vw;                /* empieza fuera del contenedor */
+  display: flex;
+  align-items: center;
+  background: var(--semitransparent-bg);
+  border-radius: 2.5vh;
+  padding: 1vh 2vw;
+  font-family: var(--main-font);
+  color: var(--text-color);
+  transition: right 0.5s ease, opacity 0.5s ease; /* animate despliegue */
+  opacity: 0;
+  z-index: 10;
+}
+
+.timer-label.show {
+  right: 3vw;  /* posición final dentro del contenedor */
+  opacity: 1;
+}
+
+
+/* Círculo */
+.timer-ring {
+  width: 5vh;                  
+  height: 5vh;
+  transform: rotate(-90deg);
+}
+
+.timer-bg {
+  fill: none;
+  stroke: #333;
+  stroke-width: 6px;           
+}
+
+.timer-progress {
+  fill: none;
+  stroke: var(--accent-color-2);
+  stroke-width: 6px;              
+  stroke-dasharray: 138;          
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+/* Texto */
+.timer-text, 
+.timer-text span {
+  font-size: 2.5vh !important;
+  margin-left: 1vh;
+  line-height: 1;
+  display: inline-block;
+  min-width: 2ch;
+  text-align: right;
+}
+
+.timer-text span{
+  margin-left: -1vh;
+}

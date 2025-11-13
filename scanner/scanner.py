@@ -23,7 +23,7 @@ def load_mac_to_pareja(filepath=WHITELIST_FILE):
         for pareja_name, pareja_info in data.items():
             mac = pareja_info.get("macPulsera", "").upper()
             if mac:
-                mac_to_pareja[mac] = pareja_name  # "pareja1" o "pareja2"
+                mac_to_pareja[mac] = pareja_name
         return mac_to_pareja
     except Exception as e:
         print(f"❌ Error al cargar whitelist: {e}")
@@ -68,7 +68,9 @@ def node_action(pareja, tipo):
         return "3-toques"  
     return None
 
-last_evt   = defaultdict(float)
+last_evt   = defaultdict(float)  # debounce por MAC+tipo
+last_global_evt = 0               # debounce global
+GLOBAL_DEBOUNCE = 5.0             # segundos para bloquear cualquier toque
 totals     = defaultdict(int)
 rebounces  = defaultdict(int)
 log_rows   = []
@@ -98,6 +100,7 @@ async def send_to_node(session, accion):
 
 def make_callback(session):
     async def cb(dev, adv):
+        global last_global_evt
         if not dev.address.upper().startswith(MAC_PREFIX):
             return
         blk = adv.manufacturer_data.get(0x004C)
@@ -116,11 +119,13 @@ def make_callback(session):
         if tipo_toque != "unknown" and pareja is not None:
             key_mac_tipo = (mac, tipo_toque)
             rebound_time = REBOUND_BY_TYPE.get(tipo_toque, 2.0)
-            elapsed = now - last_evt[key_mac_tipo]
+            elapsed_mac = now - last_evt[key_mac_tipo]
+            elapsed_global = now - last_global_evt
 
-            if elapsed >= rebound_time:
+            if elapsed_mac >= rebound_time and elapsed_global >= GLOBAL_DEBOUNCE:
                 totals[key_mac_tipo] += 1
                 last_evt[key_mac_tipo] = now
+                last_global_evt = now
                 decision = f"counted ({pareja})"
 
                 accion = node_action(pareja, tipo_toque)
@@ -128,7 +133,12 @@ def make_callback(session):
                     asyncio.create_task(send_to_node(session, accion))
             else:
                 rebounces[key_mac_tipo] += 1
-                decision = f"rebounce ({pareja}) ({rebound_time - elapsed:.1f}s)"
+                reasons = []
+                if elapsed_mac < rebound_time:
+                    reasons.append(f"MAC debounce ({rebound_time - elapsed_mac:.1f}s)")
+                if elapsed_global < GLOBAL_DEBOUNCE:
+                    reasons.append(f"GLOBAL debounce ({GLOBAL_DEBOUNCE - elapsed_global:.1f}s)")
+                decision = f"rebounce ({pareja}) - {' & '.join(reasons)}"
 
         ts_str = dt.datetime.now().strftime("%H:%M:%S.%f")[:-3]
         maj, min_ = key
