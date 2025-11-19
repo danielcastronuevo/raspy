@@ -1,42 +1,16 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  background: black; /* las barras negras */
-  height: 100%;
-  overflow: hidden;
-}
-
-.wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;    /* centrado vertical */
-  justify-content: center;/* centrado horizontal */
-}
-
-.inner {
-  aspect-ratio: 16 / 9;
-  width: 100%;
-  height: auto;
-  max-height: 100%;
-  max-width: 100%;
-}
-
-
 /* ============================================================
  * VARIABLES GLOBALES
  * ============================================================ */
 
 :root{
   /* === COLORES BASE === */
-  --bg-color: #227;                           /* Color de fondo principal */
-  --text-color: #fff;                         /* Color de texto principal */
-  --accent-color-1: #03abff;                  /* Color de fondo "games" */
-  --accent-color-2: #b7fe01;                  /* Color para cronometros,iconos y detalles */
-  --accent-color-3: #FFD700;                  /* Color para punto de oro */
-  --red-warn: #f55;                           /* Rojo de advertencia (Usado en "tiempo restante") */
+  --bg-color: #227;
+  --text-color: #fff;
+  --accent-color-1: #03abff;
+  --accent-color-2: #b7fe01;
+  --accent-color-3: #FFD700;
+  --red-warn: #f55;
 
-  /* Violeta eléctrico */
   --bg-color: #1b0a3d;
   --text-color: #fff;
   --accent-color-1: #9b30ff;
@@ -45,9 +19,9 @@ body, html {
   --red-warn: #ff4d6d;
 
   /* === OVERLAYS Y TRANSPARENCIAS === */
-  --semitransparent-bg: #00000044;            /* Negro semitransparente para bg de cronos */
-  --color-overlay-dark: rgba(0,0,0,0.9);      /* Fondo de Overlay */
-  --color-bar-bg: #000;                       /* Fondo sólido para barras de anuncio. Ej:"¡cambio de lado!" */
+  --semitransparent-bg: #00000044;
+  --color-overlay-dark: rgba(0,0,0,0.9);
+  --color-bar-bg: #000;
 
   /* === GRADIENTES === */
   --gradient-separator: linear-gradient(
@@ -55,7 +29,7 @@ body, html {
     transparent,
     var(--text-color),
     transparent
-  );                                            /* Separador generico */
+  );
 
   --gradient-hist-separator: linear-gradient(
     to right,
@@ -63,17 +37,17 @@ body, html {
     var(--text-color) 10%, 
     var(--text-color) 90%,
     rgba(255,255,255,0) 100%
-  );                                            /* Separadores contador historial */
+  );
 
   --separator-gradient: linear-gradient(
     to right,
     rgba(255,255,255,0) 0%,
     var(--text-color) 10%,
     var(--text-color) 100%
-  );                                            /* Separadores contador principal */
+  );
 
   /* === TIPOGRAFÍA === */
-  --main-font: "Oswald", Arial, sans-serif;     /* Fuente principal con fallback */
+  --main-font: "Oswald", Arial, sans-serif;
 }
 
 /* ============================================================
@@ -86,31 +60,56 @@ body, html {
   cursor: none;
 }
 
-
 /* ============================================================
  * BODY / MAIN
  * ============================================================ */
+/* UI 16/9 */
+body {
+  margin: 0;
+  height: 100vh; /* este no se convierte, es un layout unit */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  overflow: hidden;
+}
+
+#scene-container {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100vw;
+  max-width: calc(100vh * (16 / 9));
+  max-height: 100vh;
+  background: #111;
+  overflow: hidden;
+}
+
+#ui-container {
+  position: absolute;
+  width: 1600px;
+  height: 900px;
+  transform-origin: top left;
+  color: var(--text-color);
+    background: var(--bg-color);
+  font-family: var(--main-font);
+}
+
+#ui-container::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 1.8px, transparent 0.9px);
+  background-size: 36px 36px;
+  pointer-events: none;
+}
+
 main {
   position: relative;
-  height: 100vh; 
+  height: 900px;
   color: var(--text-color);
   display: flex;
   flex-direction: column;
   z-index: 1;
-}
-
-body {
-  background: var(--bg-color);
-  font-family: var(--main-font);
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle, rgba(255,255,255,0.08) 0.2vh, transparent 0.1vh);
-  background-size: 4vh 4vh;
-  pointer-events: none;
 }
 
 /* ============================================================
@@ -121,13 +120,28 @@ body::before {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 55vh;  
+  width: 495px;
   height: auto;
   margin: auto;
   padding: 1%;
-  scale: 2.6; /*ANTES ERA 2.2*/
+  scale: 2.6;
   max-height: fit-content;
   box-sizing: border-box;
+}
+
+/*
+ * MOSTRAR FORMATO MARCADOR
+*/
+
+.marcador-container,
+.cronos-container {
+  opacity: 0;
+  display: none;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.marcador-container {
+  transform: translateX(-45px);
 }
 
 /* HEADER */
@@ -136,24 +150,26 @@ body::before {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding-bottom: 0.5vh;
+  padding-bottom: 4.5px;
 }
+
 .court-name {
   text-align: left;
   flex-basis: 50%;
-  font-size: 2.2vh;
+  font-size: 19.8px;
   font-weight: 300;
 }
+
 .set-title,
 .game-title {
   text-align: center;
   flex-basis: 10%;
   flex-shrink: 0;
-  font-size: 2vh;
+  font-size: 18px;
   font-weight: 300;
   text-wrap: nowrap;
 }
-.game-title { font-weight: 500;}
+.game-title { font-weight: 500; }
 
 /* FILAS DE PUNTAJE */
 .marcador-row {
@@ -162,16 +178,18 @@ body::before {
   align-items: center;
   width: 100%;
 }
+
 .player-name {
   text-align: left;
   flex-basis: 50%;
-  font-size: 3vh;
+  font-size: 27px;
   font-weight: 500;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0.5vh 0;
+  margin: 4.5px 0;
 }
+
 .player-name p {
   display: flex;
   align-items: start;
@@ -183,23 +201,25 @@ body::before {
   text-align: center;
   flex-basis: 10%;
   flex-shrink: 0;
-  font-size: 4vh;
+  font-size: 36px;
   font-weight: 600;
   font-family: "Oswald", serif;
 }
+
 .score,
 .set-title { margin: 0 1%; }
 
 .game-score {
   flex-basis: 20%;
-  font-size: 6vh;
-  height: 10vh;
+  font-size: 54px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--accent-color-1);
   transition: 500ms background ease;
 }
+
 #points-title { flex-basis: 20%; }
 
 .set-ganado {
@@ -208,7 +228,7 @@ body::before {
 
 .set-perdido {
   opacity: 0.5;
-transition: opacity 0.5s ease !important;
+  transition: opacity 0.5s ease !important;
 }
 
 /* Solo fondo naranja para Tiebreak */
@@ -224,7 +244,6 @@ transition: opacity 0.5s ease !important;
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  /*display: none; */
   justify-content: center;
   align-items: center;
   background: var(--bg-color);
@@ -242,19 +261,19 @@ transition: opacity 0.5s ease !important;
   display: flex;
   flex-direction: column;
   align-items: center; 
-  gap: .5vh;
-  padding: 2vh 4vw;
-  border-radius: 1vh;
+  gap: 4.5px;
+  padding: 18px 4vw;
+  border-radius: 9px;
   scale: 2.5;
 
   opacity: 0;
-  transform: translateY(3vh) scale(0.9);
+  transform: translateY(27px) scale(0.9);
   animation: fadeUpZoom 0.8s ease forwards;
 }
 
 .final-title {
   font-family: 'Oswald', serif;
-  font-size: 2vh;
+  font-size: 18px;
   margin: 0;
   color: var(--text-color);
   text-align: center;
@@ -262,14 +281,14 @@ transition: opacity 0.5s ease !important;
 }
 
 .final-crono {
-  font-size: 6vh;
-  margin: 0 3vh !important;
+  font-size: 54px;
+  margin: 0 27px !important;
   color: var(--text-color); 
 }
 
 .final-line {
-  width: 1.5vh; 
-  height: 9vh;
+  width: 13.5px;
+  height: 81px;
   background: var(--accent-color-2);
 }
 
@@ -279,32 +298,30 @@ transition: opacity 0.5s ease !important;
   background: var(--semitransparent-bg);
 }
 
-/* Separador */
 .final-separator {
-  margin:2.5vh 0 0vh 0;
+  margin: 22.5px 0 0 0;
   width: 100%;
-  height: 0.2vh;
+  height: 1.8px;
   background: var(--gradient-separator);
 }
 
 /* Texto de ayuda con iconos */
 .final-help-container {
-  margin-top: 2vh;
+  margin-top: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1vh;
+  gap: 9px;
   flex-wrap: wrap;
 
   opacity: 0;
-  transform: translateY(2vh);
+  transform: translateY(18px);
   animation: fadeUp 0.8s ease forwards;
-
 }
 
 .final-help {
   font-family: 'Oswald', serif;
-  font-size: 2vh;
+  font-size: 18px;
   color: var(--text-color);
   text-align: center;
   user-select: none;
@@ -314,30 +331,30 @@ transition: opacity 0.5s ease !important;
 .final-help-2 {
   display: block;
   width: 100%;
-  margin-top: -1vh;
+  margin-top: -9px;
 }
 
-/* Iconos dentro del bloque de ayuda */
+/* Iconos de ayuda */
 .final-help-container .pulsera-grafico-container {
-  width: 3vh !important;
-  height: 3vh !important;
+  width: 27px !important;
+  height: 27px !important;
   position: relative;
   scale: 0.8;
-  margin-left: -0.7vh;
+  margin-left: -6.3px;
 }
 
 .final-help-container .hands-container {
   position: relative;
   display: flex;
-  margin-left: -4.3vh;
-  margin-right: 0.5vh;
-  transform: translateY(-1vh);
+  margin-left: -38.7px;
+  margin-right: 4.5px;
+  transform: translateY(-9px);
   scale: 0.7;
 }
 
 .final-help-container .fa-hand-pointer {
-  font-size: 2.5vh;
-  transform: translate(1.5vh, 1.2vh) rotate(-45deg);
+  font-size: 22.5px;
+  transform: translate(13.5px, 10.8px) rotate(-45deg);
 }
 
 /* Overlay fondo desapareciendo */
@@ -347,10 +364,10 @@ transition: opacity 0.5s ease !important;
 }
 
 .parentesis-de-ayuda{
-  margin-left: 3vh;
+  margin-left: 27px;
   color: var(--text-color);
-font-size: 3vh;
-transform: translateY(1vh);
+  font-size: 27px;
+  transform: translateY(9px);
 }
 
 /* ============================================================
@@ -361,12 +378,12 @@ transform: translateY(1vh);
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  display: none; /* invisible por defecto */
+  display: none;
   justify-content: center;
   align-items: center;
   background: var(--bg-color);
   z-index: 999;
-  opacity: 0; /* importante para la animación */
+  opacity: 0;
 }
 
 @keyframes fadeInBg {
@@ -374,26 +391,25 @@ transform: translateY(1vh);
   to { opacity: 1; }
 }
 
-/* Bloque central (título, crono, separador) */
+/* Bloque central */
 .calento-column {
   display: flex;
   flex-direction: column;
   align-items: center; 
-  gap: .5vh;
-  padding: 2vh 4vw;
-  border-radius: 1vh;
+  gap: 4.5px;
+  padding: 18px 4vw;
+  border-radius: 9px;
   scale: 2.5;
 
   opacity: 0;
-  transform: translateY(3vh) scale(0.9);
+  transform: translateY(27px) scale(0.9);
   animation: fadeUpZoom 0.8s ease forwards;
-
 }
 
 @keyframes fadeUpZoom {
   from {
     opacity: 0;
-    transform: translateY(3vh) scale(0.9);
+    transform: translateY(27px) scale(0.9);
   }
   to {
     opacity: 1;
@@ -403,7 +419,7 @@ transform: translateY(1vh);
 
 .calento-title {
   font-family: 'Oswald', serif;
-  font-size: 2vh;
+  font-size: 18px;
   margin: 0;
   color: var(--text-color);
   text-align: center;
@@ -411,14 +427,14 @@ transform: translateY(1vh);
 }
 
 .calento-crono {
-  font-size: 6vh;
-  margin: 0 3vh !important;
+  font-size: 54px;
+  margin: 0 27px !important;
   color: var(--text-color); 
 }
 
 .calento-line {
-  width: 1.5vh; 
-  height: 9vh;
+  width: 13.5px;
+  height: 81px;
   background: var(--accent-color-2);
 }
 
@@ -430,31 +446,30 @@ transform: translateY(1vh);
 
 /* Separador */
 .calento-separator {
-  margin:2.5vh 0 0vh 0;
+  margin: 22.5px 0 0 0;
   width: 100%;
-  height: 0.2vh;
-  background: var(--gradient-separator)
+  height: 1.8px;
+  background: var(--gradient-separator);
 }
 
-/* Texto de ayuda con iconos */
+/* Texto de ayuda */
 .calento-help-container {
-  margin-top: 2vh;
+  margin-top: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1vh;
+  gap: 9px;
   flex-wrap: wrap;
 
   opacity: 0;
-  transform: translateY(2vh);
+  transform: translateY(18px);
   animation: fadeUp 0.8s ease forwards;
-
 }
 
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(2vh);
+    transform: translateY(18px);
   }
   to {
     opacity: 1;
@@ -464,7 +479,7 @@ transform: translateY(1vh);
 
 .calento-help {
   font-family: var(--main-font);
-  font-size: 2vh;
+  font-size: 18px;
   color: var(--text-color);
   text-align: center;
   user-select: none;
@@ -474,31 +489,30 @@ transform: translateY(1vh);
 .calento-help-2 {
   display: block;
   width: 100%;
-  margin-top: -1vh;
+  margin-top: -9px;
 }
 
-/* Iconos dentro del bloque de ayuda */
+/* Iconos ayuda */
 .calento-help-container .pulsera-grafico-container {
-  width: 3vh !important;
-  height: 3vh !important;
+  width: 27px !important;
+  height: 27px !important;
   position: relative;
   scale: 0.8;
-  margin-left: -0.7vh;
+  margin-left: -6.3px;
 }
 
 .calento-help-container .hands-container {
   position: relative;
   display: flex;
-  margin-left: -3.5vh;
-  margin-right: 0.5vh;
+  margin-left: -31.5px;
+  margin-right: 4.5px;
   scale: 0.7;
 }
 
 .calento-help-container .fa-hand-pointer {
-  font-size: 2.5vh;
-  transform: translate(1.5vh, 1.2vh) rotate(-45deg);
+  font-size: 22.5px;
+  transform: translate(13.5px, 10.8px) rotate(-45deg);
 }
-
 
 
 /* Overlay fondo desapareciendo */
@@ -508,32 +522,31 @@ transform: translateY(1vh);
 }
 
 /* ============================================================
- * PELOTITA DEL SACADOR - COPIA PELOTITA CON FUEGO, EL DE ARRIBA ANDA PERFECTO CON BALL.PNG
+ * PELOTITA DEL SACADOR
  * ============================================================ */
 
-/* PELOTITA */
 .sacador-ball-container {
   position: relative;
 }
+
 .sacador-ball-container img {
-  width: 5vh;
+  width: 45px;
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .ball1, .ball2, .ball3, .ball4 {
-  transform: translate(-5.5vh, -1.1vh) !important;
+  transform: translate(-49.5px, -9.9px) !important;
 }
 
-/* Estado base: oculto y desplazado */
 .sacador-ball-container {
   opacity: 0;
-  transform: translateY(-2vh);
+  transform: translateY(-18px);
   transition: opacity 0.4s ease, transform 0.4s ease;
   pointer-events: none;
 }
 
-/* Estado visible */
 .sacador-ball-container.visible {
   opacity: 1;
   transform: translateY(0);
@@ -544,44 +557,58 @@ transform: translateY(1vh);
  * SEPARADORES
  * ============================================================ */
 .separator {
-  height: 0.2vh;
+  height: 1.8px;
   width: 100%;
   background: var(--separator-gradient);
 }
-.vertical-separator-container { position: relative; }
+
+.vertical-separator-container {
+  position: relative;
+}
+
 .vertical-separator {
   position: absolute;
   top: 50%; left: 50%;
-  width: 0.2vh;
-  height: 8vh;
+  width: 1.8px;
+  height: 72px;
   background: var(--text-color);
   transform: translate(-50%, -50%);
 }
-.vertical-separator:first-child { transform: translate(-50%, -50%) translateX(3vh); }
-.vertical-separator:last-child {  transform: translate(-50%, -50%) translateX(9.3vh); }
+
+.vertical-separator:first-child {
+  transform: translate(-50%, -50%) translateX(27px);
+}
+
+.vertical-separator:last-child {
+  transform: translate(-50%, -50%) translateX(83.7px);
+}
 
 /* ============================================================
- * RELOJ - RELOJ SUPERIOR E IMAGEN
+ * RELOJ SUPERIOR
  * ============================================================ */
 .reloj {
   position: absolute;
-  left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
   z-index: 10;
 }
+
 .reloj p {
   font-family: var(--main-font);
-  font-size: 5vh;
+  font-size: 45px;
   color: var(--text-color);
   margin: 0;
   text-align: center;
   user-select: none;
-  padding: 1vh 3vh;
-  border-radius: 0 0 3vh 3vh;
+  padding: 9px 27px;
+  border-radius: 0 0 27px 27px;
   background: var(--semitransparent-bg);
 }
+
 .logo-club {
-  width: 14vh;
+  width: 126px;
   aspect-ratio: 1/1;
   margin: auto;
   object-fit: contain;
@@ -593,136 +620,166 @@ transform: translateY(1vh);
 .cronos-container {
   position: absolute;
   left: 50%; transform: translateX(-50%);
-  bottom: 4vh;
+  bottom: 36px;
   display: flex; flex-direction: row;
-  padding: 1vh 3vw;
+  padding: 9px 3vw;
   z-index: 10;
 }
+
 .cronos-container p {
   font-family: var(--main-font);
   margin: 0;
   text-align: center;
   user-select: none;
 }
+
 .column-cronos {
   display: flex;
   flex-direction: column;
   align-items: start; 
-  gap: .5vh;
+  gap: 4.5px;
 }
-.cronos-title { font-size: 3vh; }
+
+.cronos-title { font-size: 27px; }
+
 .crono-1, .crono-2 {
-  font-size: 6vh;
-  margin: 0 3vh !important;
+  font-size: 54px;
+  margin: 0 27px !important;
 }
-/*.crono-2 { color: var(--red-warn); }*/
 
 .line-decoration-cronos {
-  width: 1.5vh; height: 100%;
+  width: 13.5px; height: 100%;
   background: var(--accent-color-2);
 }
+
 .cronos-mini-container {
   display: flex;
   background: var(--semitransparent-bg);
-  width: 29vh;
+  width: 261px;
 }
 
 /* ============================================================
  * ANUNCIOS
  * ============================================================ */
 .ads-container {
-  position: fixed;
-  display: flex; align-items: center; justify-content: center;
-  width: 72vh; height: 20vh;
-  font-size: 1.5vh; 
-  opacity: 1; z-index: 1000;
+  position: absolute;               /* ya no fixed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 648px;
+  height: 180px;
+  font-size: 13.5px;
+  opacity: 1;
+  z-index: 1000;
+  pointer-events: none;
 }
+
 .ads-container p {
-  font-size: 5vh;
+  font-size: 45px;
   font-weight: 900;
   line-height: 1;
   text-align: center;
 }
-/* POSICIONES */
-.ads-container1 { top: 0; left: 50%; transform: translateX(-100%) translateX(-15vh); }
-.ads-container2 { top: 0; left: 50%; transform: translateX(0%) translateX(15vh); }
-.ads-container3 { bottom: 0; left: 50%; width: 55.5vh; transform: translateX(-100%) translateX(-31.5vh); }
-.ads-container4 { bottom: 0; left: 50%; width: 55.5vh; transform: translateX(0%) translateX(31.5vh); }
 
-.ads-container1, .ads-container2{
-background: linear-gradient(#ffffff11, #ffffff00);
-height: 10vh;
+/* ============================================================
+   POSICIONES REALES, SIMPLE Y PEGADO
+   ============================================================ */
+
+/* Arriba izquierda */
+.ads-container1 {
+  top: 0;
+  left: 0;
+  background: linear-gradient(#ffffff11, #ffffff00);
+  height: 90px;
 }
 
-.ads-container3, .ads-container4{
-background: linear-gradient(#ffffff00, #ffffff11);
+/* Arriba derecha */
+.ads-container2 {
+  top: 0;
+  right: 0;
+  background: linear-gradient(#ffffff11, #ffffff00);
+  height: 90px;
 }
 
-/*
-ANUNCIO 3 REFERENCIA A LOS CONTROLES:
-*/
+/* Abajo izquierda */
+.ads-container3 {
+  bottom: 0;
+  left: 0;
+  width: 499.5px;
+  background: linear-gradient(#ffffff00, #ffffff11);
+}
 
-.seccion-de-referencias{
+/* Abajo derecha */
+.ads-container4 {
+  bottom: 0;
+  right: 0;
+  width: 499.5px;
+  background: linear-gradient(#ffffff00, #ffffff11);
+}
+
+
+/* ============================================================
+   ANUNCIO 3 REFERENCIAS
+   ============================================================ */
+
+.seccion-de-referencias {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 1vh;
+  gap: 9px;
 }
 
-.referencia{
+.referencia {
   width: 100%;
   display: flex;
-  margin-left: 5vh;
+  margin-left: 45px;
 }
 
-.referencia-texto-container{
-
+.referencia-texto-container {
   width: 100%;
   display: flex;
   align-items: center;
 }
 
-.seccion-de-referencias p{
-  font-size: 3vh;
+.seccion-de-referencias p {
+  font-size: 27px;
   text-wrap: nowrap;
   text-align: start;
-  margin-left: 1vh;
-  font-weight:normal !important;
+  margin-left: 9px;
+  font-weight: normal !important;
 }
 
-.pulsera-grafico-container{
-  width: 4vh !important;
-  height: 4vh !important;
+.pulsera-grafico-container {
+  width: 36px !important;
+  height: 36px !important;
 }
 
-.referencia-texto-container-3{
-  transform: translateX(6vh);
+.referencia-texto-container-3 {
+  transform: translateX(54px);
 }
 
-.referencia-texto-container-2{
-  transform: translateX(4vh);
+.referencia-texto-container-2 {
+  transform: translateX(36px);
 }
 
-.referencia-texto-container-1{
-  transform: translateX(2vh);
+.referencia-texto-container-1 {
+  transform: translateX(18px);
 }
 
-.circulo-exterior{
+.circulo-exterior {
   width: 100%;
   height: 100%;
   border-radius: 100%;
   background: var(--text-color);
-  
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-
-.circulo-detalle{
+.circulo-detalle {
   width: 75%;
   height: 75%; 
   border-radius: 100%;
@@ -732,37 +789,36 @@ ANUNCIO 3 REFERENCIA A LOS CONTROLES:
   justify-content: center;
 }
 
-.circulo-interior{
+.circulo-interior {
   width: 90%;
   height: 90%;
   border-radius: 100%;
   background: var(--text-color);
-    display: flex;
+  display: flex;
   align-items: center;
   justify-content: end;
 }
 
-.linea-detalle{
+.linea-detalle {
   width: 25%;
   height: 7%;
   background: var(--bg-color);
   border-radius: 100% 0 0 100%;
 }
 
-
-.fa-hand-pointer{
+.fa-hand-pointer {
   color: var(--accent-color-2);
-  font-size: 3vh;
-  transform: translate(2.5vh, 2vh) rotate(-45deg);
-  text-shadow: -0.2vh -0.2vh 0 var(--bg-color);
+  font-size: 27px;
+  transform: translate(22.5px, 18px) rotate(-45deg);
+  text-shadow: -1.8px -1.8px 0 var(--bg-color);
 }
 
-.fa-hand-pointer:nth-child(2){
-  margin-right: -0.2vh;
-  margin-left: -0.2vh;
+.fa-hand-pointer:nth-child(2) {
+  margin-right: -1.8px;
+  margin-left: -1.8px;
 }
 
-.hands-container{
+.hands-container {
   position: absolute;
   display: flex;
   align-items: end;
@@ -771,24 +827,21 @@ ANUNCIO 3 REFERENCIA A LOS CONTROLES:
 /*=============ADS 4 LOGOS============*/
 
 .ads-container4{
- justify-content: space-between !important;
- align-items: center;
+  justify-content: space-between !important;
+  align-items: center;
 }
 
 .ads-container4 img{
-  width: 20vh;
+  width: 180px;
 }
-
-
-
 
 .ads-container4::before {
   content: "";
   position: absolute;
   top: 0;
   left: 50%;
-  width: 0.3vh;          /* grosor relativo */
-  height: 100%;         /* cubre toda la altura visible */
+  width: 2.7px;          /* 0.3vh */
+  height: 100%;
   background: linear-gradient(
     to bottom,
     transparent 0%,
@@ -803,7 +856,6 @@ ANUNCIO 3 REFERENCIA A LOS CONTROLES:
  * OVERLAY DE ANUNCIOS DEL JUEGO
  * ============================================================ */
 
-/* Contenedor principal */
 .overlay-advice {
   position: fixed;
   top: 0;
@@ -815,7 +867,7 @@ ANUNCIO 3 REFERENCIA A LOS CONTROLES:
   justify-content: space-between;
   z-index: 9999;
   font-family: var(--main-font);
-  background: transparent; /* empieza transparente */
+  background: transparent;
 }
 
 @keyframes overlayBg {
@@ -827,48 +879,44 @@ ANUNCIO 3 REFERENCIA A LOS CONTROLES:
   }
 }
 
-
 /* Barras */
 .bar {
   width: 110%;
-  height: 40vh;
+  height: 360px;
   background: var(--color-bar-bg);
   rotate: -5deg;
 }
 
-/* Posición inicial ya definida con translate */
+/* Posición inicial */
 .bar-upper {
-  transform: translate(-10vh, -10vh);
-
+  transform: translate(-90px, -90px);
 }
 
 .bar-lower {
-  transform: translate(-10vh, 10vh);
-
+  transform: translate(-90px, 90px);
 }
 
 /* Animaciones */
 @keyframes slideRightToLeft {
-  from { transform: translateX(120vw) translateY(-10vh) }
-  to { transform: translateX(-10vh) translateY(-10vh) }
+  from { transform: translateX(120vw) translateY(-90px) }
+  to   { transform: translateX(-90px) translateY(-90px) }
 }
 
 @keyframes slideLeftToRight {
-  from { transform: translateX(-120vw) translateY(10vh) }
-  to { transform: translateX(-10vh) translateY(10vh) }
+  from { transform: translateX(-120vw) translateY(90px) }
+  to   { transform: translateX(-90px) translateY(90px) }
 }
 
-/* Animaciones */
+/* Texto */
 @keyframes slideRightToLeftText {
-  from { opacity:0;transform: translateX(-10vw) }
-  to { opacity: 1; transform: translateX(0vh) }
+  from { opacity:0; transform: translateX(-10vw) }
+  to   { opacity:1; transform: translateX(0px) }
 }
 
 @keyframes slideLeftToRightText {
-  from { opacity:0;transform: translateX(5vw)}
-  to { opacity: 1; transform: translateX(0vh)}
+  from { opacity:0; transform: translateX(5vw) }
+  to   { opacity:1; transform: translateX(0px) }
 }
-
 
 /* Fondo salida */
 @keyframes overlayBgOut {
@@ -882,27 +930,28 @@ ANUNCIO 3 REFERENCIA A LOS CONTROLES:
 
 /* Barras salida */
 @keyframes slideLeftToRightOut {
-  from { transform: translateX(-10vh) translateY(-10vh) }
-  to   { transform: translateX(120vw) translateY(-10vh) }
+  from { transform: translate(-90px, -90px); }
+  to   { transform: translate(calc(100% + 300px), -90px); }
 }
 
 @keyframes slideRightToLeftOut {
-  from { transform: translateX(-10vh) translateY(10vh) }
-  to   { transform: translateX(-120vw) translateY(10vh) }
+  from { transform: translate(-90px, 90px); }
+  to   { transform: translate(calc(-100% - 300px), 90px); }
 }
 
 /* Texto salida */
 @keyframes slideLeftToRightTextOut {
-  from { opacity: 1; transform: translateX(0vh) }
-  to   { opacity: 0; transform: translateX(10vw) }
+  from { opacity: 1; transform: translateX(0px); }
+  to   { opacity: 0; transform: translateX(100%); }
 }
 
 @keyframes slideRightToLeftTextOut {
-  from { opacity: 1; transform: translateX(0vh) }
-  to   { opacity: 0; transform: translateX(-5vw) }
+  from { opacity: 1; transform: translateX(0px); }
+  to   { opacity: 0; transform: translateX(-100%); }
 }
 
-/* Contenedor de texto */
+
+/* Contenido */
 .advice-content {
   flex: 1;
   display: flex;
@@ -914,53 +963,49 @@ ANUNCIO 3 REFERENCIA A LOS CONTROLES:
 
 /* Texto único */
 .advice-text.single-line {
-  font-size: 20vh;
+  font-size: 180px;
   font-weight: bold;
   color: var(--text-color);
   text-transform: uppercase;
-  letter-spacing: 0.2vh;
+  letter-spacing: 1.8px;
   text-align: center;
   line-height: 1;
-  transform: translateX(100vw); /* empieza fuera de pantalla a la derecha */
-
+  transform: translateX(100vw);
 }
 
 /* Texto de dos líneas */
 .advice-text.line1 {
-  font-size: 20vh;
+  font-size: 180px;
   font-weight: bold;
   color: var(--text-color);
   text-transform: uppercase;
-  letter-spacing: 0.2vh;
+  letter-spacing: 1.8px;
   text-align: center;
   line-height: 1;
   transform: translateX(100vw);
-
 }
 
 .advice-text.line2 {
-  font-size: 20vh;
+  font-size: 180px;
   font-weight: bold;
   color: var(--text-color);
   text-transform: uppercase;
-  letter-spacing: 0.2vh;
+  letter-spacing: 1.8px;
   text-align: center;
   line-height: 1;
   transform: translateX(-100vw);
-
 }
 
 /*
 TIEBREAK EFECTOS PARTICULAS
 */
 
-/* Overlay pantalla completa arriba de todo */
 #lava-overlay {
   position: fixed;
   inset: 0;
   z-index: 99999;
   pointer-events: none;
-  opacity: 0;                 /* aparece con fade */
+  opacity: 0;
   transition: opacity 400ms ease;
 }
 
@@ -972,7 +1017,6 @@ TIEBREAK EFECTOS PARTICULAS
   opacity: 0;
 }
 
-
 /* Fondo Overlay Genérico */
 #bg-overlay {
   position: fixed;
@@ -980,65 +1024,22 @@ TIEBREAK EFECTOS PARTICULAS
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0;                   /* empieza invisible */
-  transition: opacity 0.5s ease; /* fade-in/fade-out */
-  pointer-events: none;          /* no molesta clics */
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
 }
 
-/* Cuando está activo */
 #bg-overlay.active {
   opacity: 1;
 }
 
-
 /*
-PUNTO DE ORO!!!!!!!!!!
+PUNTO DE ORO
 */
 
-/* Puntos de los jugadores en dorado */
 .game-score.punto-oro {
-  background-color: var(--accent-color-3); /* dorado fuerte */
+  background-color: var(--accent-color-3);
 }
-
-/*
- * ESPACIO PARA MENEJAR Y MOSTRAR CONTENEDORES PRINCIPALES DEL MARCADOR
- *
-*/
-
-
-
-.marcador-container,
-.cronos-container {
-  opacity: 0;
-  display: none  ;
-  transition: opacity 1s ease, transform 1s ease ;
-}
-
-/*.marcador-container,
-.cronos-container,
-.reloj,
-.ads-container {
-  opacity: 0;
-  display: none  ;
-  transition: opacity 1s ease, transform 1s ease ;
-}*/
-
-
-.marcador-container{
-  transform: translateX(-5vh);
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*======================
  * MENU SACADOR
@@ -1048,7 +1049,7 @@ PUNTO DE ORO!!!!!!!!!!
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  display: none; /* invisible por defecto */
+  display: none;
   justify-content: center;
   align-items: center;
   background: var(--bg-color);
@@ -1056,21 +1057,19 @@ PUNTO DE ORO!!!!!!!!!!
   opacity: 0;
 }
 
-/* Columna central (título, paso, opciones) */
 .menu-column {
   display: flex;
   flex-direction: column;
   align-items: center; 
-  gap: 1.5vh;
-  padding: 2vh 4vw;
-  border-radius: 1vh;
+  gap: 13.5px;             /* 1.5vh */
+  padding: 18px 4vw;       /* 2vh */
+  border-radius: 9px;      /* 1vh */
   scale: 2.5;
 
   opacity: 0;
-  transform: translateY(3vh) scale(0.9);
+  transform: translateY(27px) scale(0.9);  /* 3vh */
   animation: fadeUpZoom 0.8s ease forwards;
 }
-
 
 #menu-sacador-overlay,
 #menu-sacador-overlay p {
@@ -1080,7 +1079,7 @@ PUNTO DE ORO!!!!!!!!!!
 @keyframes fadeUpZoom {
   from {
     opacity: 0;
-    transform: translateY(3vh) scale(0.9);
+    transform: translateY(27px) scale(0.9);
   }
   to {
     opacity: 1;
@@ -1089,58 +1088,57 @@ PUNTO DE ORO!!!!!!!!!!
 }
 
 #menu-sacador-overlay .calento-title{
-  font-size: 4vh !important;
+  font-size: 36px !important;   /* 4vh */
 }
 
-/* Título del overlay */
+/* Título */
 .menu-title {
   font-family: 'Oswald', serif;
-  font-size: 2.5vh;
+  font-size: 22.5px;           /* 2.5vh */
   color: var(--text-color);
   text-align: center;
   margin: 0;
 }
 
-/* Paso actual */
+/* Paso */
 .menu-step {
   font-family: var(--main-font);
-  font-size: 2vh;
+  font-size: 18px;             /* 2vh */
   color: var(--text-color);
-  margin: 1vh 0;
+  margin: 9px 0;               /* 1vh */
   text-align: center;
 }
 
-/* Contenedor de opciones */
+/* Opciones */
 .menu-options {
   display: flex;
   flex-direction: column;
-  gap: 2vh;
+  gap: 18px;                   /* 2vh */
   align-items: center;
 }
 
-/* Cada opción individual */
+/* Opción individual */
 .menu-option {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5vh;
+  gap: 4.5px;                  /* 0.5vh */
   font-family: var(--main-font);
-  font-size: 2vh;
+  font-size: 18px;             /* 2vh */
   color: var(--text-color);
   text-align: center;
 }
 
-/* Animación de cada opción */
 .menu-option {
   opacity: 0;
-  transform: translateY(2vh);
+  transform: translateY(18px); /* 2vh */
   animation: fadeUp 0.8s ease forwards;
 }
 
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(2vh);
+    transform: translateY(18px);
   }
   to {
     opacity: 1;
@@ -1148,27 +1146,28 @@ PUNTO DE ORO!!!!!!!!!!
   }
 }
 
-/* Reutilizamos los gráficos de pulsera */
+/* Pulsera */
 .menu-option .pulsera-grafico-container {
-  width: 3vh !important;
-  height: 3vh !important;
+  width: 27px !important;      /* 3vh */
+  height: 27px !important;
   position: relative;
   scale: 0.8;
 }
 
-/* Contenedor de manitos */
+/* Manitos */
 .menu-option .hands-container {
   display: flex;
   justify-content: center;
-  gap: 0.3vh;
+  gap: 2.7px;                  /* 0.3vh */
   scale: 0.7;
 }
 
 .menu-option .fa-hand-pointer {
-  font-size: 2.5vh;
+  font-size: 22.5px;           /* 2.5vh */
   transform: rotate(-45deg);
 }
 
+/* Caja grande */
 #menu-sacador-opciones{
   display: flex;
   flex-direction: column;
@@ -1181,19 +1180,19 @@ PUNTO DE ORO!!!!!!!!!!
     transparent
   );   
   width: 100%;
-  padding: 1.5vh;
+  padding: 13.5px;            /* 1.5vh */
   margin-top: 0 !important;
 }
 
 #menu-sacador-opciones .calento-help-container{
   background: var(--semitransparent-bg);
   margin-top: 0;
-  padding-right: 1vh;
+  padding-right: 9px;         /* 1vh */
 }
 
 .menu-option-text {
   background: var(--accent-color-2);
-  padding: 0.5vh 1vw;
+  padding: 4.5px 1vw;         /* 0.5vh */
   font-weight: bold;
   color: var(--bg-color);
   display: inline-block;
@@ -1203,115 +1202,95 @@ PUNTO DE ORO!!!!!!!!!!
 
 .menu-option-ref {
   font-family: var(--main-font);
-  font-size: 1.8vh;
+  font-size: 16.2px;          /* 1.8vh */
   color: var(--text-color);
   margin-left: 0.5vw;
   display: inline-block;
 }
 
-
-
-
-
+/* Paso */
 #menu-sacador-paso {
-  margin-top: 0.5vh;
-  text-transform: uppercase;       /* si querés mantener mayúsculas */
-  font-weight: bold;                /* opcional, para destacar el paso */
-  border-radius: 3vh;
-  padding: 0.2vh 1vh;           /* espacio entre texto y línea */
-  border: 0.1vh solid #9b30ff55; /* línea más visible y estilizada */
-  width:fit-content;
+  margin-top: 4.5px;          /* 0.5vh */
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 27px;        /* 3vh */
+  padding: 1.8px 9px;         /* 0.2vh / 1vh */
+  border: 0.9px solid #9b30ff55; /* 0.1vh */
+  width: fit-content;
   background: #9b30ff33;
 }
 
+/* ============================
+   TABLA RESUMEN
+   ============================ */
 
-
-
-
-
-
-/*TABLA RESUMEN DE SACADORES MENU*/
-
-/* Contenedor de tabla y opciones */
 .contenedor-tabla-opciones {
   display: flex;
   width: 100%;
-  gap: 2vh;
-  margin-top: 2vh;
-  padding-right: 2vh;
+  gap: 18px;                  /* 2vh */
+  margin-top: 18px;           /* 2vh */
+  padding-right: 18px;        /* 2vh */
 }
 
-/* Tabla de resumen */
 .tabla-resumen {
-  width: fit-content; 
+  width: fit-content;
   text-align: center;
-  color: #fff; /* Texto blanco */
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 25vh;
+  width: 225px;               /* 25vh */
   scale: 0.95;
 }
 
-/* Tabla en sí */
 .tabla-resumen table {
   width: 100%;
   border-collapse: collapse;
 }
 
-/* Encabezado y celdas */
 .tabla-resumen th,
 .tabla-resumen td {
-  border-bottom: 0.1vh solid #9b30ff88; /* línea blanca */
-  font-size: 1.7vh;
-  padding: 0.3vh 1vh;
+  border-bottom: 0.9px solid #9b30ff88; /* 0.1vh */
+  font-size: 15.3px;          /* 1.7vh */
+  padding: 2.7px 9px;         /* 0.3vh / 1vh */
   text-align: start;
   text-wrap: nowrap;
 }
 
-.tabla-resumen th:nth-child(1), .tabla-resumen td:nth-child(1) {
-  width: 8vh;
+.tabla-resumen th:nth-child(1),
+.tabla-resumen td:nth-child(1) {
+  width: 72px;                /* 8vh */
 }
 
-.tabla-resumen th{
+.tabla-resumen th {
   background-color: var(--accent-color-2);
   color: var(--bg-color) !important;
 }
 
-.tabla-resumen td{
-border-right: 0.1vh solid #9b30ff88;
-
+.tabla-resumen td {
+  border-right: 0.9px solid #9b30ff88;
 }
 
 .tabla-resumen td:nth-child(1){
-  /*background: #9b30ff55;*/
   font-weight: bold;
   color: var(--accent-color-2);
-border-right: 0.1vh solid #9b30ff88;
-border-left: 0.1vh solid #9b30ff88;
+  border-right: 0.9px solid #9b30ff88;
+  border-left: 0.9px solid #9b30ff88;
 }
 
-/* Encabezados */
-.tabla-resumen th {
-  color: #fff;
-
-}
-
-/* Título de resumen */
 .resumen-title {
   font-family: 'Oswald', serif;
-  font-size: 2.5vh;
+  font-size: 22.5px;           /* 2.5vh */
   font-weight: bold;
-  margin: 0 0 1vh 0;
+  margin: 0 0 9px 0;           /* 1vh */
   color: #fff;
 }
 
-/* Pareja sacadora */
 .resumen-pareja-sacadora {
-  font-size: 1.8vh;
+  font-size: 16.2px;           /* 1.8vh */
   font-weight: bold;
-  margin-top: 1vh;
+  margin-top: 9px;             /* 1vh */
   color: #fff;
   display: flex;
   align-items: center;
@@ -1321,116 +1300,91 @@ border-left: 0.1vh solid #9b30ff88;
 
 .resumen-pareja-sacadora b{
   background: #9b30ff33;
-  border: 0.1vh solid #9b30ff55;
+  border: 0.9px solid #9b30ff55; /* 0.1vh */
   display: flex;
-  margin-left: 1vh;
-  border-radius: 3vh;
-  padding: 0vh 1vh;
+  margin-left: 9px;            /* 1vh */
+  border-radius: 27px;         /* 3vh */
+  padding: 0px 9px;
 }
 
-/* Columna del orden (super compacta) */
 .tabla-resumen th.orden-col,
 .tabla-resumen td.orden-col {
-  width: 2ch;          /* súper chiquita */
+  width: 2ch;
   text-align: center;
-  padding: 0.2vh 0.4vh;
+  padding: 1.8px 3.6px;       /* 0.2vh / 0.4vh */
 }
 
-/* Columna de jugador ocupa el resto */
 .tabla-resumen td.jugador-col {
   text-align: left;
-  padding-left: 0.8vh;
+  padding-left: 7.2px;        /* 0.8vh */
   font-weight: bold;
 }
 
-/* Título encima de la tabla */
 .tabla-resumen .resumen-title {
-  font-size: 1.9vh;
-  margin-bottom: 0.5vh;
+  font-size: 17.1px;          /* 1.9vh */
+  margin-bottom: 4.5px;       /* 0.5vh */
   text-align: center;
 }
 
-/* Degradado fila por fila (lo complementamos con inline JS para intensidad dinámica) */
 .tabla-resumen tbody tr {
   transition: background 0.3s ease;
 }
 
+/* ================== OVERLAY de MENU =================== */
+#menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.75);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+}
 
+/* ================== CONTENEDOR ================== */
+#menu-contenedor {
+  background: #222;
+  padding: 30px 40px;
+  border-radius: 15px;
+  color: #fff;
+  text-align: center;
+  min-width: 300px;
+  max-width: 400px;
+}
 
+#menu-contenedor h2 {
+  margin-bottom: 20px;
+  font-size: 1.4em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
+/* ================== OPCIONES ================== */
+.menu-opcion {
+  font-size: 1.2em;
+  padding: 10px 0;
+  margin: 5px 0;
+  cursor: default;
+  position: relative;
+}
 
+.menu-opcion.seleccionado::before {
+  content: "\f0a4";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  display: inline-block;
+  transform: rotate(90deg);
+  margin-right: 10px;
+  color: #ffcc00;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- /* ================== OVERLAY de MENU =================== */
-  #menu-overlay {
-    display: none; /* Se activa dinámicamente */
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.75);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-    font-family: sans-serif;
-  }
-
-  /* ================== CONTENEDOR ================== */
-  #menu-contenedor {
-    background: #222;
-    padding: 30px 40px;
-    border-radius: 15px;
-    color: #fff;
-    text-align: center;
-    min-width: 300px;
-    max-width: 400px;
-  }
-
-  #menu-contenedor h2 {
-    margin-bottom: 20px;
-    font-size: 1.4em;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  /* ================== OPCIONES ================== */
-  .menu-opcion {
-    font-size: 1.2em;
-    padding: 10px 0;
-    margin: 5px 0;
-    cursor: default;
-    position: relative;
-  }
-
-  /* Señalizador de opción seleccionada */
-  .menu-opcion.seleccionado::before {
-    content: "\f0a4"; /* FontAwesome hand-pointer */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    display: inline-block;
-    transform: rotate(90deg);
-    margin-right: 10px;
-    color: #ffcc00;
-  }
-
-  .menu-instrucciones {
-    margin-top: 20px;
-    font-size: 0.9em;
-    color: #aaa;
-  }
+.menu-instrucciones {
+  margin-top: 20px;
+  font-size: 0.9em;
+  color: #aaa;
+}
 
 /* ============================================================
    OVERLAY DEL QR
@@ -1440,20 +1394,19 @@ border-left: 0.1vh solid #9b30ff88;
   position: absolute;
   top: 50%;
   left: 50%;
-  height: 60vh;
-  transform: translate(-50%, -50%) scale(1.3); 
-  display: none;    
+  height: 540px;            /* 60vh */
+  transform: translate(-50%, -50%) scale(1.3);
+  display: none;
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  gap: 4vh;
-  padding: 2vh;
+  gap: 36px;                /* 4vh */
+  padding: 18px;            /* 2vh */
   opacity: 0;
   transition: opacity 0.6s ease;
   box-sizing: border-box;
 }
 
-/* Contenedores QR y Tabla */
 #qr-container, #ultimo-partido-container {
   display: inline-block;
   vertical-align: top;
@@ -1463,49 +1416,44 @@ border-left: 0.1vh solid #9b30ff88;
 /* QR */
 
 #qr-container {
-  width: 27vh;
-  height: 27vh;
+  width: 243px;             /* 27vh */
+  height: 243px;            /* 27vh */
   display:flex;
   align-items:center;
   justify-content:center;
-  border-radius: .5vh;
+  border-radius: 4.5px;     /* 0.5vh */
   overflow: hidden;
 }
 
-
 /* Tabla último partido */
 #ultimo-partido-container {
-  width: 50vh;
-  margin-left: 4vh;
+  width: 450px;             /* 50vh */
+  margin-left: 36px;        /* 4vh */
 }
 
 #ultimo-partido-container table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 2.2vh;
+  font-size: 19.8px;        /* 2.2vh */
   text-align: center;
 }
 
 #ultimo-partido-container th, 
 #ultimo-partido-container td {
-  border: 0.2vh solid var(--text-color);
-  padding: 1vh;
-}
-
-/* Resaltar QR y tabla en pantalla */
-#qr-container, #ultimo-partido-container {
-  color: var(--text-color);
+  border: 1.8px solid var(--text-color); /* 0.2vh */
+  padding: 9px;                           /* 1vh */
 }
 
 /* ============================================================
  * MARCADOR HISTORIAL - CONTENEDOR PRINCIPAL
  * ============================================================ */
+
 .marcador-hist-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 40vh;  
+  width: 360px;          /* 40vh */
   height: auto;
   margin: auto;
   padding: 1%;
@@ -1520,42 +1468,48 @@ border-left: 0.1vh solid #9b30ff88;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding-bottom: 0.5vh;
+  padding-bottom: 4.5px;      /* 0.5vh */
 }
+
 .hist-court-name {
   text-align: left;
   flex-basis: 50%;
-  font-size: 2.2vh;
+  font-size: 19.8px;          /* 2.2vh */
   font-weight: 300;
 }
+
 .hist-set-title,
 .hist-game-title {
   text-align: center;
   flex-basis: 10%;
   flex-shrink: 0;
-  font-size: 2vh;
+  font-size: 18px;            /* 2vh */
   font-weight: 300;
   text-wrap: nowrap;
 }
-.hist-game-title { font-weight: 500;}
+
+.hist-game-title { font-weight: 500; }
 
 /* FILAS DE PUNTAJE */
+
 .marcador-hist-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 }
+
 .hist-player-name {
   text-align: left;
   flex-basis: 50%;
-  font-size: 3vh;
+  font-size: 27px;            /* 3vh */
   font-weight: 500;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0.5vh 0;
+  margin: 4.5px 0;            /* 0.5vh */
 }
+
 .hist-player-name p {
   display: flex;
   align-items: start;
@@ -1567,27 +1521,30 @@ border-left: 0.1vh solid #9b30ff88;
   text-align: center;
   flex-basis: 10%;
   flex-shrink: 0;
-  font-size: 4vh;
+  font-size: 36px;            /* 4vh */
   font-weight: 600;
   font-family: "Oswald", serif;
 }
+
 .hist-score,
 .hist-set-title { margin: 0 1%; }
 
 .hist-game-score {
   flex-basis: 20%;
-  font-size: 6vh;
-  height: 10vh;
+  font-size: 54px;            /* 6vh */
+  height: 90px;               /* 10vh */
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--accent-color-1);
 }
+
 #hist-points-title { flex-basis: 20%; }
 
 .hist-set-ganado {
   opacity: 1;
 }
+
 .hist-set-perdido {
   opacity: 0.5;
   transition: opacity 0.5s ease !important;
@@ -1596,61 +1553,66 @@ border-left: 0.1vh solid #9b30ff88;
 /* ============================================================
  * SEPARADORES HISTORIAL
  * ============================================================ */
+
 .hist-separator {
-  height: 0.2vh;
+  height: 1.8px;            /* 0.2vh */
   width: 100%;
   background: var(--gradient-hist-separator);
 }
 
 .hist-vertical-separator-container { position: relative; }
+
 .hist-vertical-separator {
   position: absolute;
   top: 50%; left: 50%;
-  width: 0.2vh;
-  height: 8vh;
+  width: 1.8px;             /* 0.2vh */
+  height: 72px;             /* 8vh */
   background: var(--text-color);
   transform: translate(-50%, -50%);
 }
-.hist-vertical-separator:first-child { transform: translate(-50%, -50%) translateX(7.5vh); }
-.hist-vertical-separator:last-child  { transform: translate(-50%, -50%) translateX(14vh); }
 
+.hist-vertical-separator:first-child {
+  transform: translate(-50%, -50%) translateX(67.5px); /* 7.5vh */
+}
+
+.hist-vertical-separator:last-child {
+  transform: translate(-50%, -50%) translateX(126px);   /* 14vh */
+}
 
 .hist-score-high {
-  color: var(--text-color); /* blanco */
+  color: var(--text-color);
   opacity: 1;
   font-weight: bold;
 }
 
 .hist-score-low {
-  color: var(--text-color); 
-  opacity: 0.3; /* más apagado */
+  color: var(--text-color);
+  opacity: 0.3;
 }
 
-.ultimo-partido-title{
-  font-size: 3.8vh;
+.ultimo-partido-title {
+  font-size: 34.2px;        /* 3.8vh */
   text-align: start;
-  margin-bottom: 3vh;
+  margin-bottom: 27px;      /* 3vh */
   text-align: center;
 }
 
-
 .qr-title {
-  font-size: 4vh;
+  font-size: 36px;          /* 4vh */
   color: var(--text-color);
-  margin: 1vh 0;
+  margin: 9px 0;            /* 1vh */
   text-wrap: nowrap;
 }
 
+/* Animación breathing (sin vh aquí, así que intacta) */
 
-
-/*ANIMACION DE RESPIRAR PARA BACKGROUNDS*/
 @keyframes overlayBreath {
   0%   { background-position: 50% 0%; }
   50%  { background-position: 50% 100%; }
   100% { background-position: 50% 0%; }
 }
 
-/*PARTICULAS POR CADA PUNTO*/
+/* Partículas */
 .particle {
   position: absolute;
   width: 6px;
@@ -1661,40 +1623,18 @@ border-left: 0.1vh solid #9b30ff88;
 }
 
 /*=====================================
- * OVERLAY RADIAL PARA TIEMPO restante
- * ===================================*/
-
-/*
-.overlay-radial {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9999;
-  background: radial-gradient(circle, rgba(0,0,0,0) 70%, #ff4d6d99 100%);
-  opacity: 0;
-  display: none;
-  transition: opacity 0.5s ease;
-}
-*/
-
-/*=====================================
  * ULTIMO PUNTO
  * ===================================*/
 
 .ads-container1 {
   top: 0;
-  left: 50%;
-  transform: translateX(-100%) translateX(-15vh);
   background: linear-gradient(#ffffff11, #ffffff00);
-  height: 10vh;
+  height: 90px; /* 10vh */
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
-  padding: 1vh 2vh;
+  padding: 9px 18px; /* 1vh 2vh */
   box-sizing: border-box;
   color: #fff;
   font-family: 'Oswald', sans-serif;
@@ -1711,10 +1651,10 @@ border-left: 0.1vh solid #9b30ff88;
 .history-header {
   display: flex;
   align-items: center;
-  font-size: 2.5vh;
-  gap: 1vh;
+  font-size: 22.5px; /* 2.5vh */
+  gap: 9px; /* 1vh */
   font-weight: 400;
-  margin-left: 3vh;
+  margin-left: 27px; /* 3vh */
   opacity: .8;
 }
 
@@ -1722,17 +1662,16 @@ border-left: 0.1vh solid #9b30ff88;
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 3.3vh; /* espacio entre elementos y separadores */
+  gap: 29.7px; /* 3.3vh */
   padding: 0;
   margin: 0;
   overflow: hidden;
-  justify-content: flex-start; /* siempre pegado a la izquierda */
-  margin-left: 3vh;
+  justify-content: flex-start;
+  margin-left: 27px; /* 3vh */
 }
 
-
 .history-list li {
-  font-size: 3.5vh;
+  font-size: 31.5px; /* 3.5vh */
   font-weight: 800;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
   white-space: nowrap;
@@ -1744,8 +1683,8 @@ border-left: 0.1vh solid #9b30ff88;
 
 .score-sep {
   color: var(--accent-color-2);
-  font-size: 2.5vh;
-  padding: 0 1vh;
+  font-size: 22.5px; /* 2.5vh */
+  padding: 0 9px; /* 1vh */
 }
 
 @keyframes newPointIn {
@@ -1769,12 +1708,12 @@ border-left: 0.1vh solid #9b30ff88;
 
 .score-sep {
   color: var(--accent-color-2);
-  font-size: 2.5vh;
-  padding: 0 0.5vh;
+  font-size: 22.5px; /* 2.5vh */
+  padding: 0 4.5px; /* 0.5vh */
 }
 
 .pair {
-  font-size: 3.5vh;
+  font-size: 31.5px; /* 3.5vh */
   font-weight: 800;
   white-space: nowrap;
   transition: opacity 0.3s ease;
@@ -1784,68 +1723,60 @@ border-left: 0.1vh solid #9b30ff88;
 /* ============================================================
    TEMPORIZADOR DE TOQUES
    ============================================================ */
-/* Contenedor 16:9 centrado */
+
+/* Contenedor general pegado a la esquina, sin 16:9 ni restricciones */
 .centered-timer-label-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  width: 100vw;               /* ocupa todo el ancho posible */
-  height: 100vh;              /* ocupa todo el alto posible */
-  
-  max-width: calc(100vh * 16 / 9);  /* limita ancho para mantener 16:9 */
-  max-height: calc(100vw * 9 / 16); /* limita alto para mantener 16:9 */
-
-  aspect-ratio: 16 / 9;       /* asegura la relación 16:9 */
-
-  z-index: 9999;               /* encima de todo */
-  overflow: hidden;
+  position: fixed;      /* se pega al viewport */
+  top: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* no bloquea clics en nada más */
+  z-index: 9999;
 }
 
-
-/* Temporizador pegado a la esquina superior derecha del contenedor */
-/* Temporizador pegado a la esquina superior derecha del contenedor */
+/* Tarjeta del timer */
 .timer-label {
   position: absolute;
-  top: 3vh;
-  right: -25vw;                /* empieza fuera del contenedor */
+  top: 27px;            /* antes 3vh */
+  right: -300px;        /* arranca fuera de la pantalla; lo ajustás según tamaño */
   display: flex;
   align-items: center;
   background: var(--semitransparent-bg);
-  border-radius: 2.5vh;
-  padding: 1vh 2vw;
+  border-radius: 22.5px;     /* antes 2.5vh */
+  padding: 9px 24px;         /* 1vh 2vw → pero 2vw lo paso a px para que no dependa del viewport */
   font-family: var(--main-font);
   color: var(--text-color);
-  transition: right 0.5s ease, opacity 0.5s ease; /* animate despliegue */
+  transition: right 0.5s ease, opacity 0.5s ease;
   opacity: 0;
   z-index: 10;
+  pointer-events: auto; /* importante para que sí puedas clickear la tarjeta */
 }
 
+/* Cuando aparece */
 .timer-label.show {
-  right: 3vw;  /* posición final dentro del contenedor */
+  right: 27px;   /* entra y queda pegada, equivalente al margen */
   opacity: 1;
 }
 
-
 /* Círculo */
 .timer-ring {
-  width: 5vh;                  
-  height: 5vh;
+  width: 45px;
+  height: 45px;
   transform: rotate(-90deg);
 }
 
 .timer-bg {
   fill: none;
   stroke: #333;
-  stroke-width: 6px;           
+  stroke-width: 6px;
 }
 
 .timer-progress {
   fill: none;
   stroke: var(--accent-color-2);
-  stroke-width: 6px;              
-  stroke-dasharray: 138;          
+  stroke-width: 6px;
+  stroke-dasharray: 138;
   stroke-dashoffset: 0;
   transition: stroke-dashoffset 0.1s linear;
 }
@@ -1853,67 +1784,14 @@ border-left: 0.1vh solid #9b30ff88;
 /* Texto */
 .timer-text, 
 .timer-text span {
-  font-size: 2.5vh !important;
-  margin-left: 1vh;
+  font-size: 22.5px !important; /* antes 2.5vh */
+  margin-left: 9px;             /* antes 1vh */
   line-height: 1;
   display: inline-block;
   min-width: 2ch;
   text-align: right;
 }
 
-.timer-text span{
-  margin-left: -1vh;
-}
-
-
-
-
-
-/*UI 16/9*/
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #000;
-  overflow: hidden;
-}
-
-/* Contenedor rígido 16/9 */
-#scene-container {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  width: 100vw;
-  max-width: calc(100vh * (16 / 9));
-  max-height: 100vh;
-  background: #111;
-  overflow: hidden;
-}
-
-/* UI fija 1600x900 que después se escala */
-#ui-container {
-  position: absolute;
-  width: 1600px;
-  height: 900px;
-  transform-origin: top left;
-}
-
-/* Ejemplo de estilos */
-.titulo {
-  font-size: 80px;
-  color: white;
-  margin: 40px;
-}
-
-.texto {
-  font-size: 40px;
-  color: #ccc;
-  margin: 40px;
-}
-
-.btn {
-  font-size: 35px;
-  padding: 20px 40px;
-  margin: 40px;
+.timer-text span {
+  margin-left: -9px;            /* antes -1vh */
 }

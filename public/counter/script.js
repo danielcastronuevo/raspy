@@ -63,13 +63,6 @@ socket.on("estado", (estado) => {
      hideBgOverlay("lowtime-bg");
     }
 
-    // Limpiamos overlay y color
-    if (overlayRadial) {
-      overlayRadial.style.opacity = "0";
-      overlayRadial.style.display = "none";
-     // Quitar overlay animado
-     hideBgOverlay("lowtime-bg");
-    }
     if (cronoRestante) {
       cronoRestante.style.color = "";
       cronoRestante.textContent = "00:00:00";
@@ -831,7 +824,7 @@ function mostrarContadores(delay = 0) {
       if (!el) return;
       el.style.display = "flex";
       el.style.opacity = "0";
-      if (el === marcador) el.style.transform = "translateX(-5vh) translateY(-2.5vh)";
+      if (el === marcador) el.style.transform = "translateX(-45px) translateY(-22.5px)";
     });
 
     // Forzar reflow
@@ -846,7 +839,7 @@ function mostrarContadores(delay = 0) {
 
     // Animación final
     if (marcador) marcador.style.opacity = "1";
-    if (marcador) marcador.style.transform = "translateY(-2.5vh)";
+    if (marcador) marcador.style.transform = "translateY(-22.5px)";
     if (cronos) cronos.style.opacity = "1";
     if (scoreHistory) scoreHistory.style.opacity = "1";
     if (referencias) referencias.style.opacity = "1";
@@ -872,7 +865,7 @@ function ocultarContadores() {
   if (marcador) {
     marcador.style.transition = "opacity 1s ease, transform 1s ease";
     marcador.style.opacity = "0";
-    marcador.style.transform = "translateX(-5vh) translateY(-2.5vh)";
+    marcador.style.transform = "translateX(-45px) translateY(-22.5px)";
   }
 
   if (cronos) {
@@ -1161,37 +1154,46 @@ function actualizarSacadorActual(nombreSacador, jugadores) {
 
 
 // =================================================
-// ========== OVERLAY DE TEXTO AVISO ==========
+// ========== OVERLAY DE TEXTO AVISO (16/9) ==========
 // =================================================
 
-let currentAdviceOverlay = null; // guarda el overlay activo
+let currentAdviceOverlay = null;
 
 function showAdviceOverlay(text1, text2 = null) {
-  // Si hay un overlay anterior, eliminarlo completamente
+  const container = document.getElementById("ui-container");
+  if (!container) return;
+
+  // Si había uno, eliminarlo
   if (currentAdviceOverlay) {
     currentAdviceOverlay.remove();
     currentAdviceOverlay = null;
   }
 
-  // Crear contenedor principal
+  // Crear overlay dentro del 16/9
   const overlay = document.createElement('div');
   overlay.className = 'overlay-advice';
   overlay.style.display = 'flex';
+  overlay.style.position = 'absolute';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.width = '100%';
+  overlay.style.height = '100%';
   overlay.style.animation = 'overlayBg 0.8s ease forwards';
-  currentAdviceOverlay = overlay; // actualizar referencia
+  overlay.style.pointerEvents = 'none';
 
-  // Crear barras
+  currentAdviceOverlay = overlay;
+
+  // Convertido: -10vh → -90px
   const barUpper = document.createElement('div');
   barUpper.className = 'bar bar-upper';
-  barUpper.style.transform = 'translate(-10vh, -10vh)';
+  barUpper.style.transform = 'translate(-90px, -90px)';
   barUpper.style.animation = 'slideRightToLeft 0.8s ease forwards';
 
   const barLower = document.createElement('div');
   barLower.className = 'bar bar-lower';
-  barLower.style.transform = 'translate(-10vh, 10vh)';
+  barLower.style.transform = 'translate(-90px, 90px)';
   barLower.style.animation = 'slideLeftToRight 0.8s ease forwards';
 
-  // Crear contenedor de texto
   const content = document.createElement('div');
   content.className = 'advice-content';
 
@@ -1219,15 +1221,14 @@ function showAdviceOverlay(text1, text2 = null) {
     content.appendChild(line2);
   }
 
-  // Agregar todo al overlay
   overlay.appendChild(barUpper);
   overlay.appendChild(content);
   overlay.appendChild(barLower);
 
-  // Agregar overlay al body
-  document.body.appendChild(overlay);
+  // Agregar overlay dentro del 16/9
+  container.appendChild(overlay);
 
-  // Tiempo de vida del overlay (3s visible)
+  // Fade out
   const fadeOut = () => {
     overlay.style.animation = 'overlayBgOut 0.8s ease forwards';
     barUpper.style.animation = 'slideLeftToRightOut 0.8s ease forwards';
@@ -1241,15 +1242,15 @@ function showAdviceOverlay(text1, text2 = null) {
     if (line1) line1.style.animation = 'slideLeftToRightTextOut 0.8s ease forwards';
     if (line2) line2.style.animation = 'slideRightToLeftTextOut 0.8s ease forwards';
 
-    // Ocultar overlay y limpiar referencia
     setTimeout(() => {
-      overlay.style.display = 'none';
+      overlay.remove();
       if (currentAdviceOverlay === overlay) currentAdviceOverlay = null;
     }, 800);
   };
 
   setTimeout(fadeOut, 3000);
 }
+
 
 // LLAMADA A LAS ANIMACIONES
 //showAdviceOverlay("TIE-BREAK");
@@ -1313,25 +1314,33 @@ function desactivarTituloTiebreak() {
 //========== FONDO DE COLOR GENÉRICO ===========
 //==============================================
 
-// Crear o mostrar overlay
 function showBgOverlay(bg = "#FF6B11", id = "normal-bg", animate = false) {
-  // Ver si ya existe el overlay
-  let overlay = document.getElementById(id);
+  const container = document.getElementById("ui-container");
+  if (!container) return; // por si te olvidás del div
+
+  // Intentamos obtener overlay dentro del contenedor
+  let overlay = container.querySelector(`#${id}`);
+
+  // Si no existe, lo creamos
   if (!overlay) {
     overlay = document.createElement("div");
     overlay.id = id;
-    overlay.style.position = "fixed"; // fixed para cubrir siempre
+
+    overlay.style.position = "absolute";  // ahora sí respeta 16:9
     overlay.style.top = "0";
     overlay.style.left = "0";
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
+    overlay.style.width = "100%";        // 100% del contenedor
+    overlay.style.height = "100%";       // 100% del contenedor
+
     overlay.style.transition = "opacity 0.5s ease";
     overlay.style.opacity = "0";
-    overlay.style.pointerEvents = "none"; // que no tape clicks
-    document.body.appendChild(overlay);
+    overlay.style.pointerEvents = "none";
+
+    // Insertarlo DENTRO del ui-container
+    container.appendChild(overlay);
   }
 
-  // Soporta color o gradiente
+  // Color o gradiente
   if (bg.startsWith("linear-gradient") || bg.startsWith("radial-gradient")) {
     overlay.style.background = bg;
   } else {
@@ -1339,7 +1348,7 @@ function showBgOverlay(bg = "#FF6B11", id = "normal-bg", animate = false) {
     overlay.style.backgroundColor = bg;
   }
 
-  // Si animate = true, aplicamos keyframes
+  // Animación opcional
   if (animate) {
     overlay.style.backgroundSize = "200% 200%";
     overlay.style.animation = "overlayBreath 6s ease-in-out infinite";
@@ -1349,22 +1358,22 @@ function showBgOverlay(bg = "#FF6B11", id = "normal-bg", animate = false) {
 
   overlay.style.display = "block";
 
-  // Forzar reflow y animar entrada
   void overlay.offsetWidth;
   overlay.style.opacity = "1";
 }
 
-// Ocultar overlay
 function hideBgOverlay(id = "normal-bg") {
-  const overlay = document.getElementById(id);
+  const container = document.getElementById("scene-container");
+  const overlay = container?.querySelector(`#${id}`);
   if (!overlay) return;
 
   overlay.style.opacity = "0";
 
   setTimeout(() => {
     overlay.style.display = "none";
-  }, 500); // coincide con la transición
+  }, 500);
 }
+
 
 
 // ================================================
@@ -1576,20 +1585,35 @@ function obtenerUltimoPuntoTexto(item, esEstadoActual) {
 }
 */
 
-
+// ==========================
 // TEMPORIZADOR DE TOQUES
+// ==========================
+
+let countdownFrame = null;  // ID del frame activo
+let countdownRunning = false;
+
 function startCountdown(seconds) {
   const container = document.querySelector('.centered-timer-label-container');
   const label = container.querySelector('.timer-label');
   const progress = container.querySelector('.timer-progress');
   const secondsText = container.querySelector('#seconds');
 
-  const radius = 22; // radio fijo en px
+  // Si había una animación corriendo, la cancelamos
+  if (countdownFrame !== null) {
+    cancelAnimationFrame(countdownFrame);
+    countdownFrame = null;
+  }
+
+  // Reset visual ANTES de empezar
+  const radius = 22;
   const circumference = 2 * Math.PI * radius;
-
   progress.style.strokeDasharray = circumference;
-  progress.style.strokeDashoffset = 0; // empieza lleno
+  progress.style.strokeDashoffset = 0;
+  secondsText.textContent = seconds;
 
+  // Forzar el reinicio de la animación
+  label.classList.remove('show');
+  void label.offsetHeight; // reflow mágico
   label.classList.add('show');
 
   const startTime = performance.now();
@@ -1604,11 +1628,12 @@ function startCountdown(seconds) {
     progress.style.strokeDashoffset = offset;
 
     if (timeLeft > 0) {
-      requestAnimationFrame(update);
+      countdownFrame = requestAnimationFrame(update);
     } else {
+      countdownFrame = null;
       label.classList.remove('show');
     }
   }
 
-  requestAnimationFrame(update);
+  countdownFrame = requestAnimationFrame(update);
 }
