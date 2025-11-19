@@ -179,4 +179,3 @@ fi
 # --------------------------
 echo -e "${GREEN}[✓] Setup completo!${RESET}"
 echo -e "Reiniciá la Raspberry para iniciar automáticamente los servicios."
-
