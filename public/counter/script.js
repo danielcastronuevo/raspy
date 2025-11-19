@@ -1,3 +1,22 @@
+// function scaleUI() {
+//   const scene = document.getElementById('scene-container');
+//   const ui = document.getElementById('ui-container');
+
+//   const sw = scene.clientWidth;
+//   const sh = scene.clientHeight;
+
+//   const scaleX = sw / 1600;
+//   const scaleY = sh / 900;
+
+//   const scale = Math.min(scaleX, scaleY);
+
+//   ui.style.transform = `scale(${scale})`;
+// }
+
+// window.addEventListener("resize", scaleUI);
+// scaleUI();
+
+
 // =================================================
 // ================= SOCKET.IO ====================
 // =================================================
