@@ -1870,7 +1870,7 @@ border-left: 0.1vh solid #9b30ff88;
 
 
 /*UI 16/9*/
-/* body {
+body {
   margin: 0;
   height: 100vh;
   display: flex;
@@ -1880,7 +1880,7 @@ border-left: 0.1vh solid #9b30ff88;
   overflow: hidden;
 }
 
-
+/* Contenedor rígido 16/9 */
 #scene-container {
   position: relative;
   aspect-ratio: 16 / 9;
@@ -1891,7 +1891,7 @@ border-left: 0.1vh solid #9b30ff88;
   overflow: hidden;
 }
 
-
+/* UI fija 1600x900 que después se escala */
 #ui-container {
   position: absolute;
   width: 1600px;
@@ -1899,7 +1899,7 @@ border-left: 0.1vh solid #9b30ff88;
   transform-origin: top left;
 }
 
-
+/* Ejemplo de estilos */
 .titulo {
   font-size: 80px;
   color: white;
@@ -1916,4 +1916,4 @@ border-left: 0.1vh solid #9b30ff88;
   font-size: 35px;
   padding: 20px 40px;
   margin: 40px;
-} */
+}
