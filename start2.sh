@@ -23,7 +23,7 @@ echo "___  /| |_  /__  /  _  __ \\  __ \`/  / / /  _ \\"
 echo "__  ___ |  / _  /   / /_/ / /_/ // /_/ //  __/"
 echo "_/_/  |_/_/  /_/    \\____/\\__, / \\__,_/ \\___/ "
 echo "                            /_/               "
-echo -e "${TURQUOISE}>_ ARRANQUE AUTOMÁTICO${RESET}\n"
+echo -e "${TURQUOISE}>_ ARRANQUE AUTOMÁTICO DE BERTO${RESET}\n"
 
 # --------------------------
 # Variables base
@@ -63,6 +63,7 @@ fi
 if [ "$REGEN" = true ]; then
     # Crear un ID aleatorio (8 caracteres, en mayúsculas)
     UUID=$(cat /proc/sys/kernel/random/uuid | cut -c1-8 | tr '[:lower:]' '[:upper:]')
+
     # Crear archivo JSON
     cat <<EOF > "$CONFIG_FILE"
 {
@@ -70,8 +71,10 @@ if [ "$REGEN" = true ]; then
   "vps_url": "http://91.108.124.53:5000"
 }
 EOF
+
     echo -e "${GREEN}[✓] Config.json creado con ID:${RESET} $UUID"
 fi
+
 
 # --------------------------
 # Limpiar servicios previos
@@ -144,7 +147,7 @@ tee ~/.config/autostart/chromium-kiosk.desktop > /dev/null <<EOF
 [Desktop Entry]
 Type=Application
 Name=Chromium Kiosk
-Exec=/bin/bash -c "sleep 10 && /usr/bin/chromium-browser --kiosk http://localhost:5000/counter/ --noerrdialogs --incognito --disable-restore-session-state"
+Exec=/bin/bash -c "sleep 10 && /usr/bin/chromium --kiosk http://localhost:5000/counter/ --noerrdialogs --incognito --disable-restore-session-state"
 StartupNotify=false
 Terminal=false
 X-GNOME-Autostart-enabled=true

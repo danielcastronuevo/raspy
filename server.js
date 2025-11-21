@@ -72,7 +72,6 @@ estado.setOnChange(() => {
 // ====================================
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
 // ====================================
 // Rutas
@@ -99,6 +98,7 @@ app.get('/api/partido-estado', (req, res) => {
 app.get('/api/raspy-id', (req, res) => {
   res.json({ raspy_id: RASPY_ID });
 });
+
 
 // ====================================
 // 📄 ENDPOINT: historial anterior y estado actual
