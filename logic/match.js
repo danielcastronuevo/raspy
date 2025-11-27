@@ -1616,6 +1616,7 @@ module.exports = {
   iniciarPartido,
   estaEnEspera,
   estaEnEligiendoSacador,
+
   // MENÚS
   abrirMenu,
   cerrarMenu,
@@ -1623,6 +1624,7 @@ module.exports = {
   seleccionarMenu,
   finalizarPartido,
   menu,
+
   // MENÚ SACADOR
   menuSacador,
   iniciarEleccionSacador,
@@ -1630,10 +1632,11 @@ module.exports = {
   seleccionarMenuSacador,
   volverMenuSacador,
   finalizarMenuSacador,
-  estaEnEligiendoSacador,
-  //RESETEAR estados 
+
+  // RESETEAR estados 
   resetEstado
 };
+
 
 
 function estaEnEspera() {
