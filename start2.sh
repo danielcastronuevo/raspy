@@ -1,5 +1,5 @@
 #!/bin/bash
-# setup_raspy.sh - Configura y habilita los servicios del proyecto Raspy
+# start2.sh - Configura y habilita los servicios del proyecto Raspy adaptado para BERTO
 # Ejecutar después de clonar el repositorio
 
 set -e
@@ -91,7 +91,7 @@ done
 # Dar permisos a los scripts
 # --------------------------
 echo -e "${YELLOW}[+] Ajustando permisos de ejecución${RESET}"
-chmod +x "$BASE_DIR/PYSTART.sh" "$BASE_DIR/NODESTART.sh"
+chmod +x "$BASE_DIR/PYSTART.sh" "$BASE_DIR/NODESTART.sh" "$BASE_DIR/GENERALSTATS.sh"
 
 # --------------------------
 # Crear servicios systemd
@@ -130,6 +130,22 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
+sudo tee /etc/systemd/system/raspy-generalstats.service > /dev/null <<EOF
+[Unit]
+Description=Raspy General Stats Collector
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=${BASE_DIR}
+ExecStart=${BASE_DIR}/GENERALSTATS.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 # --------------------------
 # Recargar systemd y habilitar servicios
 # --------------------------
@@ -137,6 +153,7 @@ echo -e "${YELLOW}[+] Activando servicios${RESET}"
 sudo systemctl daemon-reload
 sudo systemctl enable raspy-scanner
 sudo systemctl enable raspy-server
+sudo systemctl enable raspy-generalstats
 
 # --------------------------
 # Configurar autostart de Chromium

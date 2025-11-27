@@ -1,5 +1,5 @@
 #!/bin/bash
-# setup_raspy.sh - Configura y habilita los servicios del proyecto Raspy
+# start.sh - Configura y habilita los servicios del proyecto Raspy
 # Ejecutar después de clonar el repositorio
 
 set -e
@@ -34,6 +34,13 @@ USER_NAME="$(whoami)"
 echo -e "${YELLOW}[+] Directorio base detectado:${RESET} $BASE_DIR"
 echo -e "${YELLOW}[+] Usuario actual:${RESET} $USER_NAME\n"
 
+# ---------------------------------------------------
+# NUEVO: Crear carpeta de logs si no existe
+# ---------------------------------------------------
+LOG_DIR="${BASE_DIR}/reports"
+mkdir -p "$LOG_DIR"
+echo -e "${YELLOW}[+] Carpeta de logs asegurada en:${RESET} $LOG_DIR\n"
+
 # --------------------------
 # Generar config.json si no existe o preguntar
 # --------------------------
@@ -46,7 +53,6 @@ else
     echo -e "${YELLOW}[+] Config.json existente encontrado${RESET}"
     echo -e "${YELLOW}[!] Desea regenerarlo? Se reemplazará con un nuevo ID aleatorio [s/N] (auto 10s):${RESET} \c"
     
-    # Leer input con timeout 10s, default N
     read -t 10 RESP || RESP="s"
     
     if [[ "$RESP" =~ ^[Ss]$ ]]; then
@@ -59,11 +65,8 @@ else
     fi
 fi
 
-# Generar config.json si corresponde
 if [ "$REGEN" = true ]; then
-    # Crear un ID aleatorio (8 caracteres, en mayúsculas)
     UUID=$(cat /proc/sys/kernel/random/uuid | cut -c1-8 | tr '[:lower:]' '[:upper:]')
-    # Crear archivo JSON
     cat <<EOF > "$CONFIG_FILE"
 {
   "raspy_id": "$UUID",
@@ -88,7 +91,7 @@ done
 # Dar permisos a los scripts
 # --------------------------
 echo -e "${YELLOW}[+] Ajustando permisos de ejecución${RESET}"
-chmod +x "$BASE_DIR/PYSTART.sh" "$BASE_DIR/NODESTART.sh"
+chmod +x "$BASE_DIR/PYSTART.sh" "$BASE_DIR/NODESTART.sh" "$BASE_DIR/GENERALSTATS.sh"
 
 # --------------------------
 # Crear servicios systemd
@@ -127,6 +130,22 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
+sudo tee /etc/systemd/system/raspy-generalstats.service > /dev/null <<EOF
+[Unit]
+Description=Raspy General Stats Monitor
+After=multi-user.target
+
+[Service]
+Type=simple
+WorkingDirectory=${BASE_DIR}
+ExecStart=${BASE_DIR}/GENERALSTATS.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 # --------------------------
 # Recargar systemd y habilitar servicios
 # --------------------------
@@ -134,6 +153,7 @@ echo -e "${YELLOW}[+] Activando servicios${RESET}"
 sudo systemctl daemon-reload
 sudo systemctl enable raspy-scanner
 sudo systemctl enable raspy-server
+sudo systemctl enable raspy-generalstats
 
 # --------------------------
 # Configurar autostart de Chromium

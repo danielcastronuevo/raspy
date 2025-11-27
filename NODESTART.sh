@@ -9,6 +9,10 @@ RESET="\e[0m"
 BASE_DIR="$(dirname "$0")"
 cd "$BASE_DIR" || { echo -e "${RED}[!] Error:${RESET} No se pudo entrar a $BASE_DIR"; exit 1; }
 
-# Ejecutar server.js directamente
-echo -e "${YELLOW}[+] Ejecutando server.js...${RESET}"
-/home/MARCADOR/.nvm/versions/node/v24.5.0/bin/node server.js
+LOG_DIR="${BASE_DIR}/reports"
+mkdir -p "$LOG_DIR"
+
+echo -e "${YELLOW}[+] Ejecutando server.js... (logs en logs/node.log)${RESET}"
+
+# Ejecutar con log persistente
+/home/MARCADOR/.nvm/versions/node/v24.5.0/bin/node server.js >> "$LOG_DIR/node.log" 2>&1
