@@ -80,7 +80,7 @@ fi
 # Limpiar servicios previos
 # --------------------------
 echo -e "${YELLOW}[+] Deteniendo servicios antiguos${RESET}"
-for svc in raspy-scanner raspy-server; do
+for svc in raspy-scanner raspy-server raspy-generalstats; do
     if systemctl list-units --full -all | grep -q "${svc}.service"; then
         sudo systemctl stop "$svc" || true
         sudo systemctl disable "$svc" || true

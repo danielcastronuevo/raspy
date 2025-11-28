@@ -22,6 +22,9 @@ fi
 # Activar entorno virtual
 source "$VENV_DIR/bin/activate"
 
-# Ejecutar scanner con logs
+# Ejecutar scanner con logs + timestamp por línea
 echo -e "${YELLOW}[+] Ejecutando scanner.py... (logs en logs/python.log)${RESET}"
-"$VENV_DIR/bin/python3" -u scanner.py >> "$LOG_DIR/python.log" 2>&1
+"$VENV_DIR/bin/python3" -u scanner.py 2>&1 | while IFS= read -r line
+do
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $line"
+done >> "$LOG_DIR/python.log"
