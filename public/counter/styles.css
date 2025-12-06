@@ -31,6 +31,13 @@
     transparent
   );
 
+  --gradient-separator-vertical: linear-gradient(
+    to bottom,
+    transparent,
+    var(--text-color),
+    transparent
+  );
+
   --gradient-hist-separator: linear-gradient(
     to right,
     rgba(255,255,255,0) 0%, 
@@ -334,6 +341,10 @@ main {
   margin-top: -9px;
 }
 
+.final-help-3 {
+  margin-left: -23px;
+}
+
 /* Iconos de ayuda */
 .final-help-container .pulsera-grafico-container {
   width: 27px !important;
@@ -369,6 +380,40 @@ main {
   font-size: 27px;
   transform: translateY(9px);
 }
+
+/* MENU EN FILA */
+.final-help-menu {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5.5px;
+  margin-top: 18px;
+}
+
+/* SEPARADOR VERTICAL */
+.final-help-separator {
+  width: 1.8px;
+  background: var(--gradient-separator-vertical);
+  height: 108px;
+  margin: 0 9px;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: fadeUp 0.8s ease forwards;
+}
+
+
+.final-help-menu .final-help-container {
+  max-width: 260px;    /* Ajustá este valor como quieras */
+}
+
+.final-help-container-bottom {
+  background: var(--semitransparent-bg);
+  padding: 0 10px;
+  border-radius: 10px;
+  scale: 0.8;
+}
+
 
 /* ============================================================
    CRONO CALENTAMIENTO - OVERLAY CON ANIMACIONES

@@ -639,7 +639,7 @@ function ganarPartido(parejaIndex, motivo = "normal") {
   // --- LÓGICA NORMAL (GANADOR REAL) ---
   console.log(`🎉 Pareja ${parejaIndex + 1} gana el partido! 🎉`);
 
-  estado.tiempoGraciaRestante = 30; // 30 segs de gracia
+  estado.tiempoGraciaRestante = 64; // 30 segs de gracia
 
   estado.temporizadorFin = setInterval(() => {
     estado.tiempoGraciaRestante--;
