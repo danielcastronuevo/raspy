@@ -607,7 +607,7 @@ async function ganarPartido(parejaIndex, motivo = "normal") {
   estado.estadoPartido = 'terminado';
   estado.motivoFin = motivo;
 
-  // --- LIMPIAR TODOS LOS TIMERS ---
+  // --- LIMPIAR TODOS LOS TIMERS Y WATCHDOG ---
   if (estado.temporizadorCalentamiento) {
     clearInterval(estado.temporizadorCalentamiento);
     estado.temporizadorCalentamiento = null;
@@ -623,6 +623,13 @@ async function ganarPartido(parejaIndex, motivo = "normal") {
   if (estado.debugTemporizador) {
     clearInterval(estado.debugTemporizador);
     estado.debugTemporizador = null;
+  }
+  
+  // 🔹 NUEVO: Detener el watchdog cuando se finaliza el partido
+  if (watchdogFin) {
+    clearInterval(watchdogFin);
+    watchdogFin = null;
+    console.log("🛑 Watchdog detenido (partido finalizado)");
   }
 
   // --- CASO ESPECIAL: TIEMPO O MENU ---
@@ -695,6 +702,12 @@ function resetEstadoCompleto() {
 // ===============================
 async function guardarHistorialFinal(motivo = "normal") {
   try {
+    // 🔹 VALIDACIÓN CRÍTICA: Verificar que matchId existe
+    if (!estado.matchId) {
+      console.error("❌ No se puede guardar historial: matchId es null o undefined");
+      return;
+    }
+
     // Si no hay historial previo, iniciamos uno vacío
     let historial = [];
     if (fs.existsSync(HISTORIAL_PATH)) {
@@ -785,6 +798,12 @@ async function guardarHistorialFinal(motivo = "normal") {
 // ===============================
 async function enviarPartidoAlServer(dataFinal) {
   try {
+    // 🔹 VALIDACIÓN: Asegurar que hay ID
+    if (!dataFinal || !dataFinal.id) {
+      console.error("❌ No se puede enviar al servidor: falta el ID del partido");
+      return;
+    }
+
     const res = await fetch("http://91.108.124.53:3000/api/matches", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -794,11 +813,13 @@ async function enviarPartidoAlServer(dataFinal) {
     console.log("📤 Partido enviado al server:", result);
     
     // 🔹 Si se envió exitosamente, registrarlo en el sync log
-    if (result && (result.ok !== false)) {
+    if (result && (result.ok !== false) && !result.error) {
       registrarEnSyncLog(dataFinal.id);
+    } else {
+      console.warn("⚠️ Servidor rechazó el partido:", result.error || result.message);
     }
   } catch (err) {
-    console.error("❌ Error enviando partido al server:", err);
+    console.error("❌ Error enviando partido al server:", err.message);
   }
 }
 
@@ -824,6 +845,12 @@ function cargarSyncLog() {
 // Guardar un matchId como sincronizado
 function registrarEnSyncLog(matchId) {
   try {
+    // 🔹 VALIDACIÓN: No permitir registrar matchId null/undefined
+    if (!matchId) {
+      console.error("❌ No se puede registrar en sync.json: matchId es null o undefined");
+      return;
+    }
+
     let syncLog = cargarSyncLog();
     if (!syncLog.sincronizados.includes(matchId)) {
       syncLog.sincronizados.push(matchId);
