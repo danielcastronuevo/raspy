@@ -99,6 +99,13 @@ app.get('/api/raspy-id', (req, res) => {
   res.json({ raspy_id: RASPY_ID });
 });
 
+app.get('/api/config-info', (req, res) => {
+  res.json({ 
+    raspy_id: RASPY_ID,
+    club: config.club || 'sin-configurar'
+  });
+});
+
 
 // ====================================
 // 📄 ENDPOINT: historial anterior y estado actual
@@ -159,7 +166,7 @@ const socketVPS = Client(VPS_URL, {
 
 socketVPS.on("connect", () => {
   logSuccess("Conectado a VPS");
-  socketVPS.emit("register_raspy", { raspy_id: RASPY_ID });
+  socketVPS.emit("register_raspy", { raspy_id: RASPY_ID, club: config.club });
 
   const currentEstado = estado.getEstado();
   socketVPS.emit("estado_cancha", {
@@ -210,7 +217,7 @@ console.log(`${colors.cyan}>_ CONTADOR DE PADEL${colors.reset}\n`);
 server.listen(PORT, () => {
   console.log(''); 
   logInfo('Links:');
-  logSuccess(`Configuración VPS:     ${colors.cyan}https://config.altoquepadel.com/?id=${RASPY_ID}${colors.reset}`);
+  logSuccess(`Configuración VPS:     ${colors.cyan}https://config.altoquepadel.com/?id=${RASPY_ID}&club=${config.club}${colors.reset}`);
   logSuccess(`Sensores:              ${colors.cyan}http://${ip}:${PORT}/sensors${colors.reset}`);
   logSuccess(`Contador:              ${colors.cyan}http://${ip}:${PORT}/counter${colors.reset}`);
 

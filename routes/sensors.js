@@ -10,7 +10,7 @@ const partido = require('../logic/match');
 // ========================= RUTA POST /api/sensors ===================
 // ====================================================================
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { accion } = req.body;
 
   console.log('📥 Acción recibida del sensor:', accion);
@@ -63,7 +63,7 @@ if (partido.estaEnEligiendoSacador()) {
     switch (accion) {
       case 'sumarP1':
       case 'sumarP2':
-        partido.seleccionarMenu();
+        await partido.seleccionarMenu();
         break;
 
       case 'restar':

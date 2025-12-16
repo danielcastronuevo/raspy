@@ -258,10 +258,10 @@ function configurarPartido(config) {
 
   const programadoEn = Date.now();
 
-  estado.temporizadorFin = setTimeout(() => {
+  estado.temporizadorFin = setTimeout(async () => {
     const retraso = Date.now() - (programadoEn + msRestantes);
     console.info(`[+] Hora de fin alcanzada (${config.fin || config.finFecha}), finalizando partido. Retraso real: ${retraso}ms`);
-    finalizarPorTiempo();
+    await finalizarPorTiempo();
   }, msRestantes);
 
   // ==============================================
@@ -269,7 +269,7 @@ function configurarPartido(config) {
   // ==============================================
   if (watchdogFin) clearInterval(watchdogFin);
 
-  watchdogFin = setInterval(() => {
+  watchdogFin = setInterval(async () => {
     const ahora = new Date();
     const diff = finDate.getTime() - ahora.getTime();
 
@@ -280,7 +280,7 @@ function configurarPartido(config) {
 
       if (!estado.marcador.partidoTerminado) {
         try {
-          finalizarPorTiempo();
+          await finalizarPorTiempo();
         } catch (err) {
           console.error(`[X] Error en watchdog al finalizar partido: ${err.message}`);
         }
@@ -583,24 +583,24 @@ function ganarSet(parejaIndex, setIdx) {
 // ================================
 // ====== FINALIZAR PARTIDO =======
 // ================================
-function finalizarPartido() {
+async function finalizarPartido() {
   console.log("🏁 Partido finalizado manualmente desde menú.");
-  ganarPartido(null, "menu"); 
+  await ganarPartido(null, "menu"); 
 }
 
 // =======================
 // 🚨 Finalizar por tiempo
 // =======================
-function finalizarPorTiempo() {
+async function finalizarPorTiempo() {
   if (estado.marcador.partidoTerminado) return;
-  ganarPartido(null, "tiempo"); 
+  await ganarPartido(null, "tiempo"); 
 }
 
 
 // ===============================
 // 🏁 GANAR PARTIDO FINALIZAR 🏁 
 // ===============================
-function ganarPartido(parejaIndex, motivo = "normal") {
+async function ganarPartido(parejaIndex, motivo = "normal") {
   if (estado.marcador.partidoTerminado) return; // Evitar doble finalización
 
   estado.marcador.partidoTerminado = true;
@@ -628,7 +628,7 @@ function ganarPartido(parejaIndex, motivo = "normal") {
   // --- CASO ESPECIAL: TIEMPO O MENU ---
   if (motivo === "tiempo" || motivo === "menu") {
     console.log(`⏹️ Partido terminado por motivo: ${motivo}`);
-    guardarHistorialFinal(motivo);
+    await guardarHistorialFinal(motivo);
 
     if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
 
@@ -641,7 +641,7 @@ function ganarPartido(parejaIndex, motivo = "normal") {
 
   estado.tiempoGraciaRestante = 30; // 30 segs de gracia
 
-  estado.temporizadorFin = setInterval(() => {
+  estado.temporizadorFin = setInterval(async () => {
     estado.tiempoGraciaRestante--;
 
     if (estado.tiempoGraciaRestante <= 0) {
@@ -649,7 +649,7 @@ function ganarPartido(parejaIndex, motivo = "normal") {
       estado.temporizadorFin = null;
 
       console.log("⌛ Fin del tiempo de gracia, volviendo a standby.");
-      guardarHistorialFinal("normal");
+      await guardarHistorialFinal("normal");
       if (fs.existsSync(HISTORIAL_PATH)) fs.unlinkSync(HISTORIAL_PATH);
 
       resetEstadoCompleto();
@@ -693,11 +693,13 @@ function resetEstadoCompleto() {
 // ===============================
 // --- GUARDAR HISTORIAL FINAL  ---
 // ===============================
-function guardarHistorialFinal(motivo = "normal") {
+async function guardarHistorialFinal(motivo = "normal") {
   try {
-    if (!fs.existsSync(HISTORIAL_PATH)) return;
-
-    let historial = JSON.parse(fs.readFileSync(HISTORIAL_PATH, "utf-8"));
+    // Si no hay historial previo, iniciamos uno vacío
+    let historial = [];
+    if (fs.existsSync(HISTORIAL_PATH)) {
+      historial = JSON.parse(fs.readFileSync(HISTORIAL_PATH, "utf-8"));
+    }
 
     // 🔹 Guardar el último snapshot antes de reiniciar
     const ultimoSnapshot = {
@@ -717,8 +719,13 @@ function guardarHistorialFinal(motivo = "normal") {
     else if (setsG[1] > setsG[0]) ganador = "Pareja 2";
 
     const ahora = new Date();
-    const fecha = ahora.toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-");
-    const hora = ahora.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }).replace(":", "-");
+    // Generar formato ISO estándar: YYYY-MM-DD_HHmm (orden cronológico alfabético automático)
+    const año = ahora.getFullYear();
+    const mes = String(ahora.getMonth() + 1).padStart(2, "0");
+    const dia = String(ahora.getDate()).padStart(2, "0");
+    const horas = String(ahora.getHours()).padStart(2, "0");
+    const minutos = String(ahora.getMinutes()).padStart(2, "0");
+    const nombreArchivo = `${año}-${mes}-${dia}_${horas}${minutos}`;
 
     const duracionSegundos = estado.tiempoPartidoTranscurrido || 0;
     const duracionTexto = new Date(duracionSegundos * 1000).toISOString().substr(11, 8);
@@ -728,8 +735,8 @@ function guardarHistorialFinal(motivo = "normal") {
 
     const metadata = {
       matchId,
-      fecha,
-      hora,
+      fecha: nombreArchivo.split("_")[0], // DD-MM-YYYY
+      hora: nombreArchivo.split("_")[1],   // HHmm
       ganador,
       duracionSegundos,
       duracionTexto,
@@ -760,12 +767,12 @@ function guardarHistorialFinal(motivo = "normal") {
       }
     }
 
-    const archivo = path.join(baseDir, `${fecha}_${hora}.json`);
+    const archivo = path.join(baseDir, `${nombreArchivo}.json`);
     fs.writeFileSync(archivo, JSON.stringify(dataFinal, null, 2), "utf-8");
     console.log(`📁 Historial archivado en: ${archivo}`);
 
-    // --- Enviar al server central ---
-    enviarPartidoAlServer(dataFinal);
+    // --- Enviar al server central y esperar ---
+    await enviarPartidoAlServer(dataFinal);
 
   } catch (err) {
     console.error("❌ Error guardando historial:", err);
@@ -1523,13 +1530,13 @@ function navegarMenu() {
 }
 
 
-function seleccionarMenu() {
+async function seleccionarMenu() {
   if (!menu.activo) return;
 
   // === Estamos en modo confirmación ===
   if (menu.confirmacion === "finalizarPartido") {
     if (menu.index === 0) { // Sí
-      finalizarPartido();
+      await finalizarPartido();
       cerrarMenu();
     } else if (menu.index === 1) { // No
       // volvemos al menú principal

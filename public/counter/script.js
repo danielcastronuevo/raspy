@@ -50,6 +50,15 @@ socket.on("estado", (estado) => {
 
   const cronoRestante = document.querySelector(".crono-2");
 
+  // =================== LOG DE PULSERAS ===================
+  if (estado.configuracion?.pulseras) {
+    console.log("📿 PULSERAS RECIBIDAS:");
+    console.log(JSON.stringify(estado.configuracion.pulseras, null, 2));
+    
+    // Mostrar nombres de pulseras en el marcador
+    actualizarPulseras(estado.configuracion.pulseras);
+  }
+
   // =================== LIMPIAR CRONO TIEMPO RESTANTE SI NO SE ESTÁ JUGANDO ===================
   if (estado.estadoPartido !== 'jugando' && timerTiempoRestante) {
     // Si teníamos un cronómetro activo y ahora ya no estamos jugando, el partido terminó
@@ -221,9 +230,9 @@ function mostrarOverlayMenu(menu) {
 
   // Cambiar título dinámicamente
   if (menu.confirmacion === "finalizarPartido") {
-    tituloDiv.textContent = "¿SEGURO QUE DESEA FINALIZAR SU PARTIDO?\nLOS DATOS NO SERÁN ALMACENADOS";
+    tituloDiv.textContent = "¿SEGURO QUE DESEA FINALIZAR SU PARTIDO?";
   } else {
-    tituloDiv.textContent = "MENÚ DE CONFIGURACIÓN DE PARTIDO";
+    tituloDiv.textContent = "MENÚ DE CONFIGURACIÓN:";
   }
 
   // Renderizamos opciones
@@ -611,21 +620,19 @@ async function generarQRyUltimoPartido() {
   ultimoContainer.id = "ultimo-partido-container";
   qrOverlay.appendChild(ultimoContainer);
 
-  // === QR dinámico con raspy_id ===
+  // === QR dinámico con raspy_id y club ===
   try {
-    // 🔹 1. Pedimos el raspy_id a la propia API local
-    const resp = await fetch("/api/raspy-id");
+    // 🔹 1. Pedimos el raspy_id y club a la propia API local
+    const resp = await fetch("/api/config-info");
     const data = await resp.json();
     const raspy_id = data.raspy_id;
+    const club = data.club;
 
     // 🔹 2. VPS (dominio o IP pública)
     const vpsUrl = "https://config.altoquepadel.com/"; // o https://tu-dominio.com
 
-    // 🔹 3. Armamos la URL con query param
-    //const path = "/config/";
-    //const urlPartido = `${vpsUrl}${path}?raspy_id=${raspy_id}`;
-
-    const urlPartido = `${vpsUrl}?id=${raspy_id}`;
+    // 🔹 3. Armamos la URL con query params (id y club)
+    const urlPartido = `${vpsUrl}?id=${raspy_id}&club=${club}`;
 
 
     // Definimos tamaño dinámico
@@ -644,7 +651,7 @@ async function generarQRyUltimoPartido() {
     console.log("✅ QR generado con URL:", urlPartido);
 
   } catch (err) {
-    console.error("❌ Error obteniendo Raspy ID:", err);
+    console.error("❌ Error obteniendo config info:", err);
   }
 
   // === Último partido (igual que antes) ===
@@ -709,6 +716,26 @@ async function generarQRyUltimoPartido() {
         </div>
 
         <div class="hist-separator"></div>
+<p style="margin-top:15px; font-size:20px; width:100%; text-align:center">
+  ENCONTRÁ TODOS LOS RESULTADOS EN:
+  <span style="
+    color:#b7fe01;
+    font-weight:400;
+    font-size:28px;
+    background: linear-gradient(
+      to right,
+      rgba(255,255,255,0),
+      rgba(255, 255, 255, 0.15),
+      rgba(255,255,255,0)
+    );
+    padding:2px 0px 5px 0;
+    border-radius:4px;
+    display:inline-block;
+  ">
+    STATS.ALTOQUEPADEL.COM
+  </span>
+</p>
+
       </div>
     `;
 
@@ -1092,6 +1119,22 @@ function actualizarNombresJugadores(jugadores = []) {
   if (jugador2_p1 && jugadores[1]) jugador2_p1.lastChild.textContent = ` ${formatearNombre(jugadores[1])}`;
   if (jugador1_p2 && jugadores[2]) jugador1_p2.lastChild.textContent = ` ${formatearNombre(jugadores[2])}`;
   if (jugador2_p2 && jugadores[3]) jugador2_p2.lastChild.textContent = ` ${formatearNombre(jugadores[3])}`;
+}
+
+// =================================================
+// ========== ACTUALIZAR PULSERAS =================
+// =================================================
+
+function actualizarPulseras(pulseras) {
+  const pulseraNombreP1 = document.getElementById("pulsera_nombre_p1");
+  const pulseraNombreP2 = document.getElementById("pulsera_nombre_p2");
+
+  if (pulseraNombreP1 && pulseras?.pareja1?.nombre) {
+    pulseraNombreP1.textContent = pulseras.pareja1.nombre;
+  }
+  if (pulseraNombreP2 && pulseras?.pareja2?.nombre) {
+    pulseraNombreP2.textContent = pulseras.pareja2.nombre;
+  }
 }
 
 // Función PARA FORMATEAR NOMBRE

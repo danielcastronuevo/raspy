@@ -67,10 +67,33 @@ fi
 
 if [ "$REGEN" = true ]; then
     UUID=$(cat /proc/sys/kernel/random/uuid | cut -c1-8 | tr '[:lower:]' '[:upper:]')
+    
+    # ===== SELECCIONAR CLUB =====
+    echo -e "\n${YELLOW}[+] Seleccione el club a configurar:${RESET}"
+    # Array de clubs (añadir más aquí en el futuro)
+    CLUBS=("hulk-padel" "la-esquina")
+    
+    for i in "${!CLUBS[@]}"; do
+        echo -e "  ${GREEN}$((i+1))${RESET}) ${CLUBS[$i]}"
+    done
+    
+    echo -e "${YELLOW}[!] Ingrese el número de club (auto 15s):${RESET} \c"
+    read -t 15 CLUB_INDEX || CLUB_INDEX=2
+    
+    # Validar índice
+    if ! [[ "$CLUB_INDEX" =~ ^[0-9]+$ ]] || [ "$CLUB_INDEX" -lt 1 ] || [ "$CLUB_INDEX" -gt "${#CLUBS[@]}" ]; then
+        CLUB_INDEX=2  # Default: la-esquina
+        echo -e "${YELLOW}Opción inválida, usando default...${RESET}"
+    fi
+    
+    SELECTED_CLUB="${CLUBS[$((CLUB_INDEX-1))]}"
+    echo -e "${GREEN}[✓] Club seleccionado:${RESET} $SELECTED_CLUB\n"
+    
     cat <<EOF > "$CONFIG_FILE"
 {
   "raspy_id": "$UUID",
-  "vps_url": "http://91.108.124.53:5000"
+  "vps_url": "http://91.108.124.53:5000",
+  "club": "$SELECTED_CLUB"
 }
 EOF
     echo -e "${GREEN}[✓] Config.json creado con ID:${RESET} $UUID"
