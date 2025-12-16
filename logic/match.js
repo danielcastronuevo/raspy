@@ -792,8 +792,145 @@ async function enviarPartidoAlServer(dataFinal) {
     });
     const result = await res.json();
     console.log("📤 Partido enviado al server:", result);
+    
+    // 🔹 Si se envió exitosamente, registrarlo en el sync log
+    if (result && (result.ok !== false)) {
+      registrarEnSyncLog(dataFinal.id);
+    }
   } catch (err) {
     console.error("❌ Error enviando partido al server:", err);
+  }
+}
+
+// ===============================
+// --- SISTEMA DE SINCRONIZACIÓN ---
+// ===============================
+
+const SYNC_LOG_PATH = path.join(HISTORIAL_DIR, 'sync.json');
+
+// Cargar o inicializar el registro de sincronización
+function cargarSyncLog() {
+  try {
+    if (fs.existsSync(SYNC_LOG_PATH)) {
+      const contenido = fs.readFileSync(SYNC_LOG_PATH, 'utf-8');
+      return JSON.parse(contenido);
+    }
+  } catch (err) {
+    console.warn("⚠️ Error leyendo sync.json, inicializando nuevo:", err.message);
+  }
+  return { sincronizados: [] };
+}
+
+// Guardar un matchId como sincronizado
+function registrarEnSyncLog(matchId) {
+  try {
+    let syncLog = cargarSyncLog();
+    if (!syncLog.sincronizados.includes(matchId)) {
+      syncLog.sincronizados.push(matchId);
+      fs.writeFileSync(SYNC_LOG_PATH, JSON.stringify(syncLog, null, 2), 'utf-8');
+      console.log(`✅ Partido ${matchId} registrado como sincronizado`);
+    }
+  } catch (err) {
+    console.error("❌ Error guardando sync.json:", err);
+  }
+}
+
+// Obtener archivos pendientes de sincronizar
+function obtenerPartidosPendientes() {
+  try {
+    const baseDir = path.join(__dirname, "..", "history");
+    if (!fs.existsSync(baseDir)) return [];
+
+    const archivos = fs.readdirSync(baseDir).filter(f => f.endsWith('.json'));
+    const syncLog = cargarSyncLog();
+
+    const pendientes = [];
+
+    for (const archivo of archivos) {
+      try {
+        const ruta = path.join(baseDir, archivo);
+        const contenido = JSON.parse(fs.readFileSync(ruta, 'utf-8'));
+        const matchId = contenido.id || contenido.metadata?.matchId;
+
+        // Si no está en el sync log, está pendiente
+        if (matchId && !syncLog.sincronizados.includes(matchId)) {
+          pendientes.push({
+            matchId,
+            archivo,
+            ruta,
+            data: contenido
+          });
+        }
+      } catch (err) {
+        console.warn(`⚠️ Error procesando archivo ${archivo}:`, err.message);
+      }
+    }
+
+    return pendientes;
+  } catch (err) {
+    console.error("❌ Error obteniendo partidos pendientes:", err);
+    return [];
+  }
+}
+
+// Sincronizar todos los partidos pendientes
+async function sincronizarPartidosPendientes() {
+  const pendientes = obtenerPartidosPendientes();
+
+  if (pendientes.length === 0) {
+    console.log("[i] No hay partidos pendientes de sincronizar");
+    return;
+  }
+
+  console.log(`🔄 Sincronizando ${pendientes.length} partido(s) pendiente(s)...`);
+
+  for (const partido of pendientes) {
+    try {
+      console.log(`  📤 Enviando ${partido.matchId}...`);
+      const res = await fetch("http://91.108.124.53:3000/api/matches", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(partido.data)
+      });
+      const result = await res.json();
+
+      if (result && result.ok !== false) {
+        registrarEnSyncLog(partido.matchId);
+        console.log(`  ✅ ${partido.matchId} sincronizado exitosamente`);
+      } else {
+        console.warn(`  ⚠️ ${partido.matchId} rechazado por el servidor:`, result);
+      }
+    } catch (err) {
+      console.error(`  ❌ Error sincronizando ${partido.matchId}:`, err.message);
+      // No registramos como sincronizado, se reintentará en el siguiente ciclo
+    }
+  }
+}
+
+// Inicializar servicio periódico de sincronización
+let intervaloSincronizacion = null;
+
+function iniciarSincronizacionPeriodica(intervaloMs = 300000) { // 5 minutos por defecto
+  if (intervaloSincronizacion) {
+    clearInterval(intervaloSincronizacion);
+  }
+
+  console.log(`🔄 Iniciando sincronización periódica cada ${intervaloMs / 1000} segundos`);
+
+  // Ejecutar inmediatamente al iniciar
+  sincronizarPartidosPendientes();
+
+  // Luego cada X tiempo
+  intervaloSincronizacion = setInterval(() => {
+    sincronizarPartidosPendientes();
+  }, intervaloMs);
+}
+
+function detenerSincronizacionPeriodica() {
+  if (intervaloSincronizacion) {
+    clearInterval(intervaloSincronizacion);
+    intervaloSincronizacion = null;
+    console.log("⛔ Sincronización periódica detenida");
   }
 }
 
@@ -1639,6 +1776,12 @@ module.exports = {
   seleccionarMenuSacador,
   volverMenuSacador,
   finalizarMenuSacador,
+
+  // SINCRONIZACIÓN
+  sincronizarPartidosPendientes,
+  iniciarSincronizacionPeriodica,
+  detenerSincronizacionPeriodica,
+  obtenerPartidosPendientes,
 
   // RESETEAR estados 
   resetEstado

@@ -68,6 +68,13 @@ estado.setOnChange(() => {
 });
 
 // ====================================
+// Sincronización periódica de partidos
+// ====================================
+// Cada 5 minutos intenta sincronizar los partidos pendientes
+const INTERVALO_SINCRONIZACION = 5 * 60 * 1000; // 5 minutos
+estado.iniciarSincronizacionPeriodica(INTERVALO_SINCRONIZACION);
+
+// ====================================
 // Middlewares
 // ====================================
 app.use(express.json());
@@ -104,6 +111,32 @@ app.get('/api/config-info', (req, res) => {
     raspy_id: RASPY_ID,
     club: config.club || 'sin-configurar'
   });
+});
+
+// ====================================
+// Endpoint: estado de sincronización
+// ====================================
+app.get('/api/sync-status', (req, res) => {
+  const pendientes = estado.obtenerPartidosPendientes();
+  res.json({
+    pendientes: pendientes.length,
+    partidos: pendientes.map(p => ({
+      matchId: p.matchId,
+      archivo: p.archivo
+    }))
+  });
+});
+
+// ====================================
+// Endpoint: forzar sincronización manual
+// ====================================
+app.post('/api/sync-now', async (req, res) => {
+  try {
+    await estado.sincronizarPartidosPendientes();
+    res.json({ ok: true, mensaje: "Sincronización iniciada" });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
 });
 
 
