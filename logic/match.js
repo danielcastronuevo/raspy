@@ -1044,6 +1044,7 @@ function sumarPunto(parejaIndex) {
     // ✅ Registrar el último punto del game/set
     estado.ultimoPunto = {
       pareja: parejaIndex === 0 ? 'pareja1' : 'pareja2',
+      timestamp: new Date().toISOString()
     };
     notificarCambio();
     logEstado();
@@ -1063,6 +1064,7 @@ function sumarPunto(parejaIndex) {
       // ✅ Registrar el último punto del game/set
       estado.ultimoPunto = {
         pareja: parejaIndex === 0 ? 'pareja1' : 'pareja2',
+        timestamp: new Date().toISOString()
       };
       return;
     }
@@ -1077,6 +1079,7 @@ function sumarPunto(parejaIndex) {
       // ✅ Registrar el último punto del game/set
       estado.ultimoPunto = {
         pareja: parejaIndex === 0 ? 'pareja1' : 'pareja2',
+        timestamp: new Date().toISOString()
       };
         return;
       } else if (puntos[rivalIndex] === 3) {
@@ -1092,6 +1095,7 @@ function sumarPunto(parejaIndex) {
       // ✅ Registrar el último punto del game/set
       estado.ultimoPunto = {
         pareja: parejaIndex === 0 ? 'pareja1' : 'pareja2',
+        timestamp: new Date().toISOString()
       };
       return;
     }
@@ -1100,6 +1104,7 @@ function sumarPunto(parejaIndex) {
   // 🔹 Registrar quién hizo el último punto
   estado.ultimoPunto = {
     pareja: parejaIndex === 0 ? 'pareja1' : 'pareja2',
+    timestamp: new Date().toISOString()
   };
   logEstado();
   notificarCambio();
