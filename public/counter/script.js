@@ -18,14 +18,153 @@ scaleUI();
 
 
 // =================================================
+// ================= CARGAR LOGO DEL CLUB ====================
+// =================================================
+async function loadClubLogo() {
+  try {
+    const response = await fetch('/api/config-info');
+    const config = await response.json();
+    const club = config.club || 'default';
+    
+    // Actualizar la ruta del logo del club
+    const logoClubElement = document.getElementById('logo-club');
+    if (logoClubElement) {
+      logoClubElement.src = `images/clubs/${club}.png`;
+    }
+  } catch (error) {
+    console.error('Error cargando la configuración del club:', error);
+    // En caso de error, usa la imagen por defecto
+    const logoClubElement = document.getElementById('logo-club');
+    if (logoClubElement) {
+      logoClubElement.src = 'images/clubs/default.png';
+    }
+  }
+}
+
+// Cargar el logo al iniciar
+loadClubLogo();
+
+
+// =================================================
 // ================= SOCKET.IO ====================
 // =================================================
 
-const socket = io();
+const socket = io({
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000,
+  reconnectionAttempts: Infinity,
+  transports: ['websocket', 'polling']
+});
+
+// Estado de conexión
+let socketConnectionState = {
+  connected: false,
+  reconnecting: false,
+  lastError: null
+};
+
+let dotsInterval = null;
 
 socket.on("connect", () => {
   console.log("✅ Conectado al servidor Socket.IO con ID:", socket.id);
+  socketConnectionState.connected = true;
+  socketConnectionState.reconnecting = false;
+  socketConnectionState.lastError = null;
+  updateConnectionIndicator();
 });
+
+socket.on("disconnect", (reason) => {
+  console.warn("⚠️ Desconectado de Socket.IO. Razón:", reason);
+  socketConnectionState.connected = false;
+  socketConnectionState.lastError = reason;
+  updateConnectionIndicator();
+  
+  // Si es una desconexión forzada por el cliente, no reintentar
+  if (reason === 'io client namespace disconnect') {
+    console.log("Desconexión voluntaria del cliente");
+    return;
+  }
+});
+
+socket.on("connect_error", (error) => {
+  console.error("❌ Error de conexión Socket.IO:", error);
+  socketConnectionState.connected = false;
+  socketConnectionState.lastError = error.message || "Error de conexión";
+  updateConnectionIndicator();
+});
+
+socket.on("reconnect_attempt", () => {
+  console.log("🔄 Intentando reconectar...");
+  socketConnectionState.reconnecting = true;
+  updateConnectionIndicator();
+});
+
+socket.on("reconnect", () => {
+  console.log("✅ Reconectado exitosamente al servidor");
+  socketConnectionState.connected = true;
+  socketConnectionState.reconnecting = false;
+  socketConnectionState.lastError = null;
+  updateConnectionIndicator();
+});
+
+// Función para actualizar el indicador visual
+function updateConnectionIndicator() {
+  const wifiConnected = document.getElementById('wifi-connected');
+  const wifiReconnecting = document.getElementById('wifi-reconnecting');
+  
+  if (!wifiConnected || !wifiReconnecting) return;
+
+  // Ocultar ambos
+  wifiConnected.classList.add('hidden');
+  wifiReconnecting.classList.add('hidden');
+
+  if (socketConnectionState.connected) {
+    wifiConnected.classList.remove('hidden');
+    wifiConnected.title = 'Conectado a VPS';
+    
+    // Detener animación de puntos
+    if (dotsInterval) {
+      clearInterval(dotsInterval);
+      dotsInterval = null;
+    }
+  } else {
+    // Si no está conectado, mostrar reconectando (incluye desconexiones e intentos)
+    wifiReconnecting.classList.remove('hidden');
+    wifiReconnecting.title = 'Intentando reconectar...';
+    
+    // Iniciar animación de puntos
+    startDotsAnimation();
+  }
+}
+
+// Función para animar los puntos
+function startDotsAnimation() {
+  if (dotsInterval) return; // Si ya está corriendo, no iniciar de nuevo
+  
+  const wifiDots = document.querySelector('#wifi-reconnecting .wifi-dots');
+  if (!wifiDots) return;
+  
+  let dotCount = 0;
+  dotsInterval = setInterval(() => {
+    dotCount = (dotCount + 1) % 4;
+    
+    switch(dotCount) {
+      case 0:
+        wifiDots.textContent = '.';
+        break;
+      case 1:
+        wifiDots.textContent = '..';
+        break;
+      case 2:
+        wifiDots.textContent = '...';
+        break;
+      case 3:
+        wifiDots.textContent = '';
+        break;
+    }
+  }, 500);
+}
 
 // =================================================
 // ============== VARIABLES GLOBALES ===============
@@ -1428,7 +1567,7 @@ function activarPelotasTiebreak() {
   const pelotas = document.querySelectorAll(".sacador-ball-container img");
   pelotas.forEach((img) => {
     img.dataset.originalSrc = img.src; // guardar src original
-    img.src = "./ball-new-fire.png";
+    img.src = "./images/ball-new-fire.png";
   });
 }
 
@@ -1436,7 +1575,7 @@ function activarPelotasTiebreak() {
 function desactivarPelotasTiebreak() {
   const pelotas = document.querySelectorAll(".sacador-ball-container img");
   pelotas.forEach((img) => {
-    img.src = img.dataset.originalSrc || "./ball-new.png";
+    img.src = img.dataset.originalSrc || "./images/ball-new.png";
   });
 }
 

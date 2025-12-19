@@ -337,25 +337,38 @@ main {
 
 /* Iconos de ayuda */
 .final-help-container .pulsera-grafico-container {
-  width: 27px !important;
-  height: 27px !important;
+  min-width: 27px;
+  max-width: 27px;
+  width: 27px;
+  height: 27px;
   position: relative;
-  scale: 0.8;
-  margin-left: -6.3px;
+  flex-shrink: 0;
+  margin: 0 4px;
 }
 
 .final-help-container .hands-container {
   position: relative;
   display: flex;
-  margin-left: -38.7px;
-  margin-right: 4.5px;
-  transform: translateY(-9px);
-  scale: 0.7;
+  flex-shrink: 0;
+  gap: 0;
+  margin-left: -12px;
+  margin-right: 4px;
 }
 
 .final-help-container .fa-hand-pointer {
   font-size: 22.5px;
-  transform: translate(13.5px, 10.8px) rotate(-45deg);
+  transform: rotate(-45deg);
+  margin: 0;
+}
+
+.final-help-container .fa-hand-pointer:nth-child(2) {
+  margin-left: -9px;
+  z-index: 2;
+}
+
+.final-help-container .fa-hand-pointer:nth-child(3) {
+  margin-left: -9px;
+  z-index: 3;
 }
 
 /* Overlay fondo desapareciendo */
@@ -365,10 +378,11 @@ main {
 }
 
 .parentesis-de-ayuda{
-  margin-left: 27px;
+  margin: 0;
+  margin-left: 4px;
   color: var(--text-color);
-  font-size: 27px;
-  transform: translateY(9px);
+  font-size: 18px;
+  align-self: center;
 }
 
 /* ============================================================
@@ -495,18 +509,20 @@ main {
 
 /* Iconos ayuda */
 .calento-help-container .pulsera-grafico-container {
-  width: 27px !important;
-  height: 27px !important;
+  min-width: 27px;
+  max-width: 27px;
+  width: 27px;
+  height: 27px;
   position: relative;
-  scale: 0.8;
-  margin-left: -6.3px;
+  flex-shrink: 0;
+  margin: 0 4px;
 }
 
 .calento-help-container .hands-container {
   position: relative;
   display: flex;
   margin-left: -31.5px;
-  margin-right: 4.5px;
+  /* margin-right: 4.5px; */
   scale: 0.7;
 }
 
@@ -754,25 +770,30 @@ main {
 }
 
 .pulsera-grafico-container {
-  width: 36px !important;
-  height: 36px !important;
+  min-width: 36px;
+  max-width: 36px;
+  width: 36px;
+  height: 36px;
+  aspect-ratio: 1;
+  flex-shrink: 0;
 }
 
 .referencia-texto-container-3 {
-  transform: translateX(54px);
+  transform: none;
 }
 
 .referencia-texto-container-2 {
-  transform: translateX(36px);
+  transform: none;
 }
 
 .referencia-texto-container-1 {
-  transform: translateX(18px);
+  transform: none;
 }
 
 .circulo-exterior {
   width: 100%;
   height: 100%;
+  aspect-ratio: 1;
   border-radius: 100%;
   background: var(--text-color);
   display: flex;
@@ -782,7 +803,8 @@ main {
 
 .circulo-detalle {
   width: 75%;
-  height: 75%; 
+  height: 75%;
+  aspect-ratio: 1;
   border-radius: 100%;
   background: var(--bg-color);
   display: flex;
@@ -793,6 +815,7 @@ main {
 .circulo-interior {
   width: 90%;
   height: 90%;
+  aspect-ratio: 1;
   border-radius: 100%;
   background: var(--text-color);
   display: flex;
@@ -810,19 +833,29 @@ main {
 .fa-hand-pointer {
   color: var(--accent-color-2);
   font-size: 27px;
-  transform: translate(22.5px, 18px) rotate(-45deg);
+  transform: rotate(-45deg);
   text-shadow: -1.8px -1.8px 0 var(--bg-color);
+  position: relative;
+  z-index: 1;
 }
 
 .fa-hand-pointer:nth-child(2) {
-  margin-right: -1.8px;
-  margin-left: -1.8px;
+  margin-left: -12px;
+  z-index: 2;
+}
+
+.fa-hand-pointer:nth-child(3) {
+  margin-left: -12px;
+  z-index: 3;
 }
 
 .hands-container {
-  position: absolute;
+  position: relative;
   display: flex;
-  align-items: end;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+  margin-left: -6px;
 }
 
 /*=============ADS 4 LOGOS============*/
@@ -1149,10 +1182,12 @@ PUNTO DE ORO
 
 /* Pulsera */
 .menu-option .pulsera-grafico-container {
-  width: 27px !important;      /* 3vh */
-  height: 27px !important;
+  min-width: 27px;
+  max-width: 27px;
+  width: 27px;
+  height: 27px;
   position: relative;
-  scale: 0.8;
+  flex-shrink: 0;
 }
 
 /* Manitos */
@@ -1416,8 +1451,10 @@ PUNTO DE ORO
 }
 
 #menu-contenedor .pulsera-grafico-container {
-  width: 27px !important;
-  height: 27px !important;
+  min-width: 27px;
+  max-width: 27px;
+  width: 27px;
+  height: 27px;
   flex-shrink: 0;
 }
 
@@ -1621,12 +1658,17 @@ PUNTO DE ORO
 }
 
 .pulsera-name-container .pulsera-grafico-container{
-  scale: 0.55;
+  min-width: 36px;
+  max-width: 36px;
+  width: 36px;
+  height: 36px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0.75;
+  flex-shrink: 0;
+  scale: 0.55;
 }
 
 .pulsera-name-container .pulsera-grafico-container .circulo-exterior{
@@ -1897,3 +1939,257 @@ PUNTO DE ORO
 .timer-text span {
   margin-left: -9px;            /* antes -1vh */
 }
+
+/* ============================================================
+ * INDICADOR DE CONEXIÓN VPS - WIFI LOADER
+ * ============================================================ */
+
+.ads-container2 {
+  top: 0;
+  background: linear-gradient(#ffffff11, #ffffff00);
+  height: 90px; /* 10vh */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  padding: 9px 18px; /* 1vh 2vh */
+  box-sizing: border-box;
+  color: #fff;
+  font-family: 'Oswald', sans-serif;
+}
+
+.wifi-status-container{
+  scale: 0.7;
+  transform: translateX(-60px);
+}
+
+.wifi-state {
+  --background: #b7fe01;
+  --front-color: #b7fe01;
+  --back-color: #d4ff66;
+  --text-color: #b7fe01;
+  width: 280px;
+  height: 64px;
+  border-radius: 50px;
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  padding-left: 8px;
+}
+
+.wifi-state.hidden {
+  display: none !important;
+}
+
+.wifi-content {
+  width: 64px;
+  height: 64px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.wifi-text {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-color);
+  text-transform: uppercase;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.wifi-text-ok {
+  position: absolute;
+  margin-left: 15px;
+  margin-top: 30px;
+}
+
+.wifi-content svg {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wifi-content svg circle {
+  position: absolute;
+  fill: none;
+  stroke-width: 6px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: rotate(-100deg);
+  transform-origin: center;
+}
+
+.wifi-content svg circle.back {
+  stroke: var(--back-color);
+}
+
+.wifi-content svg circle.front {
+  stroke: var(--front-color);
+}
+
+.wifi-content svg.circle-outer {
+  height: 86px;
+  width: 86px;
+}
+
+.wifi-content svg.circle-outer circle {
+  stroke-dasharray: 62.75 188.25;
+}
+
+.wifi-content svg.circle-middle {
+  height: 60px;
+  width: 60px;
+}
+
+.wifi-content svg.circle-middle circle {
+  stroke-dasharray: 42.5 127.5;
+}
+
+.wifi-content svg.circle-inner {
+  height: 34px;
+  width: 34px;
+}
+
+.wifi-content svg.circle-inner circle {
+  stroke-dasharray: 22 66;
+}
+
+.wifi-state .text {
+  position: absolute;
+  bottom: -40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: var(--text-color);
+  min-width: 100px;
+}
+
+/* ===== ESTADO: CONECTADO (estático, sin animación) ===== */
+#wifi-connected {
+  --background: #b7fe01;
+  --front-color: #b7fe01;
+  --back-color: #d4ff66;
+  --text-color: #b7fe01;
+}
+
+#wifi-connected svg circle {
+  animation: none !important;
+  transform: rotate(-135deg) !important;
+}
+
+/* ===== ESTADO: RECONECTANDO (animado) ===== */
+#wifi-reconnecting {
+  --background: #b7fe01;
+  --front-color: #ff2e2e;
+  --back-color: #ff2e2e55;
+  --text-color: #ff2e2e;
+  gap: 40px;
+}
+
+#wifi-reconnecting .wifi-content svg.circle-outer circle.back {
+  animation: circle-outer135 1.8s ease infinite 0.3s;
+}
+
+#wifi-reconnecting .wifi-content svg.circle-outer circle.front {
+  animation: circle-outer135 1.8s ease infinite 0.15s;
+}
+
+#wifi-reconnecting .wifi-content svg.circle-middle circle.back {
+  animation: circle-middle6123 1.8s ease infinite 0.25s;
+}
+
+#wifi-reconnecting .wifi-content svg.circle-middle circle.front {
+  animation: circle-middle6123 1.8s ease infinite 0.1s;
+}
+
+#wifi-reconnecting .wifi-content svg.circle-inner circle.back {
+  animation: circle-inner162 1.8s ease infinite 0.2s;
+}
+
+#wifi-reconnecting .wifi-content svg.circle-inner circle.front {
+  animation: circle-inner162 1.8s ease infinite 0.05s;
+}
+
+
+/* ===== ANIMACIONES (solo para reconectando) ===== */
+
+@keyframes circle-outer135 {
+  0% {
+    stroke-dashoffset: 25;
+  }
+
+  25% {
+    stroke-dashoffset: 0;
+  }
+
+  65% {
+    stroke-dashoffset: 301;
+  }
+
+  80% {
+    stroke-dashoffset: 276;
+  }
+
+  100% {
+    stroke-dashoffset: 276;
+  }
+}
+
+@keyframes circle-middle6123 {
+  0% {
+    stroke-dashoffset: 17;
+  }
+
+  25% {
+    stroke-dashoffset: 0;
+  }
+
+  65% {
+    stroke-dashoffset: 204;
+  }
+
+  80% {
+    stroke-dashoffset: 187;
+  }
+
+  100% {
+    stroke-dashoffset: 187;
+  }
+}
+
+@keyframes circle-inner162 {
+  0% {
+    stroke-dashoffset: 9;
+  }
+
+  25% {
+    stroke-dashoffset: 0;
+  }
+
+  65% {
+    stroke-dashoffset: 106;
+  }
+
+  80% {
+    stroke-dashoffset: 97;
+  }
+
+  100% {
+    stroke-dashoffset: 97;
+  }
+}
+
+
+
+

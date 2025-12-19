@@ -754,6 +754,7 @@ async function guardarHistorialFinal(motivo = "normal") {
       duracionSegundos,
       duracionTexto,
       huboCalentamiento,
+      club: estado.configuracion?.club || "Club no definido",
       configuracion: estado.configuracion,
       motivoFin: motivo   // 👈 NUEVO: guardamos cómo terminó
     };
