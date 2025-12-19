@@ -3,16 +3,16 @@
     "nombrePulsera": "B02",
     "macPulsera": "C3:00:00:51:32:C0",
     "jugadores": [
-      "jugador1",
-      "jugador2"
+      "hola",
+      "2"
     ]
   },
   "pareja2": {
     "nombrePulsera": "B04",
     "macPulsera": "C3:00:00:51:32:AD",
     "jugadores": [
-      "jugador3",
-      "jugador4"
+      "test",
+      "4"
     ]
   }
 }
