@@ -17,6 +17,11 @@ function getAllFiles(dir, exts, list = []) {
     // nunca tocar qrcode.js
     if (full.includes("public/counter/qrcode.js")) continue;
 
+    // no procesar subdirectorios dentro de public/counter
+    if (full.includes("public/counter") && stat.isDirectory() && !full.endsWith("public/counter")) {
+      continue;
+    }
+
     if (stat.isDirectory()) {
       getAllFiles(full, exts, list);
     } else if (exts.some(ext => full.endsWith(ext))) {
@@ -33,6 +38,11 @@ function copyOtherFiles(src, dest) {
     const srcFile = path.join(src, file);
     const destFile = path.join(dest, file);
     const stat = fs.statSync(srcFile);
+
+    // si es una subcarpeta de public/counter, ignorarla completamente
+    if (srcFile.includes("public/counter") && stat.isDirectory() && !srcFile.endsWith("public/counter")) {
+      continue;
+    }
 
     if (stat.isDirectory()) {
       copyOtherFiles(srcFile, destFile);

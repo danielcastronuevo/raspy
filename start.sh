@@ -71,7 +71,7 @@ if [ "$REGEN" = true ]; then
     # ===== SELECCIONAR CLUB =====
     echo -e "\n${YELLOW}[+] Seleccione el club a configurar:${RESET}"
     # Array de clubs (añadir más aquí en el futuro)
-    CLUBS=("hulk-padel" "la-esquina")
+    CLUBS=("hulk-padel" "la-esquina" "breakpoint")
     
     for i in "${!CLUBS[@]}"; do
         echo -e "  ${GREEN}$((i+1))${RESET}) ${CLUBS[$i]}"
