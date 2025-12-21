@@ -61,10 +61,40 @@ const socket = io({
 let socketConnectionState = {
   connected: false,
   reconnecting: false,
-  lastError: null
+  lastError: null,
+  hasInternetAccess: false
 };
 
 let dotsInterval = null;
+let internetCheckInterval = null;
+
+// Función para verificar conexión a internet
+async function checkInternetConnection() {
+  try {
+    // Intentamos hacer un ping a un CDN confiable con un timeout corto
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    
+    const response = await fetch('https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png', {
+      method: 'HEAD',
+      cache: 'no-store',
+      signal: controller.signal
+    });
+    
+    clearTimeout(timeoutId);
+    socketConnectionState.hasInternetAccess = response.ok;
+    console.log("🌐 Verificación de internet:", socketConnectionState.hasInternetAccess ? "✅ OK" : "❌ SIN CONEXIÓN");
+  } catch (error) {
+    socketConnectionState.hasInternetAccess = false;
+    console.log("🌐 Verificación de internet: ❌ SIN CONEXIÓN");
+  }
+  updateConnectionIndicator();
+}
+
+// Verificar internet cada 10 segundos
+internetCheckInterval = setInterval(checkInternetConnection, 10000);
+// Verificar también al iniciar
+checkInternetConnection();
 
 socket.on("connect", () => {
   console.log("✅ Conectado al servidor Socket.IO con ID:", socket.id);
@@ -119,7 +149,10 @@ function updateConnectionIndicator() {
   wifiConnected.classList.add('hidden');
   wifiReconnecting.classList.add('hidden');
 
-  if (socketConnectionState.connected) {
+  // Solo mostrar OK si AMBAS condiciones se cumplen:
+  // 1. Socket.IO conectado
+  // 2. Hay conexión a internet
+  if (socketConnectionState.connected && socketConnectionState.hasInternetAccess) {
     wifiConnected.classList.remove('hidden');
     wifiConnected.title = 'Conectado a VPS';
     
@@ -129,9 +162,14 @@ function updateConnectionIndicator() {
       dotsInterval = null;
     }
   } else {
-    // Si no está conectado, mostrar reconectando (incluye desconexiones e intentos)
+    // Si no está conectado O no hay internet, mostrar reconectando (incluye desconexiones e intentos)
     wifiReconnecting.classList.remove('hidden');
-    wifiReconnecting.title = 'Intentando reconectar...';
+    
+    if (!socketConnectionState.connected) {
+      wifiReconnecting.title = 'Intentando reconectar al servidor...';
+    } else if (!socketConnectionState.hasInternetAccess) {
+      wifiReconnecting.title = 'Sin conexión a internet';
+    }
     
     // Iniciar animación de puntos
     startDotsAnimation();
