@@ -71,22 +71,18 @@ let internetCheckInterval = null;
 // Función para verificar conexión a internet
 async function checkInternetConnection() {
   try {
-    // Intentamos hacer un ping a un CDN confiable con un timeout corto
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000);
-    
-    const response = await fetch('https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png', {
-      method: 'HEAD',
-      cache: 'no-store',
-      signal: controller.signal
+    // Consultar el endpoint local que verifica internet desde el servidor
+    const response = await fetch('/api/internet-check', {
+      method: 'GET',
+      cache: 'no-store'
     });
     
-    clearTimeout(timeoutId);
-    socketConnectionState.hasInternetAccess = response.ok;
+    const data = await response.json();
+    socketConnectionState.hasInternetAccess = data.hasInternet === true;
     console.log("🌐 Verificación de internet:", socketConnectionState.hasInternetAccess ? "✅ OK" : "❌ SIN CONEXIÓN");
   } catch (error) {
     socketConnectionState.hasInternetAccess = false;
-    console.log("🌐 Verificación de internet: ❌ SIN CONEXIÓN");
+    console.log("🌐 Verificación de internet: ❌ SIN CONEXIÓN", error.message);
   }
   updateConnectionIndicator();
 }

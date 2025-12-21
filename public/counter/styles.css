@@ -434,7 +434,7 @@ main {
 
 .calento-title {
   font-family: 'Oswald', serif;
-  font-size: 18px;
+  font-size: 14px;
   margin: 0;
   color: var(--text-color);
   text-align: center;
@@ -1122,7 +1122,17 @@ PUNTO DE ORO
 }
 
 #menu-sacador-overlay .calento-title{
-  font-size: 36px !important;   /* 4vh */
+  font-size: 14px !important;   /* título principal más chico */
+  opacity: 1;
+  margin-bottom: 18px;
+  background: rgba(155, 48, 255, 0.25);
+  border: 2px solid rgba(155, 48, 255, 0.6);
+  border-radius: 12px;
+  padding: 6px 10px;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
 }
 
 /* Título */
@@ -1138,8 +1148,19 @@ PUNTO DE ORO
 .menu-step {
   font-family: var(--main-font);
   font-size: 18px;             /* 2vh */
+}
+
+/* Paso actual en menú sacador */
+#menu-sacador-paso {
+  font-size: 28px !important;           /* mucho más grande */
+  margin-top: 0 !important;
+  width: 100%;
+  display: block;
+  background: none !important;
+  border: none !important;
+  padding: 9px 0 !important;
+  margin-bottom: 18px !important;
   color: var(--text-color);
-  margin: 9px 0;               /* 1vh */
   text-align: center;
 }
 

@@ -114,6 +114,62 @@ app.get('/api/config-info', (req, res) => {
 });
 
 // ====================================
+// Endpoint: verificar conexión a internet
+// ====================================
+app.get('/api/internet-check', async (req, res) => {
+  try {
+    const https = require('https');
+    
+    // Hacer un request HEAD simple a un servidor que sabemos que responde
+    // Usamos Cloudflare DNS (1.1.1.1) que es muy confiable
+    const result = await new Promise((resolve, reject) => {
+      const request = https.request('https://1.1.1.1', { method: 'HEAD', timeout: 2000 }, (response) => {
+        resolve(true);
+      });
+      
+      request.on('timeout', () => {
+        request.destroy();
+        reject(new Error('Timeout'));
+      });
+      
+      request.on('error', (err) => {
+        reject(err);
+      });
+      
+      request.end();
+    });
+    
+    res.json({ hasInternet: true });
+  } catch (err) {
+    // Si falla el HTTPS, intentamos HTTP a un sitio simple
+    try {
+      const http = require('http');
+      const result = await new Promise((resolve, reject) => {
+        const request = http.request('http://1.0.0.1', { method: 'HEAD', timeout: 2000 }, (response) => {
+          resolve(true);
+        });
+        
+        request.on('timeout', () => {
+          request.destroy();
+          reject(new Error('Timeout'));
+        });
+        
+        request.on('error', (err) => {
+          reject(err);
+        });
+        
+        request.end();
+      });
+      
+      res.json({ hasInternet: true });
+    } catch (err2) {
+      console.log('❌ Sin conexión a internet detectada');
+      res.json({ hasInternet: false });
+    }
+  }
+});
+
+// ====================================
 // Endpoint: estado de sincronización
 // ====================================
 app.get('/api/sync-status', (req, res) => {
