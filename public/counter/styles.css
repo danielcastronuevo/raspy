@@ -1414,11 +1414,11 @@ PUNTO DE ORO
 }
 
 .menu-opcion.seleccionado::before {
-  content: "\f0a4";
-  font-family: "Font Awesome 6 Free";
+  content: "\f25a";
+  font-family: "Font Awesome 7 Free";
   font-weight: 900;
   display: inline-block;
-  transform: rotate(90deg);
+  transform: rotate(180deg);
   margin-right: 10px;
   color: var(--accent-color-2);
   rotate: -90deg;

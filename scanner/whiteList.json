@@ -1,17 +1,17 @@
 {
   "pareja1": {
-    "nombrePulsera": "B02",
-    "macPulsera": "C3:00:00:51:32:C0",
+    "nombrePulsera": "A04",
+    "macPulsera": "C3:00:00:51:32:33",
     "jugadores": [
-      "hola",
+      "1",
       "2"
     ]
   },
   "pareja2": {
-    "nombrePulsera": "B04",
-    "macPulsera": "C3:00:00:51:32:AD",
+    "nombrePulsera": "A03",
+    "macPulsera": "C3:00:00:51:32:22",
     "jugadores": [
-      "test",
+      "3",
       "4"
     ]
   }
